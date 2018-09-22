@@ -1,0 +1,42 @@
+#!/bin/sh
+
+while getopts qm:u:p: arg
+do
+    case $arg in
+        (q) quiet=yes ;;
+        (m) manager=$OPTARG ;;
+        (u) username=$OPTARG ;;
+        (p) password=$OPTARG ;;
+    esac
+done
+
+if [ -z "$manager" ] || [ -z "$username" ] || [ -z "$password" ]
+then
+    echo >&2 "Usage: fw-adduser -m manager -u username -p password"
+    exit 1
+fi
+
+lcaseUsername=$(printf '%s' "$username" | /usr/bin/tr '[:upper:]' '[:lower:]')
+
+dn="cn=$username,ou=members,dc=feministwiki,dc=org"
+
+input="dn: $dn
+changetype: add
+objectClass: inetOrgPerson
+objectClass: posixAccount
+cn: $username
+uid: $username
+userPassword: $password
+sn: -
+uidNumber: 9999
+gidNumber: 9999
+homeDirectory: /nonexistent
+mail: $lcaseUsername@feministwiki.org
+manager: cn=$manager,ou=members,dc=feministwiki,dc=org
+
+dn: cn=members,ou=groups,dc=feministwiki,dc=org
+changetype: modify
+add: member
+member: $dn"
+
+/root/bin/fw-ldif ${quiet:+ -q } "$input"

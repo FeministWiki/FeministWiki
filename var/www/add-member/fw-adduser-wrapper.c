@@ -1,0 +1,35 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+/*
+ * This program is meant to be be owned by root and have its setuid bit set.
+ */
+
+int
+main (int argc, char *argv[])
+{
+  setuid(0);
+
+  if (argc != 4) {
+    printf("Error: Wrong number of arguments passed to fw-adduser-wrapper.\n");
+    printf("       Please contact the technician.\n");
+    return 1;
+  }
+
+  char *addingUsername = argv[1];
+  char *newMemberUsername = argv[2];
+  char *newMemberPassword = argv[3];
+
+  execl("/root/bin/fw-adduser",
+        "fw-adduser",
+        "-m", addingUsername,
+        "-u", newMemberUsername,
+        "-p", newMemberPassword,
+        NULL);
+  
+  printf("Error: execl returned.  What the hell?  Yell at the technician.\n");
+  return 1;
+}

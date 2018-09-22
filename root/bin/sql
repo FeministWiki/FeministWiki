@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/bin/mysql -u root -p"$(cat /root/pwd/mysql)" "$@"
