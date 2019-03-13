@@ -123,7 +123,7 @@ listen:
     ##
     protocol_options:
       - "no_sslv3"
-    ##   - "no_tlsv1"
+      - "no_tlsv1"
     max_stanza_size: 65536
     shaper: c2s_shaper
     access: c2s
@@ -169,7 +169,7 @@ listen:
     module: ejabberd_http
     request_handlers:
       "/websocket": ejabberd_http_ws
-      "upload": mod_http_upload
+      "/upload": mod_http_upload
     ##  "/pub/archive": mod_http_fileserver
     web_admin: true
     http_bind: true
@@ -201,7 +201,7 @@ s2s_certfile: "/etc/letsencrypt/live/feministwiki.org/certbundle.pem"
 ##
 s2s_protocol_options:
   - "no_sslv3"
-##   - "no_tlsv1"
+  - "no_tlsv1"
 
 ##
 ## domain_certfile: Specify a different certificate for each served hostname.
@@ -289,7 +289,7 @@ ldap_servers:
 ldap_rootdn: "cn=admin,dc=feministwiki,dc=org"
 ##
 ## Password of LDAP manager:
-ldap_password: "REDACTED"
+ldap_password: "[REDACTED]"
 ##
 ## Search base of LDAP directory:
 ldap_base: "dc=feministwiki,dc=org"
@@ -512,6 +512,11 @@ access:
   ## Only allow to register from localhost
   trusted_network: 
     loopback: allow
+  ## HTTP File Upload quotas, in MiB
+  soft_upload_quota:
+    all: 250
+  hard_upload_quota:
+    all: 300
   ## Do not establish S2S connections with bad servers
   ## s2s: 
   ##   bad_servers: deny
@@ -591,14 +596,16 @@ modules:
   ##   accesslog: "/var/log/ejabberd/access.log"
   mod_http_upload:
     access: all
-    max_size: 10000000 # 10MB
+    max_size: 100000000 # 100MB
     secret_length: 20
     jid_in_url: node
     thumbnail: true
     docroot: "@HOME@/upload"
-    put_url: "https://@HOST@:5280/upload"
-    get_url: "https://@HOST@:5280/upload"
+    put_url: "https://xmpp.@HOST@:5280/upload"
+    get_url: "https://xmpp.@HOST@:5280/upload"
     rm_on_unregister: false
+  mod_http_upload_quota:
+    max_days: 100
   mod_last: {}
   mod_mam: {}
   mod_muc: 
