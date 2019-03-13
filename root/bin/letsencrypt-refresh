@@ -5,7 +5,10 @@ domains=$(/bin/cat /root/etc/domains)
 
 domains=$(printf '%s' "$domains" | /usr/bin/tr '\n' ',')
 
-/usr/bin/letsencrypt certonly --authenticator standalone -d "$domains"
+/usr/bin/letsencrypt certonly \
+                     --authenticator standalone \
+                     --keep --expand \
+                     -d "$domains"
 
 cd /etc/letsencrypt/live/feministwiki.org
 /bin/cat fullchain.pem privkey.pem > certbundle.pem

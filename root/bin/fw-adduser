@@ -23,14 +23,10 @@ dn="cn=$username,ou=members,dc=feministwiki,dc=org"
 input="dn: $dn
 changetype: add
 objectClass: inetOrgPerson
-objectClass: posixAccount
 cn: $username
 uid: $username
-userPassword: $password
 sn: -
-uidNumber: 9999
-gidNumber: 9999
-homeDirectory: /nonexistent
+userPassword: $password
 mail: $lcaseUsername@feministwiki.org
 manager: cn=$manager,ou=members,dc=feministwiki,dc=org
 
