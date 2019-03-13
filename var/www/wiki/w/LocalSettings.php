@@ -57,7 +57,7 @@ $wgDBtype = "mysql";
 $wgDBserver = "localhost";
 $wgDBname = "feministwiki";
 $wgDBuser = "feministwiki";
-$wgDBpassword = "REDACTED";
+$wgDBpassword = "[REDACTED]";
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -96,14 +96,14 @@ $wgShellLocale = "C.UTF-8";
 # Site language code, should be one of the list in ./languages/data/Names.php
 $wgLanguageCode = "en";
 
-$wgSecretKey = "REDACTED";
+$wgSecretKey = "[REDACTED]";
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "REDACTED";
+$wgUpgradeKey = "[REDACTED]";
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -140,17 +140,44 @@ wfLoadExtension( 'WikiEditor' );
 # End of automatically generated settings.
 # Add more configuration options below.
 
-$wgShowExceptionDetails = true;
-$wgShowDBErrorBacktrace = true;
-$wgShowSQLErrors = true;
+
+#####################################################
+#####################################################
+
+###
+### General Settings
+###
+
+$wgNoFollowLinks = false;
+$wgExternalLinkTarget = '_blank';
+$wgNamespaceAliases['FW'] = NS_PROJECT;
+
+###
+### Extensions
+###
+
+wfLoadExtension("Cite");
 
 wfLoadExtension("UserMerge");
-
 $wgGroupPermissions['bureaucrat']['usermerge'] = true;
 
 wfLoadExtension("Renameuser");
 
-/*** <LDAP> ***/
+wfLoadExtension("MobileFrontend");
+$wgMFAutodetectMobileView = true;
+$wgMFDefaultSkinClass = 'SkinMinerva';
+
+wfLoadExtension("WikiSEO");
+
+###
+### Skins
+###
+
+wfLoadSkin('MinervaNeue');
+
+###
+### LDAP
+###
 
 require_once "$IP/extensions/LdapAuthentication/LdapAuthentication.php";
 
@@ -164,7 +191,7 @@ $wgLDAPEncryptionType = array('feministwiki' => 'clear');
 
 // TODO: use restricted user
 $wgLDAPWriterDN = array('feministwiki' => 'cn=admin,dc=feministwiki,dc=org');
-$wgLDAPWriterPassword = array('feministwiki' => 'REDACTED');
+$wgLDAPWriterPassword = array('feministwiki' => '[REDACTED]');
 
 $wgLDAPWriteLocation = array('feministwiki' => 'ou=members,dc=feministwiki,dc=org');
 
@@ -183,5 +210,10 @@ $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgLDAPDebug = 0;
 $wgDebugLogGroups['ldap'] = '/tmp/ldapauth.log';
 
-/*** </LDAP> ***/
+###
+### Debug
+###
 
+#$wgShowExceptionDetails = true;
+#$wgShowDBErrorBacktrace = true;
+#$wgShowSQLErrors = true;

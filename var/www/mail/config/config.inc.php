@@ -27,7 +27,7 @@ $config['enable_installer'] = true;
 // For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
 // NOTE: for SQLite use absolute path (Linux): 'sqlite:////full/path/to/sqlite.db?mode=0646'
 //       or (Windows): 'sqlite:///C:/full/path/to/sqlite.db'
-$config['db_dsnw'] = 'mysql://feministmail:REDACTED@localhost/feministmail';
+$config['db_dsnw'] = 'mysql://feministmail:[REDACTED]@localhost/feministmail';
 
 // enforce connections over https
 // with this option enabled, all non-secure connections will be redirected.
@@ -100,7 +100,7 @@ $config['ldap_public']['public'] = array(
 // in the session record (and the client cookie if remember password is enabled).
 // please provide a string of exactly 24 chars.
 // YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
-$config['des_key'] = 'REDACTED';
+$config['des_key'] = '[REDACTED]';
 
 // List of active plugins (in plugins/ directory)
 $config['plugins'] = array(
