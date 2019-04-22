@@ -588,13 +588,14 @@ modules:
   mod_client_state: {}
   mod_configure: {} # requires mod_adhoc
   mod_disco: {}
-  mod_echo: {}
-  mod_irc: {}
+  #mod_echo: {}
+  #mod_irc: {}
   mod_http_bind: {}
   ## mod_http_fileserver:
   ##   docroot: "/var/www"
   ##   accesslog: "/var/log/ejabberd/access.log"
   mod_http_upload:
+    host: "upload.@HOST@"
     access: all
     max_size: 100000000 # 100MB
     secret_length: 20
@@ -626,7 +627,8 @@ modules:
   mod_privacy: {}
   mod_private: {}
   ## mod_proxy65: {}
-  mod_pubsub: 
+  mod_pubsub:
+    host: "pubsub.@HOST@"
     access_createnode: pubsub_createnode
     ## reduces resource comsumption, but XEP incompliant
     ignore_pep_from_offline: true
@@ -690,6 +692,7 @@ modules:
   mod_stats: {}
   mod_time: {}
   mod_vcard:
+    host: "vcard.@HOST@"
     search: true
   mod_vcard_ldap:
     ldap_rootdn: ""
