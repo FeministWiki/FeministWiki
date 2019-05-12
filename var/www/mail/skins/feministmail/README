@@ -1,0 +1,6 @@
+# How to properly deploy this skin:
+cd /var/www/mail/skins
+cp -r larry feministmail
+# And then use the files here to override some of those there.
+# E.g. assuming this skin is in /tmp/skin:
+pax -rw /tmp/skin /var/www/mail/skins/feministmail -s _/tmp/skin/__

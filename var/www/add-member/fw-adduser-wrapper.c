@@ -25,9 +25,9 @@ main (int argc, char *argv[])
 
   execl("/root/bin/fw-adduser",
         "fw-adduser",
-        "-m", addingUsername,
-        "-u", newMemberUsername,
-        "-p", newMemberPassword,
+        "-q", "-m", addingUsername,
+        newMemberUsername,
+        newMemberPassword,
         NULL);
   
   printf("Error: execl returned.  What the hell?  Yell at the technician.\n");

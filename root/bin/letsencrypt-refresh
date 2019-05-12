@@ -1,14 +1,20 @@
 #!/bin/sh
 
+/usr/sbin/service apache2 stop
+
 # Use $() to eliminate the terminating newline, if any.
 domains=$(/bin/cat /root/etc/domains)
 
 domains=$(printf '%s' "$domains" | /usr/bin/tr '\n' ',')
 
 /usr/bin/letsencrypt certonly \
+                     --cert-name feministwiki.org \
                      --authenticator standalone \
+                     --preferred-challenges http \
                      --keep --expand \
                      -d "$domains"
 
 cd /etc/letsencrypt/live/feministwiki.org
 /bin/cat fullchain.pem privkey.pem > certbundle.pem
+
+/usr/sbin/service apache2 start
