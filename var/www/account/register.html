@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Register an account</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+  </head>
+  <body>
+
+    <h1>Register an account</h1>
+
+    <p>This will notify the administrator about your request to register an account.</p>
+
+    <form action="actions/register.php" method="post">
+
+      <p>Enter your preferred username:</p>
+      <p><input type="text" name="username" placeholder="Username"/></p>
+
+      <p>
+        Enter your preferred e-mail address for communication as a FeministWiki member: <br/>
+        You can leave this blank to use <em>(username)@feministwiki.org</em> as your e-mail address.
+        (Such an e-mail address is provided to all FeministWiki members as a free service.)
+        If you enter your personal e-mail address, note that other FeministWiki members may see it.
+      </p>
+      <p><input type="text" name="email" placeholder="E-mail"/></p>
+
+      <p>
+        If you left the previous e-mail field blank, enter one here.
+        This e-mail address will be used for communication between you and the administrator,
+        and to send you a new password if you lose yours. It's hidden to others.
+      </p>
+      <p><input type="text" name="recoveryMail" placeholder="Secret e-mail"/></p>
+
+      <p>
+        <strong>Warning:</strong> Despite state of the art security measures, it can never be
+        ensured 100% that a data leak will never occur. If you want your identity to remain
+        absolutely hidden, use an e-mail address that cannot be traced back to your real identity.
+      </p>
+
+      <p>
+        Personal declaration: <br/>
+        Briefly explain why the FeministWiki should trust you.
+        A good idea is to link to social media accounts or blogs where you speak about feminism.
+        If you're a known feminist, provide some way to verify that it's really you.
+        The administrator may contact you for further questions via one of the e-mail addresses provided above.
+        If you provide no e-mail and don't write a convincing declaration, your request might be ignored.
+        Please don't take this personally; it's a security measure against anti-feminist trolls.
+      </p>
+      <textarea name="declaration" rows="10">I can prove my commitment or allyship to feminism in this way: ...</textarea>
+
+      <p><input type="submit" value="Send registration"/></p>
+
+    </form>
+  </body>
+</html>

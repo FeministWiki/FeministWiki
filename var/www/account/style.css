@@ -1,0 +1,14 @@
+body {
+	font-family: sans-serif;
+	max-width: 800px;
+}
+
+input[type=text],
+input[type=password] {
+	width: 300px;
+}
+
+textarea {
+	font-family: sans-serif;
+	width: 100%;
+}

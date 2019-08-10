@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Add a member to the FeministWiki</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+  </head>
+  <body>
+    <h1>Add a new member</h1>
+    <form action="actions/add-member.php" method="post">
+      <p>Enter your own username and password here:</p>
+      <p><input type="text" name="username" placeholder="Username"/></p>
+      <p><input type="password" name="password" placeholder="Password"/></p>
+      <p>Enter the desired username for the new member:</p>
+      <p><input type="text" name="newMemberUsername" placeholder="Username"/></p>
+      <p><input type="submit" value="Add member"/></p>
+    </form>
+  </body>
+</html>
