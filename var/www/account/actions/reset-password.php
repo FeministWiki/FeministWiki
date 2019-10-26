@@ -1,22 +1,9 @@
 <?php
 
-header("Content-Type: text/plain");
-
-if (PHP_SAPI == "cli") {
-  parse_str(implode('&', array_slice($argv, 1)), $_POST);
-}
+include 'common.php';
 
 $username = $_POST['username'];
 $email = $_POST['email'];
-
-function printAndExit() {
-  foreach (func_get_args() as $line) {
-    printf("%s\n", $line);
-  }
-  printf("\n");
-  printf("Use the 'back' button of your web browser to return to the previous page.\n");
-  exit;
-}
 
 if ($username == "") {
   printAndExit("Error: You forgot to enter your username.");

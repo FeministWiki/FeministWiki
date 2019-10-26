@@ -6,6 +6,7 @@
     <title>Add a member to the FeministWiki</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
   </head>
   <body>
     <h1>Add a new member</h1>
@@ -15,7 +16,9 @@
       <p><input type="password" name="password" placeholder="Password"/></p>
       <p>Enter the desired username for the new member:</p>
       <p><input type="text" name="newMemberUsername" placeholder="Username"/></p>
-      <p><input type="submit" value="Add member"/></p>
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+      <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
+      <p><input type="submit" value="Add member" id="submit" disabled="true"/></p>
     </form>
   </body>
 </html>

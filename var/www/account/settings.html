@@ -6,6 +6,7 @@
     <title>Change account information</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
   </head>
   <body>
     <h1>Account Settings</h1>
@@ -14,15 +15,19 @@
       <p><input type="text" name="username" placeholder="Username"/></p>
       <p><input type="password" name="password" placeholder="Password"/></p>
       <p>
-        Enter the settings you want to change below. <br/>
-        Fields you leave empty will not be updated.
+        Enter the settings you want to change below.  Fields you leave empty will not be
+        updated.  To remove a piece of data associated with your account, for instance the
+        recovery e-mail address, enter a dummy value into the field such as a dot or minus
+        sign to replace the current value with the dummy value.
       </p>
       <p><input type="password" name="newPassword" placeholder="New password"/></p>
       <p><input type="password" name="newPassword2" placeholder="Re-type new password"/></p>
       <p><input type="text" name="displayName" placeholder="Display name"/></p>
       <p><input type="text" name="email" placeholder="E-mail address"/></p>
       <p><input type="text" name="recoveryMail" placeholder="Recovery e-mail"/></p>
-      <p><input type="submit" value="Save settings"/></p>
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+      <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
+      <p><input type="submit" value="Save settings" id="submit" disabled="true"/></p>
     </form>
   </body>
 </html>

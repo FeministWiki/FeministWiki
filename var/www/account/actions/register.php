@@ -1,30 +1,24 @@
 <?php
 
-header("Content-Type: text/plain");
+include 'common.php';
 
-if (PHP_SAPI == "cli") {
-  parse_str(implode('&', array_slice($argv, 1)), $_POST);
-}
-
-$username     = $_POST['username'];
-$email        = $_POST['email'];
-$recoveryMail = $_POST['recoveryMail'];
-$declaration  = $_POST['declaration'];
-
-function printAndExit() {
-  foreach (func_get_args() as $line) {
-    printf("%s\n", $line);
-  }
-  printf("\n");
-  printf("Use the 'back' button of your web browser to return to the previous page.\n");
-  exit;
-}
+$username    = $_POST['username'];
+$email       = $_POST['email'];
+$email2      = $_POST['email2'];
+$saveEmail2  = $_POST['saveEmail2'];
+$declaration = $_POST['declaration'];
 
 if ($username == "") {
   printAndExit("Error: You forgot to enter a username.");
 }
 
-if ( ($email == "") == ($recoveryMail == "") ) {
+if (preg_match("/^[a-z]+[a-z0-9]*$/i", $username) !== 1) {
+  printAndExit(
+    "Error: Invalid username; please only use English letters."
+  );
+}
+
+if ( ($email == "") == ($email2 == "") ) {
   printAndExit("Error: Please fill in exactly one of the two e-mail fields.");
 }
 
@@ -36,7 +30,8 @@ $retval = mail(
   "Account request: " . $username,
   "Username: " . $username . "\n"
   . "Email: " . $email . "\n"
-  . "Recovery email: " . $recoveryMail . "\n"
+  . "Secret email: " . $email2 . "\n"
+  . "Save secret email: " . $saveEmail2 . "\n"
   . "Declaration:\n" . $declaration
 );
 

@@ -6,6 +6,7 @@
     <title>Register an account</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
   </head>
   <body>
 
@@ -15,23 +16,42 @@
 
     <form action="actions/register.php" method="post">
 
-      <p>Enter your preferred username:</p>
+      <p>
+        Enter your preferred username:<br/>
+        Please only use English letters.
+      </p>
       <p><input type="text" name="username" placeholder="Username"/></p>
 
       <p>
         Enter your preferred e-mail address for communication as a FeministWiki member: <br/>
         You can leave this blank to use <em>(username)@feministwiki.org</em> as your e-mail address.
-        (Such an e-mail address is provided to all FeministWiki members as a free service.)
-        If you enter your personal e-mail address, note that other FeministWiki members may see it.
+        (Such an e-mail address is provided to all FeministWiki members as a free service.) <br/>
       </p>
-      <p><input type="text" name="email" placeholder="E-mail"/></p>
+      <p><input type="text" name="email" placeholder="E-mail address"/></p>
 
       <p>
-        If you left the previous e-mail field blank, enter one here.
-        This e-mail address will be used for communication between you and the administrator,
-        and to send you a new password if you lose yours. It's hidden to others.
+        <strong>Warning:</strong> If you enter your personal e-mail address, note that other
+        FeministWiki members may see it. Further, it's difficult to keep out 100% of malicious
+        persons from getting a FeministWiki member account. Therefore, if keeping your identity
+        hidden from anti-feminist activists is important to you, consider leaving this field
+        empty or using an e-mail address that cannot be traced back to your real identity.
       </p>
-      <p><input type="text" name="recoveryMail" placeholder="Secret e-mail"/></p>
+
+      <p>
+        If you left the previous e-mail field blank, please enter one here instead.
+        This address will be used to respond to your account request in that case.
+      </p>
+      <p><input type="text" name="email2" placeholder="Hidden e-mail"/></p>
+
+      <p>
+        Should your hidden e-mail address be stored in the member database so you can use it to recover
+        your FeministWiki account in case you forget your password?
+      </p>
+      <p>
+        <input type="checkbox" name="saveEmail2" value="yes">
+          Yes, record this secret e-mail address in the member database.
+        </input>
+      </p>
 
       <p>
         <strong>Warning:</strong> Despite state of the art security measures, it can never be
@@ -45,12 +65,14 @@
         A good idea is to link to social media accounts or blogs where you speak about feminism.
         If you're a known feminist, provide some way to verify that it's really you.
         The administrator may contact you for further questions via one of the e-mail addresses provided above.
-        If you provide no e-mail and don't write a convincing declaration, your request might be ignored.
-        Please don't take this personally; it's a security measure against anti-feminist trolls.
       </p>
       <textarea name="declaration" rows="10">I can prove my commitment or allyship to feminism in this way: ...</textarea>
 
-      <p><input type="submit" value="Send registration"/></p>
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+
+      <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
+
+      <p><input type="submit" value="Send registration" id="submit" disabled="true"/></p>
 
     </form>
   </body>
