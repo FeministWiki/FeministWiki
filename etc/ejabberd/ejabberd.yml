@@ -286,7 +286,7 @@ ldap_servers:
 ## ldap_port: 636
 ##
 ## LDAP manager:
-ldap_rootdn: "cn=admin,dc=feministwiki,dc=org"
+ldap_rootdn: "cn=readonly,dc=feministwiki,dc=org"
 ##
 ## Password of LDAP manager:
 ldap_password: "[REDACTED]"

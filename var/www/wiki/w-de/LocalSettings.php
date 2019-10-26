@@ -201,7 +201,7 @@ $LDAPProviderDomainConfigProvider = function() {
 			"connection" => [
 				"server" => "localhost", //ldap.feministwiki.org
 				"port" => "389", //636
-				"user" => "cn=admin,dc=feministwiki,dc=org",
+				"user" => "cn=readonly,dc=feministwiki,dc=org",
 				"pass" => "[REDACTED]",
 				"basedn" => "ou=members,dc=feministwiki,dc=org",
 				"userbasedn" => "ou=members,dc=feministwiki,dc=org",
