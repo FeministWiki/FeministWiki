@@ -75,6 +75,20 @@ $config['smtp_user'] = '%u';
 // will use the current user's password for login
 $config['smtp_pass'] = '%p';
 
+// TODO: Temporary hack because of STRATO AG VPS fail.
+// Once STRATO fixes the SSL config of their VPSs, the following
+// two statements can be removed again.
+$config['imap_conn_options'] = array(
+    'ssl' => array(
+        'cafile' => '/etc/ssl/certs/ca-certificates.crt'
+    ),
+);
+$config['smtp_conn_options'] = array(
+    'ssl' => array(
+        'cafile' => '/etc/ssl/certs/ca-certificates.crt'
+    ),
+);
+
 // provide an URL where a user can get support for this Roundcube installation
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
 $config['support_url'] = 'mailto:admin@feministwiki.org';
@@ -110,3 +124,6 @@ $config['plugins'] = array(
 
 // skin name: folder from skins/
 $config['skin'] = 'feministmail';
+
+// session lifetime in minutes
+$config['session_lifetime'] = 60 * 24;
