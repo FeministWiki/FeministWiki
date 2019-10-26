@@ -18,12 +18,10 @@ cd /var/run
 
 mkdir -p inspircd
 chown irc:irc inspircd
-
-service inspircd start
+systemctl start inspircd
 
 mkdir -p ejabberd
 chown ejabberd:ejabberd ejabberd
-
-service ejabberd start
+systemctl start ejabberd
 
 exit 0

@@ -76,7 +76,8 @@ scache    unix  -       -       y       -       1       scache
 # Also specify in main.cf: maildrop_destination_recipient_limit=1
 #
 maildrop  unix  -       n       n       -       -       pipe
-  flags=DRhu user=vmail argv=/usr/bin/maildrop -d ${recipient}
+  flags=DRhu user=vmail argv=/usr/bin/maildrop -d ${user}@${domain}
+  ${extension} ${recipient} ${user} ${nexthop}
 #
 # ====================================================================
 #
@@ -123,4 +124,5 @@ mailman   unix  -       n       n       -       -       pipe
   ${nexthop} ${user}
 
 dovecot   unix  -       n       n       -       -       pipe
-        flags=ODRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -e -f ${sender} -d ${recipient}
+  flags=ODRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -e -f ${sender}
+ -d ${user}@${nexthop} -a ${recipient}
