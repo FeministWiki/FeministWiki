@@ -1,1 +1,6 @@
 @import url("/styles/basic_orange/theme/stylesheet.css");
+
+body {
+	max-width: 900pt;
+	margin: 0 auto;
+}
