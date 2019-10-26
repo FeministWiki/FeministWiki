@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ "$1" = "-q" ]
+then
+    quiet="-q"
+    shift
+fi
+
 user=$1
 shift
 
@@ -41,4 +47,4 @@ delete: $attr
     fi
 done
 
-/root/bin/fw-ldif "$input"
+/root/bin/fw-ldif $quiet "$input"

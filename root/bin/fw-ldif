@@ -22,7 +22,7 @@ then
 fi
 
 printf '%s\n' "$ldif" |
-    /usr/bin/ldapmodify -x -D cn=admin,dc=feministwiki,dc=org -y /root/pwd/ldap
+    /usr/bin/ldapmodify -x -y /root/pwd/ldap -D cn=admin,dc=feministwiki,dc=org
 retval=$?
 
 if ! [ "$quiet" ]

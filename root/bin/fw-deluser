@@ -2,7 +2,13 @@
 
 user=$1
 
-read -p "Really remove user '$user'?" x
+read -p "Really remove user '$user'? (Enter 'Y' to confirm.) " reply
+
+if [ "$reply" != "Y" ]
+then
+    echo >&2 "Aborting."
+    exit
+fi
 
 dn="cn=$user,ou=members,dc=feministwiki,dc=org"
 
