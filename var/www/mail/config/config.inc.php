@@ -123,7 +123,7 @@ $config['plugins'] = array(
 );
 
 // skin name: folder from skins/
-$config['skin'] = 'feministmail';
+$config['skin'] = 'elastic';
 
 // session lifetime in minutes
 $config['session_lifetime'] = 60 * 24;
