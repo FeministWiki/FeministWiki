@@ -119,6 +119,7 @@ $config['des_key'] = '[REDACTED]';
 // List of active plugins (in plugins/ directory)
 $config['plugins'] = array(
 'archive',
+'persistent_login',
 'zipdownload',
 );
 
