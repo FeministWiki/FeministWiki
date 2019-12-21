@@ -1,0 +1,5 @@
+# Entry to be added via 'ldapadd'
+dn: olcOverlay=lastbind,olcDatabase={1}mdb,cn=config
+objectClass: olcLastBindConfig
+olcOverlay: lastbind
+olcLastBindPrecision: 60
