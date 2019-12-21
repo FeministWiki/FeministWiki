@@ -11,7 +11,7 @@ domains=$(printf '%s' "$domains" | /usr/bin/tr '\n' ',')
                      --cert-name feministwiki.org \
                      --authenticator standalone \
                      --preferred-challenges http \
-                     --keep --expand \
+                     -n --keep --expand \
                      -d "$domains"
 
 cd /etc/letsencrypt/live/feministwiki.org
