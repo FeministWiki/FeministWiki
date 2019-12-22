@@ -24,13 +24,13 @@ if (preg_match("/^[a-z]+[a-z0-9]*$/i", $newMemberUsername) !== 1) {
 }
 
 if ($newMemberPassword == NULL) {
-  printAndExit("Error: Couldn't generate password; please notify the technician.");
+  printAndExit("Error: Couldn't generate password; please contact admin@feministwiki.org.");
 }
 
 $ldapLink = ldap_connect("localhost");
 
 if ($ldapLink == FALSE) {
-  printAndExit("Error: Couldn't access member directory; please notify the technician.");
+  printAndExit("Error: Couldn't access member directory; please contact admin@feministwiki.org.");
 }
 
 ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -42,14 +42,14 @@ if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
     "Error: Login failed.  Please check your username and password.",
     "",
     "If you're sure you entered your username and password correctly,",
-    "contact the technician and give them this error code:",
+    "contact admin@feministwiki.org and provide the following error code:",
     ldap_error($ldapLink)
   );
 }
 
 // All input should be sanity-checked by now, but use escapeshellarg() anyway.
 $adduserCommand = implode(" ", array(
-  "/var/www/settings/actions/add-member",
+  "/var/www/account/actions/add-member",
   escapeshellarg($username),
   escapeshellarg($newMemberUsername),
   escapeshellarg($newMemberPassword),
@@ -68,8 +68,7 @@ passthru($scriptCommand, $retval);
 if ($retval !== 0) {
   printf("\n");
   printAndExit(
-    "Error: Adding user failed.  See reason above.",
-    "       (If you see nothing above, yell at the technician.)"
+    "Error: Adding user failed. Please report this to admin@feministwiki.org.",
   );
 } else {
   printf("-----\n");
