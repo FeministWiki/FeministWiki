@@ -42,7 +42,7 @@ if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
     "Error: Login failed.  Please check your username and password.",
     "",
     "If you're sure you entered your username and password correctly,",
-    "contact admin@feministwiki.org and provide the following error code:",
+    "contact admin@feministwiki.org and provide them this error code:",
     ldap_error($ldapLink)
   );
 }
@@ -68,7 +68,7 @@ passthru($scriptCommand, $retval);
 if ($retval !== 0) {
   printf("\n");
   printAndExit(
-    "Error: Adding user failed. Please report this to admin@feministwiki.org.",
+    "Error: Adding user failed; please contact admin@feministwiki.org.",
   );
 } else {
   printf("-----\n");

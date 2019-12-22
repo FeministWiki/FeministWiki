@@ -36,7 +36,7 @@ $retval = mail(
 );
 
 if ($retval !== TRUE) {
-  printAndExit("Error: Failed to send out e-mail.  Please contact the technician.");
+  printAndExit("Error: Failed to send out e-mail.  Please contact admin@feministwiki.org.");
 }
 
 printf("Success.\n");

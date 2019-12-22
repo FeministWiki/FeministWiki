@@ -16,7 +16,7 @@ if ($email == "") {
 $ldapLink = ldap_connect("localhost");
 
 if ($ldapLink == FALSE) {
-  printAndExit("Error: Couldn't access member directory; please notify the technician.");
+  printAndExit("Error: Couldn't access member directory; please contact admin@feministwiki.org.");
 }
 
 ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -25,7 +25,7 @@ $ldapBind = "cn=readonly,dc=feministwiki,dc=org";
 include '.ldap-pass.php';
 
 if (ldap_bind($ldapLink, $ldapBind, $ldapPass) !== TRUE) {
-  printAndExit("Error: Couldn't log in to member directory; please notify the technician.");
+  printAndExit("Error: Couldn't log in to member directory; please contact admin@feministwiki.org.");
 }
 
 $baseDN = "ou=members,dc=feministwiki,dc=org";
@@ -37,7 +37,7 @@ $attrs = array('fwRecoveryMail');
 $result = ldap_search($ldapLink, $baseDN, $filter, $attrs);
 
 if ($result === FALSE) {
-  printAndExit("Error: Couldn't read member directory; please notify the technician.");
+  printAndExit("Error: Couldn't read member directory; please contact admin@feministwiki.org.");
 }
 
 if (ldap_count_entries($ldapLink, $result) == 0) {
@@ -51,7 +51,7 @@ $password = shell_exec("slappasswd -gn | tr './' 'xy'");
 
 // All input should be sanity-checked by now, but use escapeshellarg() anyway.
 $command = implode(" ", array(
-  "/var/www/settings/actions/reset-password",
+  "/var/www/account/actions/reset-password",
   escapeshellarg($username),
   escapeshellarg($password)
 ));
@@ -66,8 +66,7 @@ passthru($scriptCommand, $retval);
 if ($retval !== 0) {
   printf("\n");
   printAndExit(
-    "Error: Resetting password failed.  See reason above.",
-    "       (If you see nothing above, yell at the technician.)"
+    "Error: Resetting password failed; please contact admin@feministwiki.org.",
   );
 }
 
@@ -77,7 +76,7 @@ printf("\n");
 $retval = mail($email, "New FeministWiki password", "Your new password is: " . $password);
 
 if ($retval !== TRUE) {
-  printAndExit("Error: Failed to send out e-mail.  Please contact the technician.");
+  printAndExit("Error: Failed to send out e-mail; please contact admin@feministwiki.org.");
 }
 
 printf("-----\n");

@@ -16,7 +16,7 @@ if ($password == "") {
 $ldapLink = ldap_connect("localhost");
 
 if ($ldapLink == FALSE) {
-  printAndExit("Error: Couldn't access member directory; please notify the technician.");
+  printAndExit("Error: Couldn't access member directory; please contact admin@feministwiki.org.");
 }
 
 ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -28,7 +28,7 @@ if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
     "Error: Login failed.  Please check your username and password.",
     "",
     "If you're sure you entered your username and password correctly,",
-    "contact the technician and give them this error code:",
+    "contact admin@feministwiki.org and give them this error code:",
     ldap_error($ldapLink)
   );
 }
@@ -39,7 +39,7 @@ if ($res === FALSE) {
   printAndExit(
     "Error: Read operation failed.",
     "",
-    "Please notify the technician and give them this error code:",
+    "Please contact admin@feministwiki.org and give them this error code:",
     ldap_error($ldapLink)
   );
 }
@@ -50,7 +50,7 @@ if ($entry === FALSE) {
   printAndExit(
     "Error: Couldn't get result entry.",
     "",
-    "Please notify the technician and give them this error code:",
+    "Please contact admin@feministwiki.org and give them this error code:",
     ldap_error($ldapLink)
   );
 }
@@ -61,7 +61,7 @@ if ($entry === FALSE) {
   printAndExit(
     "Error: Couldn't get entry attributes.",
     "",
-    "Please notify the technician and give them this error code:",
+    "Please contact admin@feministwiki.org and give them this error code:",
     ldap_error($ldapLink)
   );
 }
