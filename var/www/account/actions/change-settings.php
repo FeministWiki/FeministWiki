@@ -11,69 +11,75 @@ $displayName = $_POST['displayName'];
 $email = $_POST['email'];
 $recoveryMail = $_POST['recoveryMail'];
 
-if ($username == "") {
-  printAndExit("Error: You forgot to enter your username.");
+if ($username == '') {
+  printAndExit('Error: You forgot to enter your username.');
 }
 
-if ($password == "") {
-  printAndExit("Error: You forgot to enter your password.");
+if ($password == '') {
+  printAndExit('Error: You forgot to enter your password.');
 }
 
-if ($newPassword != "" && strlen($newPassword) < 8) {
-  printAndExit("Error: Your password must be at least 8 characters long.");
+if ($newPassword != '' && strlen($newPassword) < 8) {
+  printAndExit('Error: Your password must be at least 8 characters long.');
 }
 
 if ($newPassword != $newPassword2) {
-  printAndExit("Error: The passwords you entered did not match.");
+  printAndExit('Error: The passwords you entered did not match.');
 }
 
-$ldapLink = ldap_connect("localhost");
+$ldapLink = ldap_connect('localhost');
 
 if ($ldapLink == FALSE) {
-  printAndExit("Error: Couldn't access member directory; please contact admin@feministwiki.org.");
+  printAndExit('Error: Couldn\'t access member directory; please contact admin@feministwiki.org.');
 }
 
 ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-$userDN = "cn=" . $username . ",ou=members,dc=feministwiki,dc=org";
+$userDN = "cn=$username,ou=members,dc=feministwiki,dc=org";
 
 if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
   printAndExit(
-    "Error: Login failed.  Please check your username and password.",
-    "",
-    "If you're sure you entered your username and password correctly,",
-    "contact admin@feministwiki.org and provide them this error code:",
+    'Error: Login failed.  Please check your username and password.',
+    '',
+    'If you\'re sure you entered your username and password correctly,',
+    'contact admin@feministwiki.org and provide them this error code:',
     ldap_error($ldapLink)
   );
 }
 
-printf("Saving settings...\n");
-printf("\n");
+println('Saving settings...');
+println('');
 
 $settings = array();
-if ($newPassword != "") {
+if ($newPassword != '') {
+  println('New password: [secret]');
   $settings['userPassword'] = $newPassword;
 }
-if ($displayName != "") {
+if ($displayName != '') {
+  println("Display name: $displayName");
   $settings['sn'] = $displayName;
 }
-if ($email != "") {
+if ($email != '') {
+  println("Email address: $email");
   $settings['mail'] = $email;
 }
-if ($recoveryMail != "") {
+if ($recoveryMail != '') {
+  println("Recovery email: $recoveryMail");
   $settings['fwRecoveryMail'] = $recoveryMail;
 }
 
+println('');
+
 if (ldap_mod_replace($ldapLink, $userDN, $settings)) {
-  printf("-----\n");
-  printf("\n");
-  printf("SETTINGS SUCCESSFULLY SAVED\n");
-  printf("\n");
-  printf("You may close this page.\n");
+  println('-----');
+  println('');
+  println('SETTINGS SUCCESSFULLY SAVED');
+  println('');
+  println('You may close this page.');
 } else {
   printAndExit(
-    "Error: Saving settings failed.",
-    "Reason: " . ldap_error($ldapLink)
+    'Error: Saving settings failed.',
+    'Reason: ' . ldap_error($ldapLink)
   );
 }
 

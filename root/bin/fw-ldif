@@ -21,7 +21,12 @@ then
     echo '--- Starting execution.'
 fi
 
-printf '%s\n' "$ldif" | /usr/bin/ldapmodify -x -y /root/pwd/ldap
+# Note: the -D arg is needed for when ~/.ldaprc isn't read
+printf '%s\n' "$ldif" |
+    /usr/bin/ldapmodify \
+        -D cn=admin,dc=feministwiki,dc=org \
+        -xy /root/pwd/ldap
+
 retval=$?
 
 if ! [ "$quiet" ]

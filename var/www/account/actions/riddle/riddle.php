@@ -1,12 +1,12 @@
 <?php
 
-header("Content-Type: text/javascript");
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
+header('Content-Type: text/javascript');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
 
 $ip = $_SERVER['REMOTE_ADDR'];
-if ($ip == "") {
+if ($ip == '') {
   exit;
 }
 
@@ -14,13 +14,13 @@ $seed = random_int(0, 100) / 100;
 $time = time();
 
 $data = array(
-  seed => $seed,
-  time => $time
+  'seed' => $seed,
+  'time' => $time
 );
 
 file_put_contents('ipdb/' . $ip, serialize($data));
 
-echo "seed = " . $seed . "\n";
+echo "seed = $seed\n";
 
 ?>
 

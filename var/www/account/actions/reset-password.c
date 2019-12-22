@@ -13,13 +13,13 @@ main (int argc, char *argv[])
 {
   if (setuid(0) != 0) {
     printf("Error: Couldn't elevate privileges.\n");
-    printf("       Please contact the technician.\n");
+    printf("       Please contact admin@feministwiki.org.\n");
     return 1;
   }
 
   if (argc != 3) {
     printf("Error: Wrong number of arguments passed to reset-password.\n");
-    printf("       Please contact the technician.\n");
+    printf("       Please contact admin@feministwiki.org.\n");
     return 1;
   }
 
@@ -31,6 +31,6 @@ main (int argc, char *argv[])
         "set", "userPassword", password,
         NULL);
 
-  printf("Error: execl returned.  What the hell?  Yell at the technician.\n");
+  printf("Error: execl returned.  Please contact admin@feministwiki.org.\n");
   return 1;
 }
