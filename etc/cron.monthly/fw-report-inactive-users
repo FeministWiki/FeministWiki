@@ -1,0 +1,11 @@
+#!/bin/sh
+
+subject="Inactive users report"
+admin=admin@feministwiki.org
+
+list=$(fw-inactive-users)
+
+if [ "$list" != "" ]
+then
+    printf '%s\n' "$list" | mail -s "$subject" "$admin"
+fi

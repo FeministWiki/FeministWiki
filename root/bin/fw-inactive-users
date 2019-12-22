@@ -1,0 +1,45 @@
+#!/bin/sh
+
+months=6
+
+loop() {
+    message=$1
+    loopState=name
+    while read line
+    do
+        case $loopState in
+            (name)
+                name=${line#dn: cn=}
+                name=${name%%,*}
+                loopState=stamp
+                ;;
+            (stamp)
+                stamp=${line#*Timestamp: }
+                stamp=${stamp%Z}
+                yearPat='s/^([0-9]{4}).*/\1/'
+                year=$(printf '%s\n' "$stamp" | sed -r "$yearPat")
+                monthPat='s/^[0-9]{4}([0-9]{2}).*/\1/'
+                month=$(printf '%s\n' "$stamp" | sed -r "$monthPat")
+                loopState=empty
+                ;;
+            (empty)
+                curYear=$(date +%Y)
+                curMonth=$(date +%m)
+                diffMonths=$(( (curYear - year) * 12 + curMonth - month ))
+                if [ $diffMonths -gt $months ]
+                then
+                    echo $name: "$message": $year-$month
+                fi
+                loopState=name
+                ;;
+        esac
+    done
+}
+
+filter='(&(objectClass=fwMember)(authTimestamp=*))'
+message="Last login"
+fw-search "$filter" authTimestamp | loop "$message"
+
+filter='(&(objectClass=fwMember)(!(authTimestamp=*)))'
+message="Never logged in since creation"
+fw-search "$filter" createTimestamp | loop "$message"
