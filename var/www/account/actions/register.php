@@ -9,34 +9,61 @@ $saveEmail2  = $_POST['saveEmail2'];
 $declaration = $_POST['declaration'];
 
 if ($username == '') {
-  printAndExit('Error: You forgot to enter a username.');
+    printAndExit('Error: You forgot to enter a username.');
 }
 
 if (preg_match('/^[a-z]+[a-z0-9]*$/i', $username) !== 1) {
-  printAndExit(
-    'Error: Invalid username; please only use English letters.'
-  );
+    printAndExit('Error: Invalid username; please only use English letters.');
 }
 
 if ( ($email == '') == ($email2 == '') ) {
-  printAndExit('Error: Please fill in exactly one of the two e-mail fields.');
+    printAndExit('Error: Please fill in exactly one of the two e-mail fields.');
 }
 
-printf('Trying to send out e-mail...\n');
-printf('\n');
+$requestID = date('Ymd-Gis-') . bin2hex(random_bytes(10));
+$pathname = "requests/$requestID";
 
-$retval = mail(
-  'admin+accountrequest@feministwiki.org',
-  "Account request: $username",
-  "Username: $username\n"
-  . "Email: $email\n"
-  . "Secret email: $email2\n"
-  . "Save secret email: $saveEmail2\n"
-  . "Declaration:\n$declaration"
+$userData = array('username' => $username);
+
+if ($email != '') {
+    $userData['email'] = $email;
+} else if ($saveEmail2 == 'yes') {
+    $userData['recoveryMail'] = $email2;
+} else {
+    $userData['temporaryMail'] = $email2;
+}
+
+file_put_contents($pathname, serialize($userData));
+
+println('Trying to send out e-mail...');
+println('');
+
+$address = 'admin+accountrequest@feministwiki.org';
+$subject = "Account request: $username";
+$headers = composeEmailHeaders(
+    'MIME-Version: 1.0',
+    'Content-Type: text/html; charset=UTF-8',
+    'From: Registration Form <admin@feministwiki.org>'
+);
+$body = composeEmailBody(
+    "Username: $username",
+    "Email: $email",
+    "Secret email: $email2",
+    "Save secret email: $saveEmail2",
+    "Declaration:\n$declaration",
+    '',
+    "<a href='https://account.feministwiki.org/actions/accept.php?r=$requestID'>"
+    . "Click here to accept this request"
+    . "</a>"
 );
 
+$retval = mail($address, $subject, $body, $headers);
+
 if ($retval !== TRUE) {
-  printAndExit('Error: Failed to send out e-mail; please contact admin@feministwiki.org.');
+    printAndExit(
+        'Error: Failed to send out e-mail.',
+        '       Please contact admin@feministwiki.org.'
+    );
 }
 
 println('Success.');
