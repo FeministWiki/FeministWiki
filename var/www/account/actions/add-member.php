@@ -55,7 +55,7 @@ if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
 
 // All input should be sanity-checked by now, but use escapeshellarg() anyway.
 $adduserCommand = implode(" ", array(
-    './add-member',
+    './bin/add-member',
     '-m', escapeshellarg($username),
     escapeshellarg($newMemberUsername),
     escapeshellarg($newMemberPassword),

@@ -59,6 +59,20 @@ println('');
     
 unlink($pathname);
 
+println('Trying to mail the admin...');
+
+$retval = mail(
+    'admin@feministwiki.org',
+    'New member accepted',
+    "Username: $username\n"
+    . "Password: $password\n"
+);
+
+if ($retval !== TRUE) {
+    println('Couldn\'t mail the admin!');
+    println('');
+}
+
 $address = $email;
 if ($address == '') {
     $address = $recoveryMail;
@@ -67,7 +81,7 @@ if ($address == '') {
     $address = $temporaryMail;
 }
 
-println("Trying to mail: $address");
+println("Trying to mail the new member ($address)...");
 println('');
 
 $subject = 'Your FeministWiki account has been created!';

@@ -62,7 +62,7 @@ $password = generatePassword();
 
 // All input should be sanity-checked by now, but use escapeshellarg() anyway.
 $command = implode(' ', array(
-    './reset-password',
+    './bin/reset-password',
     escapeshellarg($username),
     escapeshellarg($password)
 ));
@@ -85,11 +85,32 @@ if ($retval !== 0) {
 println('Password was reset.  Trying to send out e-mail...');
 println('');
 
-$retval = mail(
-    $email,
-    'New FeministWiki password',
-    "Your new password is: $password"
+$subject = 'New FeministWiki password';
+$headers = composeEmailHeaders(
+    'MIME-Version: 1.0',
+    'Content-Type: text/html; charset=UTF-8',
+    'From: FeministWiki <admin@feministwiki.org>',
+    'Reply-To: FeministWiki Technician <admin@feministwiki.org>'
 );
+$body = composeEmailBody(
+    "Dear $username,",
+    '',
+    'Your FeministWiki password has been reset.',
+    'Your new randomly generated password is:',
+    '',
+    $password,
+    '',
+    'Remember that you can change it again to your liking here:',
+    '',
+    '<a href="https://account.feministwiki.org/settings.html">'
+    . 'FeministWiki Account Settings'
+    . '</a>',
+    '',
+    'Yours truly',
+    'the FeministWiki Technician'
+);
+
+$retval = mail($email, $subject, $body, $headers);
 
 if ($retval !== TRUE) {
     printAndExit(
