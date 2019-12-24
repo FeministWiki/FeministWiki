@@ -22,6 +22,84 @@ function printAndExit() {
     exit;
 }
 
+function indexOfFirstLengthN($words, $length) {
+    $lower = 0;
+    $upper = count($words);
+    $index = $upper / 2;
+    while ($upper > $lower + 1) {
+        $l = strlen($words[$index]);
+        if ($l < $length) {
+            $lower = $index;
+            $index = $lower + ($upper - $lower) / 2;
+        } else if ($l >= $length) {
+            $upper = $index;
+            $index = $lower + ($upper - $lower) / 2;
+        }
+    }
+    return $upper;
+}
+
+function generatePassword() {
+    # NOTE: The dictionary MUST be sorted by line length!
+    $words = explode("\n", file_get_contents('.dict'));
+    $count = count($words);
+
+    $result = '';
+
+    # Our longest words are 10 chars, so this
+    # ensures that max length is 15 + 10 = 25.
+    while (strlen($result) < 16) {
+        $word = $words[random_int(0, $count - 1)];
+        $result .= ucfirst($word);
+    }
+
+    # Make sure that the minimum length is 20.
+    if (strlen($result) < 20) {
+        # Max length 6, so 19 + 6 = 25.
+        $index = indexOfFirstLengthN($words, 7);
+        $word = $words[random_int(0, $index - 1)];
+        $result .= ucfirst($word);
+    }
+
+    return $result . random_int(1000, 9999);
+}
+
+# Returns a unix-style exit code, i.e. 0 = success.
+function addMember($username, $password, $email = '', $recoveryMail = '', $manager = '') {
+    $command = array('./bin/add-member');
+
+    if ($email != '') {
+        $command[] = "-e";
+        $command[] = $email;
+    }
+
+    if ($recoveryMail != '') {
+        $command[] = "-r";
+        $command[] = $recoveryMail;
+    }
+
+    if ($manager != '') {
+        $command[] = '-m';
+        $command[] = $manager;
+    }
+
+    $command[] = escapeshellarg($username);
+    $command[] = escapeshellarg($password);
+
+    $commandLine = implode(' ', $command);
+
+    // Use the 'script()' utility to get the same output we would get in a tty.
+    $scriptCommand = implode(' ', array(
+        'script -qefc', escapeshellarg($commandLine), '/dev/null'
+    ));
+
+    $retval = 0;
+
+    passthru($scriptCommand, $retval);
+
+    return $retval;
+}
+
 function composeEmailHeaders() {
     $result = '';
     foreach (func_get_args() as $header) {
@@ -38,28 +116,40 @@ function composeEmailBody() {
     return $result . '</body></html>';
 }
 
-function generatePassword() {
-    # NOTE: The dictionary MUST be sorted by line length!
-    $words = explode("\n", file_get_contents('.dict'));
-    $count = count($words);
-    $result = '';
-    while (strlen($result) < 12) {
-        $word = $words[random_int(0, $count)];
-        $result .= ucfirst($word);
-    }
-    # Maybe add another short word
-    if (strlen($result) < 16) {
-        $idx = 0;
-        while (++$idx) {
-            if (strlen($words[$idx]) == 5) {
-                break;
-            }
-        }
-        $word = $words[random_int(0, $idx)];
-        $result .= ucfirst($word);
-    }
-    $suffix = random_int(1000, 9999);
-    return $result . $suffix;
+function sendWelcomeEmail($address, $username, $password) {
+    $subject = 'Your FeministWiki account has been created!';
+    $headers = composeEmailHeaders(
+        'MIME-Version: 1.0',
+        'Content-Type: text/html; charset=UTF-8',
+        'From: FeministWiki <admin@feministwiki.org>',
+        'Reply-To: FeministWiki Technician <admin@feministwiki.org>'
+    );
+    $body = composeEmailBody(
+        "Welcome to the FeministWiki, $username!",
+        '',
+        'A password of random English words was automatically '
+        . 'generated for your account:',
+        '',
+        $password,
+        '',
+        'You can change your password and other settings here:',
+        '',
+        '<a href="https://account.feministwiki.org/settings.html">'
+        . 'FeministWiki Account Settings'
+        . '</a>',
+        '',
+        'If you would like to learn more about the FeministWiki, '
+        . 'please refer to the Welcome Page:',
+        '',
+        '<a href="https://feministwiki.org/wiki/FW:Welcome">'
+        . 'Welcome to the FeministWiki!'
+        . '</a>',
+        '',
+        'If you have any questions, don\'t be shy to ask! '
+        . 'Replies to this email will be forwarded to the technician.'
+    );
+
+    return mail($address, $subject, $body, $headers);
 }
 
 if ($skipSecurityCheck === TRUE) {

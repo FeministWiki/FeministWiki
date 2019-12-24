@@ -16,10 +16,6 @@ if (preg_match('/^[a-z]+[a-z0-9]*$/i', $username) !== 1) {
     printAndExit('Error: Invalid username; please only use English letters.');
 }
 
-if ( ($email == '') == ($email2 == '') ) {
-    printAndExit('Error: Please fill in exactly one of the two e-mail fields.');
-}
-
 $requestID = date('Ymd-Gis-') . bin2hex(random_bytes(10));
 $pathname = "requests/$requestID";
 

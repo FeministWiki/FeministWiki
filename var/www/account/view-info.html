@@ -21,12 +21,12 @@
         logging into the service in question and viewing your profile there.
     </p>
     <form action="actions/view-info.php" method="post">
-      <p>Enter your username and password here:</p>
+      <p>Enter your username and password to see your database entry:</p>
       <p><input type="text" name="username" placeholder="Username"/></p>
       <p><input type="password" name="password" placeholder="Password"/></p>
       <input type="hidden" name="riddleInput" id="riddleInput"/>
       <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
-      <p><input type="submit" value="View info" id="submit" disabled="true"/></p>
+      <p><button type="submit" id="submit" disabled="true">View info</button></p>
     </form>
   </body>
 </html>

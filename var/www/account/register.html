@@ -3,76 +3,73 @@
   <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Register an account</title>
+    <title>Become a FeministWiki member</title>
     <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="/style.css"/>
     <script src="actions/riddle/riddle.php"></script>
   </head>
   <body>
 
-    <h1>Register an account</h1>
-
-    <p>This will notify the administrator about your request to register an account.</p>
+    <h1>Become a FeministWiki member</h1>
 
     <form action="actions/register.php" method="post">
 
       <p>
-        Enter your preferred username:<br/>
-        Please only use English letters.
-      </p>
-      <p><input type="text" name="username" placeholder="Username"/></p>
-
-      <p>
-        Enter your preferred e-mail address for communication as a FeministWiki member: <br/>
-        You can leave this blank to use <em>(username)@feministwiki.org</em> as your e-mail address.
-        (Such an e-mail address is provided to all FeministWiki members as a free service.) <br/>
-      </p>
-      <p><input type="text" name="email" placeholder="E-mail address"/></p>
-
-      <p>
-        <strong>Warning:</strong> If you enter your personal e-mail address, note that other
-        FeministWiki members may see it. Further, it's difficult to keep out 100% of malicious
-        persons from getting a FeministWiki member account. Therefore, if keeping your identity
-        hidden from anti-feminist activists is important to you, consider leaving this field
-        empty or using an e-mail address that cannot be traced back to your real identity.
+        <div class="title"><strong>Username</strong></div>
+        <input type="text" name="username" placeholder="Username"/>
+        <div class="description">
+          English letters and digits only. Must start with a letter.
+        </div>
       </p>
 
       <p>
-        If you left the previous e-mail field blank, please enter one here instead.
-        This address will be used to respond to your account request in that case.
-      </p>
-      <p><input type="text" name="email2" placeholder="Hidden e-mail"/></p>
-
-      <p>
-        Should your hidden e-mail address be stored in the member database so you can use it to recover
-        your FeministWiki account in case you forget your password?
-      </p>
-      <p>
-        <input type="checkbox" name="saveEmail2" value="yes">
-          Yes, record this secret e-mail address in the member database.
-        </input>
+        <div class="title"><strong>Public e-mail</strong></div>
+        <input  type="text" name="email" placeholder="E-mail address"/>
+        <div class="description">
+          Leave blank to use <code>username@feministwiki.org</code>.
+        </div>
       </p>
 
-      <p>
-        <strong>Warning:</strong> Despite state of the art security measures, it can never be
-        ensured 100% that a data leak will never occur. If you want your identity to remain
-        absolutely hidden, use an e-mail address that cannot be traced back to your real identity.
-      </p>
+      <fieldset>
+        <legend><strong>Private e-mail</strong></legend>
+          <input type="text" name="email2" placeholder="E-mail address"/>
+          <div class="description">
+            Only fill this if you left the public e-mail field blank.
+          </div>
+
+          <div class="title"><strong>Save private e-mail for password recovery?</strong></div>
+          <div class="checkbox">
+            <input id="saveEmail2" type="checkbox" name="saveEmail2" value="yes"/>
+            <label for="saveEmail2">Yes, save my private e-mail address.</label>
+          </div>
+          <div class="description" style="font-size: 0.8em;">
+            <strong>Warning:</strong> Despite standard security measures, it cannot be guaranteed
+            that a data leak will never occur.  For maximum privacy, use an e-mail address
+            that cannot be traced back to you.  Alternatively, use a throwaway e-mail address,
+            leave this box unchecked, and take good care of your password.
+          </div>
+      </fieldset>
 
       <p>
-        Personal declaration: <br/>
-        Briefly explain why the FeministWiki should trust you.
-        A good idea is to link to social media accounts or blogs where you speak about feminism.
-        If you're a known feminist, provide some way to verify that it's really you.
-        The administrator may contact you for further questions via one of the e-mail addresses provided above.
+        <div class="title"><strong>Personal declaration</strong></div>
+        <div class="description">
+          Briefly explain why the FeministWiki should trust you.
+          A good idea is to link to social media accounts or blogs where you speak about feminism.
+          If you're a known feminist, provide some way to verify that it's really you.
+        </div>
       </p>
-      <textarea name="declaration" rows="10">I can prove my commitment or allyship to feminism in this way: ...</textarea>
+
+      <textarea name="declaration" rows="10"></textarea>
 
       <input type="hidden" name="riddleInput" id="riddleInput"/>
 
-      <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
+      <p>
+        <button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button>
+      </p>
 
-      <p><input type="submit" value="Send registration" id="submit" disabled="true"/></p>
+      <p>
+        <button type="submit" id="submit" disabled="true">Send registration</button>
+      </p>
 
     </form>
   </body>

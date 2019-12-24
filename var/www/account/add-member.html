@@ -9,16 +9,56 @@
     <script src="actions/riddle/riddle.php"></script>
   </head>
   <body>
+
     <h1>Add a new member</h1>
+
     <form action="actions/add-member.php" method="post">
-      <p>Enter your own username and password here:</p>
+
+      <p>Enter your own username and password:</p>
       <p><input type="text" name="username" placeholder="Username"/></p>
       <p><input type="password" name="password" placeholder="Password"/></p>
-      <p>Enter the desired username for the new member:</p>
-      <p><input type="text" name="newMemberUsername" placeholder="Username"/></p>
+
+      <p>Enter the new member's information below.</p>
+
+      <p>
+        <div class="title"><strong>Username</strong></div>
+        <input type="text" name="newUsername" placeholder="New username"/>
+        <div class="description">
+          English letters and digits only. Must start with a letter.
+        </div>
+      </p>
+
+      <p>
+        <div class="title"><strong>Public e-mail</strong></div>
+        <input  type="text" name="newEmail" placeholder="E-mail address"/>
+        <div class="description">
+          Leave blank to use <code>username@feministwiki.org</code>.
+        </div>
+      </p>
+
+      <p>
+        <div class="title"><strong>Password recovery e-mail</strong></div>
+        <input  type="text" name="newRecoveryMail" placeholder="E-mail address"/>
+        <div class="description">
+          Leave this empty if you've provided a public e-mail address.
+        </div>
+      </p>
+
       <input type="hidden" name="riddleInput" id="riddleInput"/>
-      <p><button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button></p>
-      <p><input type="submit" value="Add member" id="submit" disabled="true"/></p>
+
+      <p>
+        <button type="button" id="riddleTrigger" onclick="riddleme()">I'm not a bot</button>
+      </p>
+      <p>
+        <button type="submit" id="submit" disabled="true">Add member</button>
+      </p>
+
     </form>
+
+    <p>
+      Don't forget that the newly added user can change their settings here: <br/>
+      <a href="settings.html">https://account.feministwiki.org/settings.html</a>
+    </p>
+
   </body>
 </html>
