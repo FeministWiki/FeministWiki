@@ -1,7 +1,7 @@
 #!/bin/sh
 
 /usr/bin/ldapsearch \
-	-D cn=readonly,dc=feministwiki,dc=org \
-	-y /root/pwd/ldap-readonly \
+	-D cn=admin,dc=feministwiki,dc=org \
+	-y /root/pwd/ldap \
 	-b dc=feministwiki,dc=org \
 	-LLL "$@"
