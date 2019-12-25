@@ -1,6 +1,6 @@
 <?php
 
-include 'common.php';
+require 'common.php';
 
 $username    = $_POST['username'];
 $email       = $_POST['email'];
@@ -16,8 +16,12 @@ if (preg_match('/^[a-z]+[a-z0-9]*$/i', $username) !== 1) {
     printAndExit('Error: Invalid username; please only use English letters.');
 }
 
+if (ldapCheckUserExists($username)) {
+    printAndExit('The username you entered is already taken.');
+}
+
 $requestID = date('Ymd-Gis-') . bin2hex(random_bytes(10));
-$pathname = "requests/$requestID";
+$pathname = "./requests/$requestID";
 
 $userData = array('username' => $username);
 
@@ -56,10 +60,7 @@ $body = composeEmailBody(
 $retval = mail($address, $subject, $body, $headers);
 
 if ($retval !== TRUE) {
-    printAndExit(
-        'Error: Failed to send out e-mail.',
-        '       Please contact admin@feministwiki.org.'
-    );
+    adminError('Failed to send out e-mail.');
 }
 
 println('Success.');

@@ -1,6 +1,6 @@
 <?php
 
-include 'common.php';
+require 'common.php';
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -26,34 +26,14 @@ if (preg_match('/^[a-z]+[a-z0-9]*$/i', $newUsername) !== 1) {
     );
 }
 
-if ($newPassword == NULL) {
-    printAndExit(
-        'Error: Couldn\'t generate password.',
-        '       Please contact admin@feministwiki.org.'
-    );
+if (strlen($newPassword) < 24) {
+    adminError('Password generation failed.');
 }
 
-$ldapLink = ldap_connect('localhost');
+$ldapLink = ldapBind($username, $password);
 
-if ($ldapLink == FALSE) {
-    printAndExit(
-        'Error: Couldn\'t access member directory.',
-        '       Please contact admin@feministwiki.org.'
-    );
-}
-
-ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-$userDN = "cn=$username,ou=members,dc=feministwiki,dc=org";
-
-if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
-    printAndExit(
-        'Error: Login failed.  Please check your username and password.',
-        '',
-        'If you\'re sure you entered your username and password correctly,',
-        'contact admin@feministwiki.org and provide them this error code:',
-        ldap_error($ldapLink)
-    );
+if (ldapCheckUserExists($newUsername, $ldapLink)) {
+    printAndExit('The username you entered is already taken.');
 }
 
 println('Trying to add member...');
@@ -63,9 +43,7 @@ $retval = addMember($newUsername, $newPassword, $newEmail, $newRecoveryMail, $us
 
 if ($retval !== 0) {
     println('');
-    printAndExit(
-        'Error: Adding user failed; please contact admin@feministwiki.org.'
-    );
+    adminError('Adding user failed.');
 }
 
 println('-----');
@@ -91,7 +69,8 @@ if ($address == '') {
 
     if ($retval !== TRUE) {
         $printPassword = TRUE;
-        println('Sending email failed.  Please contact admin@feministwiki.org.');
+        println('Sending email failed.  Please notify the member yourself.');
+        println('And please contact admin@feministwiki.org about this problem.');
         println('');
     } else {
         println('Success!');
@@ -107,6 +86,5 @@ if ($printPassword) {
     println('Don\'t forget to write these down or save them on your computer.');
     println('You can then safely close this page.');
 }
-
 
 ?>

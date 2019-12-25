@@ -2,10 +2,10 @@
 
 $skipSecurityCheck = TRUE;
 
-include 'common.php';
+require 'common.php';
 
 $requestID = $_GET['r'];
-$pathname = "requests/$requestID";
+$pathname = "./requests/$requestID";
 $contents = unserialize(file_get_contents($pathname));
 
 if ($contents === FALSE) {
@@ -67,10 +67,7 @@ println('');
 $retval = sendWelcomeEmail($address, $username, $password);
 
 if ($retval !== TRUE) {
-    printAndExit(
-        'Error: Failed to send out e-mail.',
-        '       Please contact admin@feministwiki.org.'
-    );
+    printAndExit('Error: Failed to send out e-mail.');
 }
 
 println('Success!');

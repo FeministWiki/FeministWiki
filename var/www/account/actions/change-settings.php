@@ -1,6 +1,6 @@
 <?php
 
-include 'common.php';
+require 'common.php';
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -27,28 +27,7 @@ if ($newPassword != $newPassword2) {
     printAndExit('Error: The passwords you entered did not match.');
 }
 
-$ldapLink = ldap_connect('localhost');
-
-if ($ldapLink == FALSE) {
-    printAndExit(
-        'Error: Couldn\'t access member directory.',
-        '       Please contact admin@feministwiki.org.'
-    );
-}
-
-ldap_set_option($ldapLink, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-$userDN = "cn=$username,ou=members,dc=feministwiki,dc=org";
-
-if (ldap_bind($ldapLink, $userDN, $password) !== TRUE) {
-    printAndExit(
-        'Error: Login failed.  Please check your username and password.',
-        '',
-        'If you\'re sure you entered your username and password correctly,',
-        'contact admin@feministwiki.org and provide them this error code:',
-        ldap_error($ldapLink)
-    );
-}
+$ldapLink = ldapBind($username, $password);
 
 println('Saving settings...');
 println('');
@@ -73,6 +52,8 @@ if ($recoveryMail != '') {
 
 println('');
 
+$userDN = "cn=$username,ou=members,dc=feministwiki,dc=org";
+
 if (ldap_mod_replace($ldapLink, $userDN, $settings)) {
     println('-----');
     println('');
@@ -80,10 +61,7 @@ if (ldap_mod_replace($ldapLink, $userDN, $settings)) {
     println('');
     println('You may close this page.');
 } else {
-    printAndExit(
-        'Error: Saving settings failed.',
-        'Reason: ' . ldap_error($ldapLink)
-    );
+    adminError('Saving settings failed. CODE: ' . ldap_error($ldapLink));
 }
 
 ?>
