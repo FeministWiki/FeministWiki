@@ -35,6 +35,16 @@ fi
 username=$1
 password=$2
 
+while read name
+do
+    if [ "$name" = "$username" ]
+    then
+        echo >&2 "Forbidden username: $name"
+        echo >&2 "Please choose a different one."
+        exit 1
+    fi
+done < /root/etc/forbidden-names
+
 for cn in "$manager" "$username"
 do
     if printf %s "$cn" | grep -q '^[^a-zA-Z]\|[^a-zA-Z0-9]'
