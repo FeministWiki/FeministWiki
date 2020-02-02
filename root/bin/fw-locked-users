@@ -1,0 +1,21 @@
+#!/bin/sh
+
+loop() {
+    loopState=name
+    while read line
+    do
+        case $loopState in
+            (name)
+                name=${line#dn: cn=}
+                name=${name%%,*}
+                loopState=empty
+                ;;
+            (empty)
+                printf '%s\n' "$name"
+                loopState=name
+                ;;
+        esac
+    done
+}
+
+fw-search 'pwdAccountLockedTime=*' '' | loop
