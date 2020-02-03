@@ -3,9 +3,9 @@
 subject="Inactive users report"
 admin=admin@feministwiki.org
 
-list=$(fw-inactive-users)
+list=$(/root/bin/fw-inactive-users)
 
 if [ "$list" != "" ]
 then
-    printf '%s\n' "$list" | mail -s "$subject" "$admin"
+    printf '%s\n' "$list" | /usr/bin/mail -s "$subject" "$admin"
 fi

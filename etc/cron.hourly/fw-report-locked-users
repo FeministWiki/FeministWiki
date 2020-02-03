@@ -3,14 +3,14 @@
 subject="Brute force warning"
 admin=admin@feministwiki.org
 
-list=$(fw-locked-users)
+list=$(/root/bin/fw-locked-users)
 
 if [ "$list" = "" ]
 then
     exit
 fi
 
-mail -s "$subject" "$admin" <<EOF
+/usr/bin/mail -s "$subject" "$admin" <<EOF
 The following accounts were temporarily disabled:
 $list
 EOF
