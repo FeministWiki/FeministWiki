@@ -1,0 +1,11 @@
+### HOW TO STYLE PHPBB FOR FEMINISTWIKI
+
+- Create a copy of the prosilver_dark style
+
+- Change the name in style.cfg
+
+- Change theme/images/logo.png to the one in this repo
+
+- Add 'background-size: 100%;' to .site_logo in theme/colours.css
+
+### END
