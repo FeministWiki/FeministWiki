@@ -18,4 +18,4 @@ loop() {
     done
 }
 
-fw-search 'pwdAccountLockedTime=*' '' | loop
+/root/bin/fw-search 'pwdAccountLockedTime=*' '' | loop
