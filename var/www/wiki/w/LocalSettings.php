@@ -10,11 +10,24 @@
 # Further documentation for configuration settings may be found at:
 # https://www.mediawiki.org/wiki/Manual:Configuration_settings
 
+$fwLang = NULL;
+
+$fwUri = $_SERVER['REQUEST_URI'];
+
+if ($fwUri[0] === '/') {
+	$fwUri = substr($fwUri, 1);
+}
+
+if (strlen($fwUri) === 2) {
+	$fwLang = $fwUri;
+} else if ($fwUri[2] === '/') {
+	$fwLang = substr($fwUri, 0, 2);
+}
+
 # Protect against web entry
 if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
-
 
 ## Uncomment this to disable output compression
 # $wgDisableOutputCompression = true;
@@ -26,8 +39,13 @@ $wgSitename = "FeministWiki";
 ## For more information on customizing the URLs
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
-$wgScriptPath = "/w";
-$wgArticlePath = "/wiki/$1";
+if ($fwLang === NULL) {
+	$wgScriptPath = "/w";
+	$wgArticlePath = "/wiki/$1";
+} else {
+	$wgScriptPath = "/{$fwLang}/w";
+	$wgArticlePath = "/{$fwLang}/wiki/$1";
+}
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = "https://feministwiki.org";
@@ -59,7 +77,11 @@ $wgEmailAuthentication = true;
 ## Database settings
 $wgDBtype = "mysql";
 $wgDBserver = "localhost";
-$wgDBname = "feministwiki";
+if ($fwLang === NULL) {
+	$wgDBname = "feministwiki";
+} else {
+	$wgDBname = "feministwiki_{$fwLang}";
+}
 $wgDBuser = "feministwiki";
 $wgDBpassword = "[REDACTED]";
 
@@ -76,6 +98,10 @@ $wgMemCachedServers = [];
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
 $wgEnableUploads = true;
+if ($fwLang !== NULL) {
+	$wgUploadPath = "{$wgScriptPath}/images-{$fwLang}";
+	$wgUploadDirectory = "{$IP}/images-{$fwLang}";
+}
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 
@@ -98,7 +124,11 @@ $wgShellLocale = "C.UTF-8";
 #$wgCacheDirectory = "$IP/cache";
 
 # Site language code, should be one of the list in ./languages/data/Names.php
-$wgLanguageCode = "en";
+if ($fwLang === NULL) {
+	$wgLanguageCode = "en";
+} else {
+	$wgLanguageCode = $fwLang;
+}
 
 $wgSecretKey = "[REDACTED]";
 
@@ -163,27 +193,27 @@ $wgNamespaceAliases['FW'] = NS_PROJECT;
 ### Extensions
 ###
 
-wfLoadExtension("AutoSitemap");
+wfLoadExtension('AutoSitemap');
 
-wfLoadExtension("UserMerge");
+wfLoadExtension('UserMerge');
 $wgGroupPermissions['bureaucrat']['usermerge'] = true;
 
-wfLoadExtension("Renameuser");
+wfLoadExtension('Renameuser');
 
-wfLoadExtension("MobileFrontend");
+wfLoadExtension('MobileFrontend');
 $wgMFAutodetectMobileView = true;
 $wgMFDefaultSkinClass = 'SkinMinerva';
 
-wfLoadExtension("WikiSEO");
+wfLoadExtension('WikiSEO');
 
-wfLoadExtension("EmbedVideo-master");
+wfLoadExtension('EmbedVideo-master');
 
-wfLoadExtension("PluggableAuth");
+wfLoadExtension('PluggableAuth');
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 
-wfLoadExtension("LDAPProvider");
-wfLoadExtension("LDAPAuthentication2");
-wfLoadExtension("LDAPUserInfo");
+wfLoadExtension('LDAPProvider');
+wfLoadExtension('LDAPAuthentication2');
+wfLoadExtension('LDAPUserInfo');
 
 ###
 ### Skins
