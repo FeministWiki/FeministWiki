@@ -98,12 +98,28 @@ $wgMemCachedServers = [];
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
 $wgEnableUploads = true;
-if ($fwLang !== NULL) {
-	$wgUploadPath = "{$wgScriptPath}/images-{$fwLang}";
-	$wgUploadDirectory = "{$IP}/images-{$fwLang}";
-}
 $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
+
+if ($fwLang !== NULL) {
+	$wgForeignFileRepos[] = [
+		'class' => 'ForeignDBRepo',
+		'name' => 'FeministWiki',
+		'url' => "https://feministwiki.org/w/images",
+		'directory' => '/var/www/wiki/w/images',
+		'hashLevels' => 2,
+		'dbType' => $wgDBtype,
+		'dbServer' => $wgDBserver,
+		'dbUser' => $wgDBuser,
+		'dbPassword' => $wgDBpassword,
+		'dbFlags' => DBO_DEFAULT,
+		'dbName' => 'feministwiki',
+		'tablePrefix' => '',
+		'hasSharedCache' => false,
+		'descBaseUrl' => 'https://feministwiki.org/wiki/File:',
+		'fetchDescription' => false
+	];
+}
 
 # InstantCommons allows wiki to use images from https://commons.wikimedia.org
 $wgUseInstantCommons = false;
