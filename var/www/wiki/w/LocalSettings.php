@@ -231,6 +231,9 @@ wfLoadExtension('LDAPProvider');
 wfLoadExtension('LDAPAuthentication2');
 wfLoadExtension('LDAPUserInfo');
 
+wfLoadExtension('Interwiki');
+$wgGroupPermissions['sysop']['interwiki'] = true;
+
 ###
 ### Skins
 ###
