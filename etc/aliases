@@ -1,8 +1,9 @@
 # See man 5 aliases for format
-root: admin
-abuse: admin
-info: admin
-postmaster: admin
+root: technician
+abuse: technician
+admin: technician
+info: technician
+postmaster: technician
 
 ## mailman ML
 mailman:              "|/var/lib/mailman/mail/mailman post mailman"

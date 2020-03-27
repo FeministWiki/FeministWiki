@@ -19,7 +19,7 @@ function indexOfFirstLengthN($words, $length) {
 
 function generatePassword() {
     # NOTE: The dictionary MUST be sorted by line length!
-    $words = explode("\n", file_get_contents(__DIR__ . '/.dict'));
+    $words = explode("\n", file_get_contents(__DIR__ . '/.pwd-dict'));
     $count = count($words);
 
     if ($count < 40000) {

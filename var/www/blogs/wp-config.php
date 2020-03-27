@@ -18,6 +18,8 @@
  * @package WordPress
  */
 
+require '.secrets.php';
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'blogs' );
@@ -26,7 +28,7 @@ define( 'DB_NAME', 'blogs' );
 define( 'DB_USER', 'blogs' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', '[REDACTED]' );
+#define( 'DB_PASSWORD', (Defined in .secrets.php) );
 
 /** MySQL hostname */
 define( 'DB_HOST', 'localhost' );
@@ -46,14 +48,14 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         '[REDACTED]' );
-define( 'SECURE_AUTH_KEY',  '[REDACTED]' );
-define( 'LOGGED_IN_KEY',    '[REDACTED]' );
-define( 'NONCE_KEY',        '[REDACTED]' );
-define( 'AUTH_SALT',        '[REDACTED]' );
-define( 'SECURE_AUTH_SALT', '[REDACTED]' );
-define( 'LOGGED_IN_SALT',   '[REDACTED]' );
-define( 'NONCE_SALT',       '[REDACTED]' );
+#define( 'AUTH_KEY',         (Defined in .secrets.php) );
+#define( 'SECURE_AUTH_KEY',  (Defined in .secrets.php) );
+#define( 'LOGGED_IN_KEY',    (Defined in .secrets.php) );
+#define( 'NONCE_KEY',        (Defined in .secrets.php) );
+#define( 'AUTH_SALT',        (Defined in .secrets.php) );
+#define( 'SECURE_AUTH_SALT', (Defined in .secrets.php) );
+#define( 'LOGGED_IN_SALT',   (Defined in .secrets.php) );
+#define( 'NONCE_SALT',       (Defined in .secrets.php) );
 
 /**#@-*/
 
@@ -95,3 +97,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Sets up WordPress vars and included files. */
 require_once( ABSPATH . 'wp-settings.php' );
+
+/** Disable File Edits. */
+define( 'DISALLOW_FILE_EDIT', true );

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 subject="Brute force warning"
-admin=admin@feministwiki.org
+admin=$(/bin/cat /root/etc/admin-mail)
 
 list=$(/root/bin/fw-locked-users)
 

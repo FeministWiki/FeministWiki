@@ -1,7 +1,7 @@
 #!/bin/sh
 
 subject="Inactive users report"
-admin=admin@feministwiki.org
+admin=$(/bin/cat /root/etc/admin-mail)
 
 list=$(/root/bin/fw-inactive-users)
 

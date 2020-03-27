@@ -13,7 +13,7 @@ main (int argc, char *argv[])
 {
   if (setuid(0) != 0) {
     printf("Error: Couldn't elevate privileges.\n");
-    printf("       Please contact admin@feministwiki.org.\n");
+    printf("       Please contact technician@feministwiki.org.\n");
     return 1;
   }
 
@@ -43,14 +43,14 @@ main (int argc, char *argv[])
       break;
     default:
       printf("Error: Wrong usage of add-member program.\n");
-      printf("       Please contact admin@feministwiki.org.\n");
+      printf("       Please contact technician@feministwiki.org.\n");
       return 1;
     }
   }
 
   if (optind + 2 != argc) {
       printf("Error: Too many arguments passed to add-member.\n");
-      printf("       Please contact admin@feministwiki.org.\n");
+      printf("       Please contact technician@feministwiki.org.\n");
       return 1;
   }
 
@@ -59,6 +59,6 @@ main (int argc, char *argv[])
 
   execv("/root/bin/fw-adduser", args);
 
-  printf("Error: exec() returned.  Please contact admin@feministwiki.org.\n");
+  printf("Error: exec() returned.  Please contact technician@feministwiki.org.\n");
   return 1;
 }

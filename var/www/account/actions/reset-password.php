@@ -23,7 +23,7 @@ $filter = "(&(cn=$usernameEsc)(fwRecoveryMail=$emailEsc))";
 $result = ldap_search($ldapLink, $baseDN, $filter, array());
 
 if ($result === FALSE) {
-    adminError('Couldn\'t read member directory.');
+    technicalError('Couldn\'t read member directory.');
 }
 
 if (ldap_count_entries($ldapLink, $result) == 0) {
@@ -41,7 +41,7 @@ $retval = setPassword($username, $password);
 
 if ($retval !== 0) {
     println('');
-    adminError('Resetting password failed.');
+    technicalError('Resetting password failed.');
 }
 
 println('Password was reset.  Trying to send out e-mail...');
@@ -51,8 +51,8 @@ $subject = 'New FeministWiki password';
 $headers = composeEmailHeaders(
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset=UTF-8',
-    'From: FeministWiki <admin@feministwiki.org>',
-    'Reply-To: FeministWiki Technician <admin@feministwiki.org>'
+    'From: FeministWiki <technician@feministwiki.org>',
+    'Reply-To: Technician <technician@feministwiki.org>'
 );
 $body = composeEmailBody(
     "Dear $username,",
@@ -75,7 +75,7 @@ $body = composeEmailBody(
 $retval = mail($email, $subject, $body, $headers);
 
 if ($retval !== TRUE) {
-    adminError('Failed to send out e-mail.');
+    technicalError('Failed to send out e-mail.');
 }
 
 println('-----');

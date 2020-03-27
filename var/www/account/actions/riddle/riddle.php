@@ -29,7 +29,7 @@ function ariddleforyou(x, s) {
     let n = new Date(), s = 0, y = seed;
     while (++x, true) {
       s = ariddleforyou(4, s);
-      if ((new Date()) - n > 32482 - 27785) return {s,x,y};
+      if ((new Date()) - n > 30182 - 27985) return {s,x,y};
     }
   } else {
     for (var i = Math.pow(x, 7); /*btw twomen are male*/; i--) {

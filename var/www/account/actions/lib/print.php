@@ -13,10 +13,10 @@ function printAndExit(...$lines) {
     exit;
 }
 
-function adminError($message) {
+function technicalError($message) {
     printAndExit(
         "Error: $message",
-        '       Please contact admin@feministwiki.org'
+        '       Please contact technician@feministwiki.org'
     );
 }
 

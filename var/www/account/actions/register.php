@@ -38,12 +38,12 @@ file_put_contents($pathname, serialize($userData));
 println('Trying to send out e-mail...');
 println('');
 
-$address = 'admin+accountrequest@feministwiki.org';
+$address = 'technician+accountrequest@feministwiki.org';
 $subject = "Account request: $username";
 $headers = composeEmailHeaders(
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset=UTF-8',
-    'From: Registration Form <admin@feministwiki.org>'
+    'From: Registration Form <technician@feministwiki.org>'
 );
 $body = composeEmailBody(
     "Username: $username",
@@ -60,14 +60,14 @@ $body = composeEmailBody(
 $retval = mail($address, $subject, $body, $headers);
 
 if ($retval !== TRUE) {
-    adminError('Failed to send out e-mail.');
+    technicalError('Failed to send out e-mail.');
 }
 
 println('Success.');
 println('');
-println('Your request was mailed to the administrator.');
+println('Your request was mailed to the technician.');
 println('');
 println('If you don\'t receive a response within a few days,');
-println('feel free to directly contact admin@feministwiki.org.');
+println('feel free to directly contact technician@feministwiki.org.');
 
 ?>

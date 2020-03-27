@@ -38,17 +38,17 @@ println('');
     
 unlink($pathname);
 
-println('Trying to mail the admin...');
+println('Trying to mail the technician...');
 
 $retval = mail(
-    'admin@feministwiki.org',
+    'technician@feministwiki.org',
     'New member accepted',
     "Username: $username\n"
     . "Password: $password\n"
 );
 
 if ($retval !== TRUE) {
-    println('Couldn\'t mail the admin!');
+    println('Couldn\'t mail the technician!');
     println('');
 }
 

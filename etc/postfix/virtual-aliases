@@ -1,4 +1,5 @@
 # See man 5 aliases for format
-abuse: admin
-info: admin
-postmaster: admin
+abuse: technician
+admin: technician
+info: technician
+postmaster: technician

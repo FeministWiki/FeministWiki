@@ -20,19 +20,19 @@ $userDN = "cn=$username,ou=members,dc=feministwiki,dc=org";
 $res = ldap_read($ldapLink, $userDN, '(objectClass=*)');
 
 if ($res === FALSE) {
-    adminError('Read operation failed. CODE: ' . ldap_error($ldapLink));
+    technicalError('Read operation failed. CODE: ' . ldap_error($ldapLink));
 }
 
 $entry = ldap_first_entry($ldapLink, $res);
 
 if ($entry === FALSE) {
-    adminError('Couldn\'t get result entry. CODE: ' . ldap_error($ldapLink));
+    technicalError('Couldn\'t get result entry. CODE: ' . ldap_error($ldapLink));
 }
 
 $attrs = ldap_get_attributes($ldapLink, $entry);
 
 if ($entry === FALSE) {
-    adminError('Couldn\'t get entry attributes. CODE: ' . ldap_error($ldapLink));
+    technicalError('Couldn\'t get entry attributes. CODE: ' . ldap_error($ldapLink));
 }
 
 println('Your database entry:');

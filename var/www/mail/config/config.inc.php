@@ -17,6 +17,8 @@
 +-----------------------------------------------------------------------+
 */
 
+require '.secrets.php';
+
 $config = array();
 
 $config['enable_installer'] = true;
@@ -27,7 +29,7 @@ $config['enable_installer'] = true;
 // For examples see http://pear.php.net/manual/en/package.database.mdb2.intro-dsn.php
 // NOTE: for SQLite use absolute path (Linux): 'sqlite:////full/path/to/sqlite.db?mode=0646'
 //       or (Windows): 'sqlite:///C:/full/path/to/sqlite.db'
-$config['db_dsnw'] = 'mysql://feministmail:[REDACTED]@localhost/feministmail';
+$config['db_dsnw'] = "mysql://feministmail:${fwRCDBPassword}@localhost/feministmail";
 
 // enforce connections over https
 // with this option enabled, all non-secure connections will be redirected.
@@ -91,7 +93,7 @@ $config['smtp_conn_options'] = array(
 
 // provide an URL where a user can get support for this Roundcube installation
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
-$config['support_url'] = 'mailto:admin@feministwiki.org';
+$config['support_url'] = 'mailto:technician@feministwiki.org';
 
 // Name your service. This is displayed on the login screen and in the window title
 $config['product_name'] = 'FeministMail';
@@ -114,7 +116,7 @@ $config['ldap_public']['public'] = array(
 // in the session record (and the client cookie if remember password is enabled).
 // please provide a string of exactly 24 chars.
 // YOUR KEY MUST BE DIFFERENT THAN THE SAMPLE VALUE FOR SECURITY REASONS
-$config['des_key'] = '[REDACTED]';
+$config['des_key'] = $fwRCDESKey;
 
 // List of active plugins (in plugins/ directory)
 $config['plugins'] = array(
@@ -125,6 +127,3 @@ $config['plugins'] = array(
 
 // skin name: folder from skins/
 $config['skin'] = 'elastic';
-
-// session lifetime in minutes
-$config['session_lifetime'] = 60 * 24;

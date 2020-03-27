@@ -61,7 +61,7 @@ if (ldap_mod_replace($ldapLink, $userDN, $settings)) {
     println('');
     println('You may close this page.');
 } else {
-    adminError('Saving settings failed. CODE: ' . ldap_error($ldapLink));
+    technicalError('Saving settings failed. CODE: ' . ldap_error($ldapLink));
 }
 
 ?>

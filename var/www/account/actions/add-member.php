@@ -27,7 +27,7 @@ if (preg_match('/^[a-z]+[a-z0-9]*$/i', $newUsername) !== 1) {
 }
 
 if (strlen($newPassword) < 24) {
-    adminError('Password generation failed.');
+    technicalError('Password generation failed.');
 }
 
 $ldapLink = ldapBind($username, $password);
@@ -43,7 +43,7 @@ $retval = addMember($newUsername, $newPassword, $newEmail, $newRecoveryMail, $us
 
 if ($retval !== 0) {
     println('');
-    adminError('Adding user failed.');
+    technicalError('Adding user failed.');
 }
 
 println('-----');
@@ -70,7 +70,7 @@ if ($address == '') {
     if ($retval !== TRUE) {
         $printPassword = TRUE;
         println('Sending email failed.  Please notify the member yourself.');
-        println('And please contact admin@feministwiki.org about this problem.');
+        println('And please contact technician@feministwiki.org about this problem.');
         println('');
     } else {
         println('Success!');

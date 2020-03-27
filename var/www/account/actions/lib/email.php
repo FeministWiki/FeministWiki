@@ -21,8 +21,8 @@ function sendWelcomeEmail($address, $username, $password) {
     $headers = composeEmailHeaders(
         'MIME-Version: 1.0',
         'Content-Type: text/html; charset=UTF-8',
-        'From: FeministWiki <admin@feministwiki.org>',
-        'Reply-To: FeministWiki Technician <admin@feministwiki.org>'
+        'From: FeministWiki <technician@feministwiki.org>',
+        'Reply-To: FeministWiki Technician <technician@feministwiki.org>'
     );
     $body = composeEmailBody(
         "Welcome to the FeministWiki, $username!",

@@ -10,23 +10,25 @@
 # Further documentation for configuration settings may be found at:
 # https://www.mediawiki.org/wiki/Manual:Configuration_settings
 
+require '../secrets.php';
+
 $fwLang = NULL;
 
 $fwUri = $_SERVER['REQUEST_URI'];
 
 if ($fwUri[0] === '/') {
-	$fwUri = substr($fwUri, 1);
+    $fwUri = substr($fwUri, 1);
 }
 
 if (strlen($fwUri) === 2) {
-	$fwLang = $fwUri;
-} else if ($fwUri[2] === '/') {
-	$fwLang = substr($fwUri, 0, 2);
+    $fwLang = $fwUri;
+} else if (strlen($fwUri) > 2 && $fwUri[2] === '/') {
+    $fwLang = substr($fwUri, 0, 2);
 }
 
 # Protect against web entry
 if ( !defined( 'MEDIAWIKI' ) ) {
-	exit;
+    exit;
 }
 
 ## Uncomment this to disable output compression
@@ -40,11 +42,11 @@ $wgSitename = "FeministWiki";
 ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
 ## https://www.mediawiki.org/wiki/Manual:Short_URL
 if ($fwLang === NULL) {
-	$wgScriptPath = "/w";
-	$wgArticlePath = "/wiki/$1";
+    $wgScriptPath = "/w";
+    $wgArticlePath = "/wiki/$1";
 } else {
-	$wgScriptPath = "/{$fwLang}/w";
-	$wgArticlePath = "/{$fwLang}/wiki/$1";
+    $wgScriptPath = "/{$fwLang}/w";
+    $wgArticlePath = "/{$fwLang}/wiki/$1";
 }
 
 ## The protocol and server name to use in fully-qualified URLs
@@ -57,8 +59,8 @@ $wgResourceBasePath = $wgScriptPath;
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogo = "$wgResourceBasePath/resources/assets/fw-logo-135.png";
 $wgLogoHD = [
-	"1.5x" => "$wgResourceBasePath/resources/assets/fw-logo-203.png",
-	"2x" => "$wgResourceBasePath/resources/assets/fw-logo-270.png"
+    "1.5x" => "$wgResourceBasePath/resources/assets/fw-logo-203.png",
+    "2x" => "$wgResourceBasePath/resources/assets/fw-logo-270.png"
 ];
 $wgFavicon = "$wgResourceBasePath/resources/assets/fw-favicon.ico";
 
@@ -67,8 +69,8 @@ $wgFavicon = "$wgResourceBasePath/resources/assets/fw-favicon.ico";
 $wgEnableEmail = true;
 $wgEnableUserEmail = true; # UPO
 
-$wgEmergencyContact = "admin@feministwiki.org";
-$wgPasswordSender = "admin@feministwiki.org";
+$wgEmergencyContact = "technician@feministwiki.org";
+$wgPasswordSender = "technician@feministwiki.org";
 
 $wgEnotifUserTalk = true; # UPO
 $wgEnotifWatchlist = true; # UPO
@@ -78,12 +80,12 @@ $wgEmailAuthentication = true;
 $wgDBtype = "mysql";
 $wgDBserver = "localhost";
 if ($fwLang === NULL) {
-	$wgDBname = "feministwiki";
+    $wgDBname = "feministwiki";
 } else {
-	$wgDBname = "feministwiki_{$fwLang}";
+    $wgDBname = "feministwiki_{$fwLang}";
 }
 $wgDBuser = "feministwiki";
-$wgDBpassword = "[REDACTED]";
+#$wgDBpassword = (Set in ../secrets.php);
 
 # MySQL specific settings
 $wgDBprefix = "";
@@ -102,23 +104,23 @@ $wgUseImageMagick = true;
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 
 if ($fwLang !== NULL) {
-	$wgForeignFileRepos[] = [
-		'class' => 'ForeignDBRepo',
-		'name' => 'FeministWiki',
-		'url' => "https://feministwiki.org/w/images",
-		'directory' => '/var/www/wiki/w/images',
-		'hashLevels' => 2,
-		'dbType' => $wgDBtype,
-		'dbServer' => $wgDBserver,
-		'dbUser' => $wgDBuser,
-		'dbPassword' => $wgDBpassword,
-		'dbFlags' => DBO_DEFAULT,
-		'dbName' => 'feministwiki',
-		'tablePrefix' => '',
-		'hasSharedCache' => false,
-		'descBaseUrl' => 'https://feministwiki.org/wiki/File:',
-		'fetchDescription' => false
-	];
+    $wgForeignFileRepos[] = [
+        'class' => 'ForeignDBRepo',
+        'name' => 'FeministWiki',
+        'url' => "https://feministwiki.org/w/images",
+        'directory' => '/var/www/wiki/w/images',
+        'hashLevels' => 2,
+        'dbType' => $wgDBtype,
+        'dbServer' => $wgDBserver,
+        'dbUser' => $wgDBuser,
+        'dbPassword' => $wgDBpassword,
+        'dbFlags' => DBO_DEFAULT,
+        'dbName' => 'feministwiki',
+        'tablePrefix' => '',
+        'hasSharedCache' => false,
+        'descBaseUrl' => 'https://feministwiki.org/wiki/File:',
+        'fetchDescription' => false
+    ];
 }
 
 # InstantCommons allows wiki to use images from https://commons.wikimedia.org
@@ -141,19 +143,19 @@ $wgShellLocale = "C.UTF-8";
 
 # Site language code, should be one of the list in ./languages/data/Names.php
 if ($fwLang === NULL) {
-	$wgLanguageCode = "en";
+    $wgLanguageCode = "en";
 } else {
-	$wgLanguageCode = $fwLang;
+    $wgLanguageCode = $fwLang;
 }
 
-$wgSecretKey = "[REDACTED]";
+#$wgSecretKey = (Set in ../secrets.php);
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
-$wgUpgradeKey = "[REDACTED]";
+#$wgUpgradeKey = (Set in ../secrets.php);
 
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
@@ -205,6 +207,8 @@ $wgNoFollowLinks = false;
 $wgExternalLinkTarget = '_blank';
 $wgNamespaceAliases['FW'] = NS_PROJECT;
 
+$wgPasswordAttemptThrottle = [ 'count' => 5, 'seconds' => 3600 ];
+
 ###
 ### Extensions
 ###
@@ -221,8 +225,11 @@ $wgMFAutodetectMobileView = true;
 $wgMFDefaultSkinClass = 'SkinMinerva';
 
 wfLoadExtension('WikiSEO');
+$wgWikiSeoDefaultImage = 'FeministWiki_banner.png';
+$wgTwitterSiteHandle = '@FeministWiki';
+#$wgGoogleSiteVerificationKey = (Set in ../secrets.php);
 
-wfLoadExtension('EmbedVideo-master');
+wfLoadExtension('EmbedVideo');
 
 wfLoadExtension('PluggableAuth');
 $wgGroupPermissions['*']['autocreateaccount'] = true;
@@ -244,33 +251,33 @@ wfLoadSkin('MinervaNeue');
 ### LDAP
 ###
 
-$LDAPProviderDomainConfigProvider = function() {
-	$config = [
-		"feministwiki" => [
-			"connection" => [
-				"server" => "localhost", //ldap.feministwiki.org
-				"port" => "389", //636
-				"user" => "cn=readonly,dc=feministwiki,dc=org",
-				"pass" => "[REDACTED]",
-				"basedn" => "ou=members,dc=feministwiki,dc=org",
-				"userbasedn" => "ou=members,dc=feministwiki,dc=org",
-				"groupbasedn" => "ou=groups,dc=feministwiki,dc=org",
-				"searchattribute" => "cn",
-				"searchstring" => "cn=USER-NAME,ou=members,dc=feministwiki,dc=org",
-				"usernameattribute" => "cn",
-				"realnameattribute" => "sn",
-				"emailattribute" => "mail",
-			],
-			"userinfo" => [
-				"attributes-map" => [
-					"email" => "mail",
-					"realname" => "sn",
-				]
-			]
-		]
-	];
-
-	return new \MediaWiki\Extension\LDAPProvider\DomainConfigProvider\InlinePHPArray( $config );
+$LDAPProviderDomainConfigProvider = function() use ($fwLDAPPassword) {
+    $connection = [
+        'server' => 'localhost', //ldap.feministwiki.org
+        'port' => '389', //636
+        'user' => 'cn=readonly,dc=feministwiki,dc=org',
+        'pass' => $fwLDAPPassword,
+        'basedn' => 'ou=members,dc=feministwiki,dc=org',
+        'userbasedn' => 'ou=members,dc=feministwiki,dc=org',
+        'groupbasedn' => 'ou=groups,dc=feministwiki,dc=org',
+        'searchattribute' => 'cn',
+        'searchstring' => 'cn=USER-NAME,ou=members,dc=feministwiki,dc=org',
+        'usernameattribute' => 'cn',
+        'realnameattribute' => 'sn',
+        'emailattribute' => 'mail',
+    ];
+    $attributesMap = [
+        'email' => 'mail',
+        'realname' => 'sn',
+    ];
+    return new \MediaWiki\Extension\LDAPProvider\DomainConfigProvider\InlinePHPArray([
+        'feministwiki' => [
+            'connection' => $connection,
+            'userinfo' => [
+                'attributes-map' => $attributesMap
+            ],
+        ]
+    ]);
 };
 
 ###

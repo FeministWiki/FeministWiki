@@ -8,14 +8,35 @@ loop() {
             (name)
                 name=${line#dn: cn=}
                 name=${name%%,*}
+                loopState=time
+                ;;
+            (time)
+                ts=${line#*LockedTime: }
+                # Format: yyyymmddHHMMSS'Z'
+                ts=${ts%Z}
+                date=${ts%??????}
+                time=${ts#????????}
+                y=${date%????}
+                m=${date#????}
+                m=${m%??}
+                d=${date#??????}
+                H=${time%????}
+                M=${time#??}
+                M=${M%??}
+                S=${time#????}
+                lockedAt=$(date -d "$y-$m-$d $H:$M:$S UTC" +%s)
+                now=$(date +%s)
                 loopState=empty
                 ;;
             (empty)
-                printf '%s\n' "$name"
+                if [ $((now - lockedAt)) -lt 3600 ]
+                then
+                    printf '%s\n' "$name"
+                fi
                 loopState=name
                 ;;
         esac
     done
 }
 
-/root/bin/fw-search 'pwdAccountLockedTime=*' '' | loop
+/root/bin/fw-search 'pwdAccountLockedTime=*' 'pwdAccountLockedTime' | loop
