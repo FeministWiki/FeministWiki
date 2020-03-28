@@ -1,6 +1,14 @@
 #!/bin/sh
 
+if ! [ "$(pwd)" = /root/repo ];
+then
+    echo >&2 'Run this from /root/repo!'
+    exit 1
+fi
+
 find etc root var -type f -exec sh -c 'for file; do cp /"$file" "$file"; done' {} +
+
+sed -ri 's/ldap_password: "[^"]+"/ldap_password: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 
 echo
 echo '~~~~~~~~~~~~~~~~~~~~~'
