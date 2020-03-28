@@ -1,0 +1,22 @@
+# Fail2Ban action configuration file for ufw - TCP port version
+#
+# You are required to run "ufw enable" before this will have any effect.
+
+[Definition]
+
+actionstart =
+
+actionstop =
+
+actioncheck =
+
+actionban = ufw insert 1 deny proto tcp from <ip> to any port <port>
+
+actionunban = ufw delete deny proto tcp from <ip> to any port <port>
+
+[Init]
+port = 22
+
+# DEV NOTES:
+#
+# Author: SocJusWiz

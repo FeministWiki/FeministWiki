@@ -1,0 +1,14 @@
+[DEFAULT]
+usedns = no
+
+[sshd]
+enabled = false
+
+[inspircd]
+enabled = true
+logpath = /var/log/inspircd.log
+filter = inspircd
+action = ufw-port[port=6697]
+maxretry = 5
+findtime = 600
+bantime = 3600
