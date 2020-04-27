@@ -14,14 +14,4 @@
 echo feministwiki.org > /etc/hostname
 hostname feministwiki.org
 
-cd /var/run
-
-mkdir -p inspircd
-chown irc:irc inspircd
-systemctl start inspircd
-
-mkdir -p ejabberd
-chown ejabberd:ejabberd ejabberd
-systemctl start ejabberd
-
 exit 0
