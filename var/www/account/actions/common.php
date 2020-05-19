@@ -5,6 +5,7 @@ require './lib/email.php';
 require './lib/ldap.php';
 require './lib/print.php';
 require './lib/pwdgen.php';
+require './lib/verify.php';
 
 header('Content-Type: text/plain');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');

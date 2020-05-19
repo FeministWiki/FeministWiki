@@ -38,15 +38,25 @@ if ($newPassword != '') {
     $settings['userPassword'] = $newPassword;
 }
 if ($displayName != '') {
-    println("Display name: $displayName");
+    println("New display name: $displayName");
     $settings['sn'] = $displayName;
 }
 if ($email != '') {
-    println("Email address: $email");
+    if (verifyEmail($email)) {
+        println("New email address: $email");
+    } else {
+        $email = "${username}@feministwiki.org";
+        println("Email address reset to default: $email");
+    }
     $settings['mail'] = $email;
 }
 if ($recoveryMail != '') {
-    println("Recovery email: $recoveryMail");
+    if (verifyEmail($recoveryMail)) {
+        println("New recovery email: $recoveryMail");
+    } else {
+        $recoveryMail = array();
+        println('Recovery email deleted.');
+    }
     $settings['fwRecoveryMail'] = $recoveryMail;
 }
 
