@@ -75,7 +75,7 @@ log_rate_limit: 100
 ##
 ## hosts: Domains served by ejabberd.
 ## You can define one or several, for example:
-## hosts: 
+## hosts:
 ##   - "example.net"
 ##   - "example.com"
 ##   - "example.org"
@@ -85,7 +85,7 @@ hosts:
 
 ##
 ## Don't use any caching.
-use_cache: false
+# use_cache: false
 
 ##
 ## route_subdomains: Delegate subdomains to other XMPP servers.
@@ -101,42 +101,58 @@ use_cache: false
 ## listen: The ports ejabberd will listen on, which service each is handled
 ## by and what options to start it with.
 ##
-listen: 
-  - 
+listen:
+  -
     port: 5222
     ip: "0.0.0.0"
     module: ejabberd_c2s
-    ##
-    ## If TLS is compiled in and you installed a SSL
-    ## certificate, specify the full path to the
-    ## file and uncomment these lines:
-    ##
     certfile: "/etc/letsencrypt/live/feministwiki.org/certbundle.pem"
-    #starttls: true
-    ##
-    ## To enforce TLS encryption for client connections,
-    ## use this instead of the "starttls" option:
-    ##
     starttls_required: true
-    ##
-    ## Custom OpenSSL options
-    ##
     protocol_options:
       - "no_sslv3"
       - "no_tlsv1"
     max_stanza_size: 65536
-    shaper: c2s_shaper
     access: c2s
     zlib: true
     resend_on_timeout: if_offline
-  - 
+  -
+    port: 5223
+    ip: "0.0.0.0"
+    module: ejabberd_c2s
+    certfile: "/etc/letsencrypt/live/feministwiki.org/certbundle.pem"
+    tls: true
+    protocol_options:
+      - "no_sslv3"
+      - "no_tlsv1"
+    max_stanza_size: 65536
+    access: c2s
+    zlib: true
+    resend_on_timeout: if_offline
+  -
     port: 5269
     ip: "0.0.0.0"
     module: ejabberd_s2s_in
-  ##
+  -
+    port: 5270
+    ip: "0.0.0.0"
+    module: ejabberd_s2s_in
+    tls: true
+  -
+    port: 5443
+    ip: "0.0.0.0"
+    module: ejabberd_http
+    request_handlers:
+      "/ws": ejabberd_http_ws
+      "/ul": mod_http_upload
+    web_admin: true
+    http_bind: true
+    captcha: true
+    tls: true
+    certfile: "/etc/letsencrypt/live/feministwiki.org/certbundle.pem"
+
   ## ejabberd_service: Interact with external components (transports, ...)
   ##
-  ## - 
+  ## -
   ##   port: 8888
   ##   module: ejabberd_service
   ##   access: all
@@ -148,35 +164,19 @@ listen:
   ##     "sms.example.org":
   ##       password: "secret"
 
-  ##
   ## ejabberd_stun: Handles STUN Binding requests
   ##
-  ## - 
+  ## -
   ##   port: 3478
   ##   transport: udp
   ##   module: ejabberd_stun
 
-  ##
   ## To handle XML-RPC requests that provide admin credentials:
   ##
-  ## - 
+  ## -
   ##   port: 4560
   ##   module: ejabberd_xmlrpc
   ##   access_commands: {}
-  - 
-    port: 5280
-    ip: "0.0.0.0"
-    module: ejabberd_http
-    request_handlers:
-      "/websocket": ejabberd_http_ws
-      "/upload": mod_http_upload
-    ##  "/pub/archive": mod_http_fileserver
-    web_admin: true
-    http_bind: true
-    ## register: true
-    captcha: true
-    tls: true
-    certfile: "/etc/letsencrypt/live/feministwiki.org/certbundle.pem"
 
 ## Disabling digest-md5 SASL authentication. digest-md5 requires plain-text
 ## password storage (see auth_password_format option).
@@ -268,119 +268,38 @@ auth_password_format: scram
 ## auth_method: pam
 ## pam_service: "pamservicename"
 
-##
-## Authentication using LDAP
-##
+#
+# Authentication using LDAP
+#
 auth_method: ldap
-##
-## List of LDAP servers:
+
+# List of LDAP servers:
 ldap_servers:
   - "localhost"
-##
-## Encryption of connection to LDAP servers:
-## ldap_encrypt: none
-## ldap_encrypt: tls
-##
-## Port to connect to on LDAP servers:
-## ldap_port: 389
-## ldap_port: 636
-##
-## LDAP manager:
+
+# Encryption of connection to LDAP servers:
+# ldap_encrypt: none
+# ldap_encrypt: tls
+
+# Port to connect to on LDAP servers:
+# ldap_port: 389
+# ldap_port: 636
+
+# LDAP manager:
 ldap_rootdn: "cn=readonly,dc=feministwiki,dc=org"
-##
-## Password of LDAP manager:
+
+# Password of LDAP manager:
 ldap_password: "[REDACTED]"
-##
-## Search base of LDAP directory:
+
+# Search base of LDAP directory:
 ldap_base: "dc=feministwiki,dc=org"
-##
-## LDAP attribute that holds user ID:
+
+# LDAP attribute that holds user ID:
 ldap_uids:
   - "cn": "%u"
-##
-## LDAP filter:
+
+# LDAP filter:
 ldap_filter: "(objectClass=inetOrgPerson)"
-
-##
-## Anonymous login support:
-##   auth_method: anonymous
-##   anonymous_protocol: sasl_anon | login_anon | both
-##   allow_multiple_connections: true | false
-##
-## host_config:
-##   "public.example.org":
-##     auth_method: anonymous
-##     allow_multiple_connections: false
-##     anonymous_protocol: sasl_anon
-##
-## To use both anonymous and internal authentication:
-##
-## host_config:
-##   "public.example.org":
-##     auth_method:
-##       - internal
-##       - anonymous
-
-###.  ==============
-###'  DATABASE SETUP
-
-## ejabberd by default uses the internal Mnesia database,
-## so you do not necessarily need this section.
-## This section provides configuration examples in case
-## you want to use other database backends.
-## Please consult the ejabberd Guide for details on database creation.
-
-##
-## MySQL server:
-##
-## odbc_type: mysql
-## odbc_server: "server"
-## odbc_database: "database"
-## odbc_username: "username"
-## odbc_password: "password"
-##
-## If you want to specify the port:
-## odbc_port: 1234
-
-##
-## PostgreSQL server:
-##
-## odbc_type: pgsql
-## odbc_server: "server"
-## odbc_database: "database"
-## odbc_username: "username"
-## odbc_password: "password"
-##
-## If you want to specify the port:
-## odbc_port: 1234
-##
-## If you use PostgreSQL, have a large database, and need a
-## faster but inexact replacement for "select count(*) from users"
-##
-## pgsql_users_number_estimate: true
-
-##
-## SQLite:
-##
-## odbc_type: sqlite
-## odbc_database: "/path/to/database.db"
-
-##
-## ODBC compatible or MSSQL server:
-##
-## odbc_type: odbc
-## odbc_server: "DSN=ejabberd;UID=ejabberd;PWD=ejabberd"
-
-##
-## Number of connections to open to the database for each virtual host
-##
-## odbc_pool_size: 10
-
-##
-## Interval to make a dummy SQL request to keep the connections to the
-## database alive. Specify in seconds: for example 28800 means 8 hours
-##
-## odbc_keepalive_interval: undefined
 
 ###.  ===============
 ###'  TRAFFIC SHAPERS
@@ -422,7 +341,7 @@ acl:
 
   ## Local users: don't modify this.
   ##
-  local: 
+  local:
     user_regexp: ""
 
   ##
@@ -467,50 +386,50 @@ acl:
 ###'  ACCESS RULES
 access:
   ## Maximum number of simultaneous sessions allowed for a single user:
-  max_user_sessions: 
+  max_user_sessions:
     all: 10
   ## Maximum number of offline messages that users can have:
-  max_user_offline_messages: 
+  max_user_offline_messages:
     admin: 5000
     all: 100
   ## This rule allows access only for local users:
-  local: 
+  local:
     local: allow
   ## Only non-blocked users can use c2s connections:
-  c2s: 
+  c2s:
     blocked: deny
     all: allow
   ## For C2S connections, all users except admins use the "normal" shaper
-  c2s_shaper: 
+  c2s_shaper:
     admin: none
     all: normal
   ## All S2S connections use the "fast" shaper
-  s2s_shaper: 
+  s2s_shaper:
     all: fast
   ## Only admins can send announcement messages:
-  announce: 
+  announce:
     admin: allow
   ## Only admins can use the configuration interface:
-  configure: 
+  configure:
     admin: allow
   ## Admins of this server are also admins of the MUC service:
-  muc_admin: 
+  muc_admin:
     admin: allow
   ## Only accounts of the local ejabberd server can create rooms:
-  muc_create: 
+  muc_create:
     local: allow
   ## All users are allowed to use the MUC service:
-  muc: 
+  muc:
     all: allow
   ## Only accounts on the local ejabberd server can create Pubsub nodes:
-  pubsub_createnode: 
+  pubsub_createnode:
     local: allow
   ## In-band registration allows registration of any possible username.
   ## To disable in-band registration, replace 'allow' with 'deny'.
-  register: 
+  register:
     all: allow
   ## Only allow to register from localhost
-  trusted_network: 
+  trusted_network:
     loopback: allow
   ## HTTP File Upload quotas, in MiB
   soft_upload_quota:
@@ -518,14 +437,14 @@ access:
   hard_upload_quota:
     all: 300
   ## Do not establish S2S connections with bad servers
-  ## s2s: 
+  ## s2s:
   ##   bad_servers: deny
   ##   all: allow
 
 ## By default the frequency of account registrations from the same IP
 ## is limited to 1 account every 10 minutes. To disable, specify: infinity
 ## registration_timeout: 600
-  
+
 ##
 ## Define specific Access Rules in a virtual host.
 ##
@@ -577,7 +496,7 @@ language: "en"
 ##
 ## Modules enabled in all ejabberd virtual hosts.
 ##
-modules: 
+modules:
   mod_adhoc: {}
   mod_admin_extra: {}
   mod_announce: # recommends mod_adhoc
@@ -587,7 +506,12 @@ modules:
   mod_carboncopy: {}
   mod_client_state: {}
   mod_configure: {} # requires mod_adhoc
-  mod_disco: {}
+  mod_disco:
+    server_info:
+      -
+        modules: all
+        name: "abuse-addresses"
+        urls: ["mailto:info@feministwiki.org"]
   #mod_echo: {}
   #mod_irc: {}
   mod_http_bind: {}
@@ -595,21 +519,20 @@ modules:
   ##   docroot: "/var/www"
   ##   accesslog: "/var/log/ejabberd/access.log"
   mod_http_upload:
-    host: "upload.@HOST@"
-    access: all
-    max_size: 100000000 # 100MB
     secret_length: 20
     jid_in_url: node
     thumbnail: true
-    docroot: "@HOME@/upload"
-    put_url: "https://xmpp.@HOST@:5280/upload"
-    get_url: "https://xmpp.@HOST@:5280/upload"
-    rm_on_unregister: false
+    put_url: "https://xmpp.@HOST@:5443/ul"
+    get_url: "https://xmpp.@HOST@:5443/ul"
+    custom_headers:
+      "Access-Control-Allow-Origin": "https://chat.@HOST@"
+      "Access-Control-Allow-Methods": "GET,HEAD,PUT,OPTIONS"
+      "Access-Control-Allow-Headers": "Content-Type"
   mod_http_upload_quota:
     max_days: 100
   mod_last: {}
   mod_mam: {}
-  mod_muc: 
+  mod_muc:
     host: "groups.@HOST@"
     access: muc
     access_create: muc_create
@@ -618,7 +541,7 @@ modules:
   mod_muc_log: {}
   mod_muc_admin: {}
   ## mod_multicast: {}
-  mod_offline: 
+  mod_offline:
     access_max_user_messages: max_user_offline_messages
   mod_ping: {}
   ## mod_pres_counter:
@@ -626,60 +549,20 @@ modules:
   ##   interval: 60
   mod_privacy: {}
   mod_private: {}
-  ## mod_proxy65: {}
+  mod_proxy65: {}
   mod_pubsub:
-    host: "pubsub.@HOST@"
     access_createnode: pubsub_createnode
     ## reduces resource comsumption, but XEP incompliant
-    ignore_pep_from_offline: true
+    # ignore_pep_from_offline: true
     ## XEP compliant, but increases resource comsumption
-    ## ignore_pep_from_offline: false
+    ignore_pep_from_offline: false
     last_item_cache: false
-    plugins: 
+    plugins:
       - "flat"
       - "hometree"
       - "pep" # pep requires mod_caps
-  # mod_register: 
-  #   ##
-  #   ## Protect In-Band account registrations with CAPTCHA.
-  #   ##
-  #   ## captcha_protected: true
-
-  #   ##
-  #   ## Set the minimum informational entropy for passwords.
-  #   ##
-  #   ## password_strength: 32
-
-  #   ##
-  #   ## After successful registration, the user receives
-  #   ## a message with this subject and body.
-  #   ##
-  #   welcome_message: 
-  #     subject: "Welcome!"
-  #     body: |-
-  #       Hi.
-  #       Welcome to this XMPP server.
-
-  #   ##
-  #   ## When a user registers, send a notification to
-  #   ## these XMPP accounts.
-  #   ##
-  #   ## registration_watchers:
-  #   ##   - "admin1@example.org"
-
-  #   ##
-  #   ## Only clients in the server machine can register accounts
-  #   ##
-  #   ip_access: trusted_network
-
-  #   ##
-  #   ## Local c2s or remote s2s users cannot register accounts
-  #   ##
-  #   ## access_from: deny
-
-  #   access: register
-  mod_roster: {}
-  # mod_shared_roster: {}
+  mod_roster:
+    versioning: true
   mod_shared_roster_ldap:
     ldap_base: "dc=feministwiki,dc=org"
     # Reset the top-level filter

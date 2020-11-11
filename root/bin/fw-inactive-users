@@ -24,7 +24,7 @@ loop() {
             (empty)
                 curYear=$(date +%Y)
                 curMonth=$(date +%m)
-                diffMonths=$(( (curYear - year) * 12 + curMonth - month ))
+                diffMonths=$(( (curYear - year) * 12 + ${curMonth#0} - ${month#0} ))
                 if [ $diffMonths -gt $months ]
                 then
                     echo $name: "$message": $year-$month

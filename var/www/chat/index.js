@@ -1,6 +1,6 @@
 converse.initialize({
     view_mode: "fullscreen",
-    websocket_url: "wss://xmpp.feministwiki.org:5280/websocket",
+    websocket_url: "wss://xmpp.feministwiki.org:5443/ws",
     locked_domain: "feministwiki.org",
     muc_domain: "groups.feministwiki.org",
     allow_registration: false
