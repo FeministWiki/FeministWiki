@@ -5,10 +5,12 @@ header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
 header('Pragma: no-cache');
 
-$ip = $_SERVER['REMOTE_ADDR'];
-if ($ip == '') {
+$remoteAddr = $_SERVER['REMOTE_ADDR'];
+if ($remoteAddr == '') {
   exit;
 }
+
+$clientID = md5($remoteAddr);
 
 $seed = random_int(0, 100) / 100;
 $time = time();
@@ -18,7 +20,7 @@ $data = array(
   'time' => $time
 );
 
-file_put_contents('ipdb/' . $ip, serialize($data));
+file_put_contents('clients/' . $clientID, serialize($data));
 
 echo "seed = $seed\n";
 
@@ -57,4 +59,8 @@ window.addEventListener('pageshow', function(){
   if (!s.disabled) {
     location.reload(true);
   }
+});
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  document.getElementById('riddleTrigger').onclick = riddleme;
 });
