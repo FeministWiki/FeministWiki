@@ -1,9 +1,9 @@
 <?php
 
-$clientIP = $_SERVER['REMOTE_ADDR'];
+$clientID = md5($_SERVER['REMOTE_ADDR']);
 $riddleInput = $_POST['riddleInput'];
 
-$clientSeedFile = __DIR__ . "/ipdb/$clientIP";
+$clientSeedFile = __DIR__ . "/clients/$clientID";
 
 if (!file_exists($clientSeedFile)) {
     printAndExit('No security token on server.');
