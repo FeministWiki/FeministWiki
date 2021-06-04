@@ -11,7 +11,7 @@ find etc root var -type f -exec sh -c 'for file; do cp /"$file" "$file"; done' {
 sed -ri 's/ldap_password: "[^"]+"/ldap_password: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 sed -ri 's/(key|password)="[^"]+"/\1="[REDACTED]"/' etc/inspircd/inspircd.conf
 
-tar -czf- /root/pwd \
+(cd /root; tar -czf- pwd) \
   | openssl aes-256-cbc \
     -md sha512 \
     -pbkdf2 \
