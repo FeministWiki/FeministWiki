@@ -1,0 +1,2 @@
+[Definition]
+failregex = ^.* CONNECT: Forbidden connection from [^@]*@<HOST>

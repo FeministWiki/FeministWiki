@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Add a new member</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
+  </head>
+  <body>
+
+    <h1>Add a new member</h1>
+
+    <form action="actions/add-member.php" method="post">
+
+      <p>Enter your own username and password:</p>
+      <p><input type="text" name="username" placeholder="Username"/></p>
+      <p><input type="password" name="password" placeholder="Password"/></p>
+
+      <p>Enter the new member's information below.</p>
+
+      <p>
+        <div class="title"><strong>Username</strong></div>
+        <div class="description">
+          English letters and digits.  Must start with a letter.
+        </div>
+        <input type="text" name="newUsername" placeholder="New username"/>
+      </p>
+
+      <p>
+        <div class="title"><strong>Public e-mail address</strong></div>
+        <div class="description">
+          Visible to everyone.  Can be left empty.
+        </div>
+        <input type="text" name="newEmail" placeholder="Public e-mail address"/>
+      </p>
+
+      <fieldset>
+        <legend><strong>Private e-mail address</strong></legend>
+        <div class="description">
+          Fill out if you left the public e-mail empty, so the new user can receive their
+          password to this e-mail address instead.
+        </div>
+        <input type="text" name="newEmail2" placeholder="Private e-mail address"/>
+
+        <div class="title"><strong>Save private e-mail for password recovery?</strong></div>
+        <div class="description">
+          Does the new member wish their private e-mail to be stored by the FeministWiki, so
+          that in the case they forget their password, they can automatically reset it?
+        </div>
+        <div class="checkbox">
+          <input id="saveEmail2" type="checkbox" name="saveEmail2" value="yes"/>
+          <label for="saveEmail2">Yes, save the private e-mail address.</label>
+        </div>
+        <div class="description fineprint">
+          <strong>Warning:</strong> Despite standard security measures, it cannot be guaranteed
+          that a data leak will never occur.
+        </div>
+      </fieldset>
+
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+
+      <p>
+        <button type="button" id="riddleTrigger">I'm not a bot</button>
+      </p>
+      <p>
+        <button type="submit" id="submit" disabled="true">Add member</button>
+      </p>
+
+    </form>
+
+    <p>
+      Don't forget that the newly added user can change their settings here: <br/>
+      <a href="settings.html">https://account.feministwiki.org/settings.html</a>
+    </p>
+
+  </body>
+</html>

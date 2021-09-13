@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<clientConfig version="1.1">
+  <emailProvider id="example.com">
+
+    <domain>feministwiki.org</domain>
+    <domain>feministwiki.dev</domain>
+
+    <displayName>FeministMail</displayName>
+    <displayShortName>FeministMail</displayShortName>
+
+    <incomingServer type="imap">
+      <hostname>imap.feministwiki.org</hostname>
+      <port>993</port>
+      <socketType>SSL</socketType>
+      <username>%EMAILLOCALPART%</username>
+      <authentication>password-cleartext</authentication>
+    </incomingServer>
+
+    <outgoingServer type="smtp">
+      <hostname>smtp.feministwiki.org</hostname>
+      <port>465</port>
+      <socketType>SSL</socketType>
+      <username>%EMAILLOCALPART%</username>
+      <authentication>password-cleartext</authentication>
+    </outgoingServer>
+
+  </emailProvider>
+</clientConfig>

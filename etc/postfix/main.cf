@@ -1,0 +1,139 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# Disable backwards-compatibility
+compatibility_level = 2
+
+#
+# Core options
+#
+
+mydomain = feministwiki.org
+
+myorigin = $mydomain
+myhostname = smtp.$mydomain
+
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128 192.168.0.0/24
+
+# Don't list $mydomain, which is in virtual_mailbox_domains instead
+mydestination = $myhostname, lists.$mydomain, localhost.$mydomain, localhost
+
+# Listen on all interfaces, but IPv4 only
+inet_interfaces = all
+inet_protocols = ipv4
+
+# We don't support biff(1)
+biff = no
+
+# Generate "delayed mail" warnings
+delay_warning_time = 30m
+confirm_delay_cleared = yes
+
+#
+# Mail filtering / OpenDKIM
+#
+
+milter_protocol = 2
+milter_default_action = accept
+smtpd_milters = inet:localhost:8891
+non_smtpd_milters = inet:localhost:8891
+
+#
+# Mail delivery
+#
+
+# List of alias files that newaliases(1) should update
+alias_database = hash:/etc/aliases, hash:/etc/postfix/virtual-aliases
+
+# Local aliases (e.g. for lists.feministwiki.org)
+alias_maps = hash:/etc/aliases
+
+# Deliver mail via dovecot
+mailbox_command = /usr/lib/dovecot/deliver -c /etc/dovecot/dovecot.conf -m "${EXTENSION}"
+
+# Use the Maildir format for mailboxes in home directories
+home_mailbox = Maildir/
+
+# Mail size limit: 50 MB
+message_size_limit = 50000000
+
+# Mailbox quota: 10 GB
+mailbox_size_limit = 10000000000
+
+# Allow janedoe+blah@feministwiki.org (where "blah" can be anything)
+# as an alias for janedoe@feministwiki.org
+recipient_delimiter = +
+
+# Needed to be able to send mail to several recipients
+dovecot_destination_recipient_limit = 1
+maildrop_destination_recipient_limit = 1
+
+#
+# Virtual mailboxes for FeministWiki members
+#
+
+virtual_mailbox_domains = feministwiki.org
+virtual_mailbox_maps = ldap:/etc/postfix/ldap-vmailboxes.cf
+virtual_alias_maps = hash:/etc/postfix/virtual-aliases
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+virtual_transport = dovecot
+
+#
+# TLS parameters
+#
+
+smtpd_tls_cert_file = /etc/fw-certs/fullchain.pem
+smtpd_tls_key_file = /etc/fw-certs/privkey.pem
+
+smtpd_tls_security_level = may
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+
+smtp_tls_security_level = may
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+smtpd_tls_received_header = yes
+smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
+smtpd_tls_mandatory_ciphers = medium
+smtpd_tls_auth_only = yes
+
+tls_random_source = dev:/dev/urandom
+
+#
+# Dovecot SASL authentication
+#
+
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+
+#
+# Restrictions
+#
+
+smtpd_client_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_unknown_client_hostname
+    reject_unauth_pipelining
+
+smtpd_helo_required = yes
+smtpd_helo_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_non_fqdn_helo_hostname
+    reject_unknown_helo_hostname
+
+smtpd_sender_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    # Local blacklist; run 'postmap /etc/postfix/sender_access' after editing!
+    check_sender_access hash:/etc/postfix/sender_access
+    reject_unknown_sender_domain
+
+smtpd_recipient_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_unknown_recipient_domain
+    reject_unauth_destination
+    # Consult public blacklists last so as not to abuse them.
+    reject_rbl_client zen.spamhaus.org

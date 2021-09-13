@@ -1,0 +1,54 @@
+body {
+    padding: 0 20px;
+    max-width: 650px;
+    background: #eee;
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+@media (max-height: 900px) {
+    body {
+        margin: 20px auto;
+    }
+}
+
+@media (min-height: 900px) {
+    body {
+        margin: 40px auto;
+    }
+}
+
+h1, h2, h3 {
+    line-height: 1.2;
+}
+
+div.title {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+div.description {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.fineprint {
+    font-size: 0.8em;
+}
+
+input[type=text],
+input[type=password] {
+    display: block;
+    font-size: 0.85em;
+    width: 300px;
+}
+
+textarea {
+    font-family: sans-serif;
+    width: 95%;
+}
+
+code {
+    font-family: "Lucida Console", Monaco, monospace;
+}

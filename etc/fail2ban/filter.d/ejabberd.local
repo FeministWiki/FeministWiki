@@ -1,0 +1,3 @@
+[Definition]
+
+failregex = ^.* Failed authentication for \S+ from <HOST>$

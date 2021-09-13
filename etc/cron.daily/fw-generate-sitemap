@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd /var/www/fw/wiki/w
+
+su www-data -s /bin/sh -c '
+  php7.4 maintenance/generateSitemap.php \
+    --fspath=sitemap \
+    --urlpath=w/sitemap \
+    --skip-redirects
+'

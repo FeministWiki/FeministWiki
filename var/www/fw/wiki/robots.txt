@@ -1,0 +1,21 @@
+User-Agent: *
+Allow: /w/api.php?action=mobileview&
+Allow: /w/load.php?
+Allow: /w/images/
+Allow: /w/resources/
+Allow: /w/sitemap/
+Allow: /*/w/api.php?action=mobileview&
+Allow: /*/w/load.php?
+Allow: /*/w/images/
+Allow: /*/w/resources/
+Allow: /*/w/sitemap/
+Disallow: /w/
+Disallow: /api/
+Disallow: /wiki/Special:
+Disallow: /wiki/Special%3A
+Disallow: /*/w/
+Disallow: /*/api/
+Disallow: /*/wiki/Special:
+Disallow: /*/wiki/Special%3A
+
+Sitemap: https://feministwiki.org/sitemap.xml

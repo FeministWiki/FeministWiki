@@ -1,0 +1,8 @@
+# Modifications to be made, e.g. via 'ldapmodify'
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcAccess
+olcAccess: {2}to attrs=sn,mail by self write
+olcAccess: {3}to attrs=fwRecoveryMail by self write by dn.exact="cn=readonly,dc=feministwiki,dc=org" search
+olcAccess: {4}to attrs=manager by self read
+-

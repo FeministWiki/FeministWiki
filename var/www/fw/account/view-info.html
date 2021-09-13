@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>View account information</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
+  </head>
+  <body>
+    <h1>View account information</h1>
+    <p>
+        This will display all information stored about your user account in the
+        central FeministWiki user directory.
+    </p>
+    <p>
+        If you have logged into any of the services (such as the wiki, forum,
+        blog platform, etc.) and added further user profile information within
+        them, that information will not be displayed here.  You can view it by
+        logging into the service in question and viewing your profile there.
+    </p>
+    <form action="actions/view-info.php" method="post">
+      <p>Enter your username and password to see your database entry:</p>
+      <p><input type="text" name="username" placeholder="Username"/></p>
+      <p><input type="password" name="password" placeholder="Password"/></p>
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+      <p><button type="button" id="riddleTrigger">I'm not a bot</button></p>
+      <p><button type="submit" id="submit" disabled="true">View info</button></p>
+    </form>
+  </body>
+</html>

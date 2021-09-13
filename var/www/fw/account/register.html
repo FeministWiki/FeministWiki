@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Register an account</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
+  </head>
+  <body>
+
+    <h1>Register an account</h1>
+
+    <form action="actions/register.php" method="post">
+
+      <p>
+        <div class="title"><strong>Username</strong></div>
+        <div class="description">
+          English letters and digits.  Must start with a letter.
+        </div>
+        <input type="text" name="username" placeholder="Username"/>
+      </p>
+
+      <p>
+        <div class="title"><strong>Public e-mail address</strong></div>
+        <div class="description">
+          Visible to everyone.  Can be left empty.
+        </div>
+        <input  type="text" name="email" placeholder="Public e-mail address"/>
+      </p>
+
+      <fieldset>
+        <legend><strong>Private e-mail address</strong></legend>
+        <div class="description">
+          Fill out if you left the public e-mail empty, so you can receive your password.
+        </div>
+        <input type="text" name="email2" placeholder="Private e-mail address"/>
+
+        <div class="title"><strong>Save private e-mail for password recovery?</strong></div>
+        <div class="description">
+          If you're bad with remembering passwords, and didn't fill in the public e-mail field,
+          the FeministWiki can store your private e-mail for password recovery purposes.
+        </div>
+        <div class="checkbox">
+          <input id="saveEmail2" type="checkbox" name="saveEmail2" value="yes"/>
+          <label for="saveEmail2">Yes, save my private e-mail address.</label>
+        </div>
+        <div class="description fineprint">
+          <strong>Warning:</strong> Despite standard security measures, it cannot be guaranteed
+          that a data leak will never occur.  For maximum privacy, you can use an e-mail address
+          that cannot be traced back to you.  Alternatively, you could use a throwaway e-mail
+          address, leave this box unchecked, and take good care of your password.
+        </div>
+      </fieldset>
+
+      <p>
+        <div class="title"><strong>Personal declaration</strong></div>
+        <div class="description">
+          Say a few words about what feminism means to you.
+        </div>
+      </p>
+
+      <textarea name="declaration" rows="3"></textarea>
+
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+
+      <p>
+        <button type="button" id="riddleTrigger">I'm not a bot</button>
+      </p>
+
+      <p>
+        <button type="submit" id="submit" disabled="true">Send registration</button>
+      </p>
+
+    </form>
+  </body>
+</html>

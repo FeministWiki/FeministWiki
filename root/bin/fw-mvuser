@@ -1,0 +1,19 @@
+#!/bin/sh
+
+oldname=$1
+newname=$2
+
+olddn="cn=$oldname,ou=members,dc=feministwiki,dc=org"
+newdn="cn=$newname,ou=members,dc=feministwiki,dc=org"
+
+input="dn: $olddn
+changetype: modrdn
+newrdn: cn=$newname
+deleteoldrdn: 1
+
+dn: $newdn
+changetype: modify
+replace: cn
+cn: $newname"
+
+/root/bin/fw-ldif "$input"

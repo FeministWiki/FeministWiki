@@ -1,0 +1,114 @@
+#!/bin/sh
+
+Help() {
+    echo >&2 ""
+    echo >&2 "Usage: fw-adduser [options] username password"
+    echo >&2 ""
+    echo >&2 "Optional arguments:"
+    echo >&2 ""
+    echo >&2 "-q          Quiet"
+    echo >&2 "-m manager  Set 'manager' field"
+    echo >&2 "-e email    Set 'mail' field"
+    echo >&2 "-r email    Set 'fwRecoveryMail' field"
+    echo >&2 ""
+    exit 1
+}
+
+while getopts qm:e:r: arg
+do
+    case $arg in
+        (q) quiet=yes ;;
+        (m) manager=$OPTARG ;;
+        (e) email=$OPTARG ;;
+        (r) recoveryMail=$OPTARG ;;
+        (*) Help
+    esac
+done
+
+shift $((OPTIND - 1))
+
+if [ $# -ne 2 ]
+then
+    Help
+fi
+
+username=$1
+password=$2
+
+getent passwd "$username" > /dev/null 2>&1
+retval=$?
+if [ "$retval" -eq 0 ]
+then
+    echo >&2 "System-reserved username: $username"
+    echo >&2 "Please choose a different one."
+    exit 1
+elif [ "$retval" -ne 2 ]
+then
+    echo >&2 "Couldn't validate username."
+    exit 1
+fi
+
+while read name
+do
+    if [ "$name" = "$username" ]
+    then
+        echo >&2 "Forbidden username: $name"
+        echo >&2 "Please choose a different one."
+        exit 1
+    fi
+done < /etc/feministwiki/forbidden-names
+
+for cn in "$manager" "$username"
+do
+    if printf %s "$cn" | grep -q '^[^a-zA-Z]\|[^a-zA-Z0-9]'
+    then
+        echo >&2 "Invalid username: $cn"
+        echo >&2 "Usernames must begin with a letter,"
+        echo >&2 "and only contain letters and digits."
+        exit 1
+    fi
+done
+
+if printf %s "$password" | grep -q '[^a-zA-Z0-9]'
+then
+    echo >&2 "Invalid password: $password"
+    echo >&2 "Password must only contain letters and digits."
+    exit 1
+fi
+
+lcaseUsername=$(printf '%s' "$username" | /usr/bin/tr '[:upper:]' '[:lower:]')
+
+if [ "$email" = "" ]
+then
+    email=$lcaseUsername@feministwiki.org
+fi
+
+if [ "$recoveryMail" = "" ]
+then
+    recoveryMail=$email
+fi
+
+if [ "$manager" = "" ]
+then
+    manager=SocJusWiz
+fi
+
+dn="cn=$username,ou=members,dc=feministwiki,dc=org"
+
+input="dn: $dn
+changetype: add
+objectClass: fwMember
+cn: $username
+uid: $username
+sn: $username
+userPassword: $password
+mail: $email
+fwRecoveryMail: $recoveryMail
+manager: cn=$manager,ou=members,dc=feministwiki,dc=org
+
+dn: cn=members,ou=groups,dc=feministwiki,dc=org
+changetype: modify
+add: member
+member: $dn"
+
+/root/bin/fw-ldif ${quiet:+ -q } "$input"

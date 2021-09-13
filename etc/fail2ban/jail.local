@@ -1,0 +1,19 @@
+[DEFAULT]
+usedns = no
+maxretry = 5
+findtime = 600
+bantime = 3600
+
+[sshd]
+enabled = false
+
+[ejabberd]
+enabled = true
+logpath = /var/log/ejabberd/ejabberd.log
+action = ufw-port[port=5222, actname=deny-xmpp]
+         ufw-port[port=5280, actname=deny-bosh]
+
+[inspircd]
+enabled = true
+logpath = /var/log/inspircd.log
+action = ufw-port[port=6697, actname=deny-ircd]

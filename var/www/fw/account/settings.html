@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Account settings</title>
+    <link rel="shortcut icon" type="image/png" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <script src="actions/riddle/riddle.php"></script>
+  </head>
+  <body>
+    <h1>Account settings</h1>
+    <form action="actions/change-settings.php" method="post">
+      <p>Enter your username and current password here:</p>
+      <p><input type="text" name="username" placeholder="Username"/></p>
+      <p><input type="password" name="password" placeholder="Password"/></p>
+      <p>
+        Enter the settings you want to change below.  Fields you leave empty will be left
+        unchanged.
+      </p>
+      <p><input type="password" name="newPassword" placeholder="New password"/></p>
+      <p><input type="password" name="newPassword2" placeholder="Re-type new password"/></p>
+      <p><input type="text" name="displayName" placeholder="Display name"/></p>
+      <p><input type="text" name="email" placeholder="E-mail address"/></p>
+      <p><input type="text" name="recoveryMail" placeholder="Recovery e-mail"/></p>
+      <input type="hidden" name="riddleInput" id="riddleInput"/>
+      <div class="description fineprint">
+        <p>
+          <strong>Warning:</strong> Despite standard security measures, it cannot be guaranteed
+          that a data leak will never occur.  If you're highly concerned about privacy, you may
+          want to use an e-mail address that cannot be traced back to you, or not enter one at
+          all.
+        </p>
+        <p>
+          If you previously entered an e-mail address and now want to remove it from your account,
+          you can enter a dummy value like a single "x" into the field.
+        </p>
+      </div>
+      <p><button type="button" id="riddleTrigger">I'm not a bot</button></p>
+      <p><button type="submit" id="submit" disabled="true">Save settings</button></p>
+    </form>
+  </body>
+</html>

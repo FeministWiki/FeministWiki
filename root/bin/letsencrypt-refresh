@@ -1,0 +1,63 @@
+#!/bin/sh
+
+error() {
+    printf >&2 '%s\n' "$@"
+}
+
+renew=yes
+
+while [ $# -ne 0 ]
+do
+    case $1 in
+    (--copy-only)
+        renew=
+        ;;
+    (*)
+        error "Usage: letsencrypt-refresh [--copy-only]"
+        exit 1
+    esac
+    shift
+done
+
+domains=$(/bin/grep -Ev '^#|^$' /etc/feministwiki/domains)
+domains=$(printf '%s' "$domains" | /usr/bin/tr '\n' ',')
+
+if [ "$renew" ]
+then
+    /usr/bin/certbot -n certonly \
+                     --cert-name feministwiki \
+                     --authenticator standalone \
+                     --preferred-challenges http \
+                     --force-renewal \
+                     -d "$domains"
+
+    retval=$?
+    if [ $retval -ne 0 ]
+    then
+        error "Certbot failed with exit code $retval."
+        exit $retval
+    fi
+fi
+
+# To make sure there is not a moment in which the privkey and bundle
+# are readable by others, we first make sure the files exist and set
+# their ownership and permissions.
+
+le=/etc/letsencrypt/live/feministwiki
+fw=/etc/fw-certs
+
+/bin/mkdir -p "$fw"
+/bin/touch "$fw/cert.pem"
+/bin/touch "$fw/chain.pem"
+/bin/touch "$fw/fullchain.pem"
+/bin/touch "$fw/privkey.pem"
+/bin/touch "$fw/bundle.pem"
+/bin/chown -R root:ssl-cert "$fw" || exit
+/bin/chmod -R 640 "$fw/privkey.pem" "$fw/bundle.pem" || exit
+
+/bin/cat "$le/cert.pem" > "$fw/cert.pem"
+/bin/cat "$le/chain.pem" > "$fw/chain.pem"
+/bin/cat "$le/fullchain.pem" > "$fw/fullchain.pem"
+/bin/cat "$le/privkey.pem" > "$fw/privkey.pem"
+
+/bin/cat "$fw/fullchain.pem" "$fw/privkey.pem" > "$fw/bundle.pem"

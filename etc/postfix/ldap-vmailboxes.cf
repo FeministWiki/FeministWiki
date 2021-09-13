@@ -1,0 +1,6 @@
+search_base = ou=members,dc=feministwiki,dc=org
+query_filter = cn=%u
+domain = feministwiki.org
+result_attribute = cn
+result_format = %s/
+bind = no

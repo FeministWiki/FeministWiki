@@ -1,0 +1,7 @@
+#!/bin/sh
+
+/usr/bin/ldapsearch \
+	-D cn=admin,dc=feministwiki,dc=org \
+	-y /root/pwd/ldap \
+	-b dc=feministwiki,dc=org \
+	-LLL "$@"

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+user=$1
+
+read -p "Really remove user '$user'? (Enter 'Y' to confirm.) " reply
+
+if [ "$reply" != "Y" ]
+then
+    echo >&2 "Aborting."
+    exit
+fi
+
+dn="cn=$user,ou=members,dc=feministwiki,dc=org"
+
+input="dn: $dn
+changetype: delete
+
+dn: cn=members,ou=groups,dc=feministwiki,dc=org
+changetype: modify
+delete: member
+member: $dn"
+
+/root/bin/fw-ldif "$input"

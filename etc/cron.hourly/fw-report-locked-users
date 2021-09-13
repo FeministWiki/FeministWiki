@@ -1,0 +1,16 @@
+#!/bin/sh
+
+subject="Brute force warning"
+admin=$(/bin/cat /etc/feministwiki/admin-mail)
+
+list=$(/root/bin/fw-locked-users)
+
+if [ "$list" = "" ] || [ "$list" = "Admin" ]
+then
+    exit
+fi
+
+/usr/bin/mail -s "$subject" "$admin" <<EOF
+The following accounts were temporarily disabled:
+$list
+EOF

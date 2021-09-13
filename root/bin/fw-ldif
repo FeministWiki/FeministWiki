@@ -1,0 +1,40 @@
+#!/bin/sh
+
+if [ "$1" = "-q" ]
+then
+    quiet=yes
+    shift;
+fi
+
+if [ "$#" -ne 1 ]
+then
+    echo >&2 'Usage: fw-ldif [-q] <ldif>'
+    exit 1
+fi
+
+ldif=$1
+
+if ! [ "$quiet" ]
+then
+    echo '--- LDIF to execute:'
+    printf '%s\n' "$ldif"
+    echo '--- Starting execution.'
+fi
+
+# Note: the -D arg is needed for when ~/.ldaprc isn't read
+printf '%s\n' "$ldif" |
+    /usr/bin/ldapmodify \
+        -D cn=admin,dc=feministwiki,dc=org \
+        -xy /root/pwd/ldap
+
+retval=$?
+
+if ! [ "$quiet" ]
+then
+    if [ "$retval" -eq 0 ]
+    then echo "--- Execution finished successfully."
+    else echo "--- EXECUTION ENCOUNTERED ERRORS"
+    fi
+fi
+
+exit $retval

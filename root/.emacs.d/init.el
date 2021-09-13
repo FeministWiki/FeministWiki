@@ -1,0 +1,5 @@
+(setq make-backup-files nil)
+(setq-default tab-width 4)
+(setq-default indent-tabs-mode nil)
+;(add-to-list 'load-path "/root/.emacs.d/php-mode/lisp")
+;(load-library "php-mode")

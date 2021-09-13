@@ -1,0 +1,50 @@
+#!/bin/sh
+
+if [ "$1" = "-q" ]
+then
+    quiet="-q"
+    shift
+fi
+
+user=$1
+shift
+
+input="dn: cn=$user,ou=members,dc=feministwiki,dc=org
+changetype: modify"
+
+while [ $# -gt 0 ]
+do
+    action=$1
+    shift
+    if [ "$action" = add ]
+    then
+	attr=$1
+	value=$2
+	shift 2
+	input="$input
+add: $attr
+$attr: $value
+-"
+    elif [ "$action" = set ]
+    then
+	attr=$1
+	value=$2
+	shift 2
+	input="$input
+replace: $attr
+$attr: $value
+-"
+    elif [ "$action" = del ]
+    then
+	attr=$1
+	shift
+	input="$input
+delete: $attr
+-"
+    else
+	echo >&2 "Unrecognized action: $action"
+	exit 1
+    fi
+done
+
+/root/bin/fw-ldif $quiet "$input"

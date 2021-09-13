@@ -1,0 +1,24 @@
+### HOW TO STYLE ROUNDCUBE FOR FEMINISTWIKI
+
+Creating a new skin is too annoying, even using the "extend" functionality.
+
+Much easier to just copy an existing one and modify a few files.
+
+This is how you can turn the default 'elastic' skin into a FeministMail skin:
+
+- Copy fw-favicon.ico to skins/elastic/images/favicon.ico.
+
+- Copy fw-watermark.png, fw-rounded.png and fw-font.png to skins/elastic/images.
+
+- Modify the following files to point to the FeministWiki images:
+
+  - skins/elastic/templates/login.html:
+    Change 'logo.svg' to 'fw-font.png'
+
+  - skins/elastic/templates/includes/menu.html:
+    Change 'logo.svg' to 'fw-rounded.png'
+
+  - skins/elastic/watermark.html:
+    Change 'logo.svg' to 'fw-watermark.png'
+
+### END
