@@ -18,7 +18,7 @@ $email         = $contents['email'];
 $recoveryMail  = $contents['recoveryMail'];
 $temporaryMail = $contents['temporaryMail'];
 
-println('Trying to add member...');
+println("Trying to add member: $username");
 println('');
 
 $retval = addMember($username, $password, $email, $recoveryMail);
