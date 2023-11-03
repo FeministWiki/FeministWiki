@@ -1,0 +1,40 @@
+server {
+	listen 80 default_server;
+
+	access_log /var/log/nginx/default-redirect.log;
+	error_log /var/log/nginx/default-error.log;
+
+	# Note that this covers not just hXXXXXXX.stratoserver.net,
+	# but also various xyz.feministwiki.org domains which don't
+	# have any nginx configuration, such as irc.feministwiki.org
+	include snippets/letsencrypt;
+
+	location = /php-status {
+		allow 127.0.0.1;
+		include snippets/run-php;
+	}
+
+	location / {
+		return 301 https://$host$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl default_server;
+	server_name h3003167.stratoserver.net;
+
+	ssl_certificate     /etc/letsencrypt/live/h3003167.stratoserver.net/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/h3003167.stratoserver.net/privkey.pem;
+
+	access_log /var/log/nginx/default-access.log;
+	error_log /var/log/nginx/default-error.log;
+
+	root /var/www/html;
+
+	include headers/default;
+	include headers/strict-csp;
+
+	location / {
+		autoindex on;
+	}
+}

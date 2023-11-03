@@ -1,0 +1,60 @@
+server {
+	listen 80;
+	server_name mail.feministwiki.org
+	            mail.feministwiki.dev;
+
+	access_log /var/log/nginx/fw-mail-redirect.log;
+	error_log /var/log/nginx/fw-mail-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://mail.feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name mail.feministwiki.org
+	            mail.feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-mail-access.log;
+	error_log /var/log/nginx/fw-mail-error.log;
+
+	root /var/www/fw/mail;
+
+	include headers/default;
+	include headers/unsafe-csp;
+
+	location = / {
+		fastcgi_index index.php;
+		include snippets/run-php;
+	}
+
+	location ~ ^/(\.git|\.tx|SQL|bin|config|logs|temp|tests|vendor)/ {
+		deny all;
+	}
+
+	location ~ ^/program/(include|lib|localization|steps)/ {
+		deny all;
+	}
+
+	location ~ ^/(README|CHANGELOG|SECURITY|meta\.json|composer\.|jsdeps\.json) {
+		deny all;
+	}
+
+	location ~ \.php$ {
+		include snippets/run-php;
+	}
+
+	location ~* \.(jpg|jpeg|gif|png|webp|svg|woff|woff2|ttf|css|js|ico|xml)$ {
+		include headers/cache-30d;
+	}
+
+	location / {
+		try_files $uri =404;
+	}
+}

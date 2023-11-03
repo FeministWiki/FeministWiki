@@ -207,7 +207,13 @@ wfLoadExtension( 'WikiEditor' );
 ### General Settings
 ###
 
-$wgNoFollowLinks = false;
+$wgUseCdn = true;
+$wgCdnMaxAge = 3600;
+
+if ($fwLang === NULL) {
+    $wgMainPageIsDomainRoot = true;
+}
+
 $wgExternalLinkTarget = '_blank';
 $wgNamespaceAliases['FW'] = NS_PROJECT;
 
@@ -215,12 +221,21 @@ $wgPasswordAttemptThrottle = [
     [ 'count' => 5, 'seconds' => 3600 ]
 ];
 
+# Add <meta name="robots" content="noindex,nofollow"/>
+# to all pages outside the main namespace.
+$wgNoFollowLinks = false;
+$wgDefaultRobotPolicy = 'noindex,nofollow';
+$wgNamespaceRobotPolicies[NS_MAIN] = 'index,follow';
+
+$wgRestrictDisplayTitle = false;
+
+# Unstable?
+#$wgEnableSidebarCache = true;
+#$wgSidebarCacheExpiry = 3600;
+
 ###
 ### Extensions
 ###
-
-# We use maintenance/generateSitemap.php now
-#wfLoadExtension('AutoSitemap');
 
 wfLoadExtension('UserMerge');
 $wgGroupPermissions['bureaucrat']['usermerge'] = true;
@@ -232,12 +247,16 @@ wfLoadExtension('MobileFrontend');
 wfLoadExtension('WikiSEO');
 $wgWikiSeoDefaultImage = 'FeministWiki_banner.png';
 $wgTwitterSiteHandle = '@FeministWiki';
-#$wgGoogleSiteVerificationKey = (Set in ../secrets.php);
+$wgGoogleSiteVerificationKey = "RZf8hzu0sR32H9OsEXa3-aN3LzE4T2nLPg1s9SrJgJI";
 
 wfLoadExtension('EmbedVideo');
 
 wfLoadExtension('PluggableAuth');
 $wgGroupPermissions['*']['autocreateaccount'] = true;
+
+wfLoadExtension('TextExtracts');
+wfLoadExtension('PageImages');
+wfLoadExtension('Popups');
 
 wfLoadExtension('LDAPProvider');
 wfLoadExtension('LDAPAuthentication2');
@@ -284,6 +303,13 @@ $LDAPProviderDomainConfigProvider = function() use ($fwLDAPPassword) {
         ]
     ]);
 };
+
+$wgPluggableAuth_Config['Log in'] = [
+    'plugin' => 'LDAPAuthentication2',
+    'data' => [
+        'domain' => 'feministwiki'
+    ]
+];
 
 ###
 ### Debug

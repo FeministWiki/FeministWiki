@@ -1,0 +1,39 @@
+server {
+	listen 80;
+	server_name blogs.feministwiki.org
+	            blogs.feministwiki.dev;
+
+	access_log /var/log/nginx/fw-blogs-redirect.log;
+	error_log /var/log/nginx/fw-blogs-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://blogs.feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name blogs.feministwiki.org
+	            blogs.feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-blogs-access.log;
+	error_log /var/log/nginx/fw-blogs-error.log;
+
+	root /var/www/fw/blogs;
+
+	include headers/default;
+	include headers/unsafe-csp;
+
+	location / {
+		proxy_pass http://localhost:8080;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+}

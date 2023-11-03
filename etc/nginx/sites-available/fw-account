@@ -1,0 +1,43 @@
+server {
+	listen 80;
+	server_name account.feministwiki.org
+	            account.feministwiki.dev;
+
+	access_log /var/log/nginx/fw-account-redirect.log;
+	error_log /var/log/nginx/fw-account-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://account.feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name account.feministwiki.org
+	            account.feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-account-access.log;
+	error_log /var/log/nginx/fw-account-error.log;
+
+	root /var/www/fw/account;
+
+	include headers/default;
+	include headers/strict-csp;
+
+	location ~ ^/actions/(bin|requests|src|lib)/ {
+		return 403;
+	}
+
+	location ~ \.php$ {
+		include snippets/run-php;
+	}
+
+	location / {
+		index index.html;
+	}
+}

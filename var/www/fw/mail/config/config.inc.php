@@ -31,11 +31,6 @@ $config['enable_installer'] = true;
 //       or (Windows): 'sqlite:///C:/full/path/to/sqlite.db'
 $config['db_dsnw'] = "mysql://feministmail:${fwRCDBPassword}@localhost/feministmail";
 
-// enforce connections over https
-// with this option enabled, all non-secure connections will be redirected.
-// set the port for the ssl connection as value of this option if it differs from the default 443
-$config['force_https'] = true;
-
 $config['mail_domain'] = 'feministwiki.org';
 
 // The mail host chosen to perform the log-in.

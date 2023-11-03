@@ -1,0 +1,47 @@
+server {
+	listen 80;
+	server_name forum.feministwiki.org
+	            forum.feministwiki.dev;
+
+	access_log /var/log/nginx/fw-forum-redirect.log;
+	error_log /var/log/nginx/fw-forum-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://forum.feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name forum.feministwiki.org
+	            forum.feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-forum-access.log;
+	error_log /var/log/nginx/fw-forum-error.log;
+
+	root /var/www/fw/forum;
+
+	include headers/default;
+	include headers/unsafe-csp;
+
+	location = / {
+		index index.php index.html index.htm;
+	}
+
+	location ~ ^/(config\.php|common\.php|includes|cache|files|store|images/avatars/upload) {
+		deny all;
+	}
+
+	location ~ \.php$ {
+		include snippets/run-php;
+	}
+
+	location ~ /app.php/ {
+		include snippets/run-php;
+	}
+}

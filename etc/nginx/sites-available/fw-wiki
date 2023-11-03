@@ -1,0 +1,148 @@
+server {
+	listen 80;
+	server_name feministwiki.de www.feministwiki.de;
+
+	access_log /var/log/nginx/fw-wiki-redirect.log;
+	error_log /var/log/nginx/fw-wiki-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://feministwiki.org/de$request_uri;
+	}
+}
+
+server {
+	listen 80;
+	server_name
+		feministwiki.org
+		feministwiki.net
+		feministwiki.dev
+		www.feministwiki.org
+		www.feministwiki.net
+		www.feministwiki.dev
+		fem.wiki www.fem.wiki
+		feminism.wiki www.feminism.wiki
+		feminist.wiki www.feminist.wiki;
+
+	access_log /var/log/nginx/fw-wiki-redirect.log;
+	error_log /var/log/nginx/fw-wiki-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name feministwiki.de www.feministwiki.de;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-wiki-access.log;
+	error_log /var/log/nginx/fw-wiki-error.log;
+
+	return 301 https://feministwiki.org/de$request_uri;
+}
+
+server {
+	listen 443 ssl;
+	server_name
+		www.feministwiki.org
+		www.feministwiki.dev
+		fem.wiki www.fem.wiki
+		feminism.wiki www.feminism.wiki
+		feminist.wiki www.feminist.wiki;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-wiki-redirect.log;
+	error_log /var/log/nginx/fw-wiki-error.log;
+
+	return 301 https://feministwiki.org$request_uri;
+}
+
+server {
+	listen 443 ssl;
+	server_name feministwiki.org feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-wiki-access.log;
+	error_log /var/log/nginx/fw-wiki-error.log;
+
+	root /var/www/fw/wiki;
+
+	include headers/default;
+	include headers/unsafe-csp;
+
+	# No cache for robots or sitemaps
+	location ~ ^/(robots|sitemap) {
+	}
+
+	# Static assets outside of MediaWiki
+	location ~ ^/(favicon|static) {
+		include headers/cache-30d;
+	}
+
+	# Root URL is main page
+	location = / {
+		fastcgi_index w/index.php;
+		include snippets/run-php;
+	}
+
+	location = /wiki/Main_Page {
+		return 301 /;
+	}
+
+	# Location for wiki's entry points
+	location ~ ^/w/(index|load|api|thumb|opensearch_desc|rest)\.php$ {
+		include snippets/run-php;
+	}
+
+	# Images
+	location /w/images {
+		include headers/cache-1d;
+	}
+	location /w/images/deleted {
+		deny all;
+	}
+
+	# MediaWiki assets (usually images)
+	location ~ ^/w/resources/(assets|lib|src) {
+		include headers/cache-30d;
+	}
+
+	# Assets, scripts and styles from skins and extensions
+	location ~ ^/w/(skins|extensions)/.+\.(css|js|gif|ico|jpg|jpeg|png|svg|webp|wasm|ttf|woff|woff2)$ {
+		include headers/cache-30d;
+	}
+
+	# Handling for Mediawiki REST API, see [[mw:API:REST_API]]
+	location /w/rest.php/ {
+		try_files $uri $uri/ /w/rest.php?$query_string;
+	}
+
+	# Handling for the article path (pretty URLs)
+	location /wiki/ {
+		rewrite ^/wiki/(?<pagename>.*)$ /w/index.php;
+	}
+
+	# Handle languages
+	location ~ ^/(de|es|fr|it|pt)/ {
+		rewrite ^/../$           /w/index.php;
+		rewrite ^/../wiki(/.*)?$ /w/index.php;
+		rewrite ^/../w/(.*)$     /w/$1;
+	}
+
+	# Every other entry point will be disallowed.
+	# Add specific rules for other entry points/images as needed above this
+	location / {
+		return 404;
+	}
+}

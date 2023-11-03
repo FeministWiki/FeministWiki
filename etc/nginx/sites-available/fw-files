@@ -1,0 +1,42 @@
+server {
+	listen 80;
+	server_name files.feministwiki.org
+	            files.feministwiki.dev;
+
+	access_log /var/log/nginx/fw-files-redirect.log;
+	error_log /var/log/nginx/fw-files-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://files.feministwiki.org$request_uri;
+	}
+}
+
+server {
+	listen 443 ssl;
+	server_name files.feministwiki.org
+	            files.feministwiki.dev;
+
+	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+	access_log /var/log/nginx/fw-files-access.log;
+	error_log /var/log/nginx/fw-files-error.log;
+
+	root /var/www/fw/files;
+
+	include headers/strict-hsts;
+
+	location = /.well-known/carddav { return 301 /remote.php/dav/; }
+	location = /.well-known/caldav { return 301 /remote.php/dav/; }
+
+	location / {
+		proxy_pass http://localhost:8080;
+		proxy_read_timeout 600s;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+}

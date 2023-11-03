@@ -8,4 +8,6 @@
 
 - Add 'background-size: 100%;' to .site_logo in theme/colours.css
 
+- Add /favicon.ico file
+
 ### END

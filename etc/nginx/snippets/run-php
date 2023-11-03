@@ -1,0 +1,11 @@
+include /etc/nginx/fastcgi.conf;
+
+fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+
+fastcgi_cache SHM;
+fastcgi_cache_valid 1h;
+fastcgi_cache_use_stale error timeout http_500 http_503;
+
+add_header X-Cache $upstream_cache_status;
+
+access_log /var/log/nginx/cache-stats.log cache_stats gzip;
