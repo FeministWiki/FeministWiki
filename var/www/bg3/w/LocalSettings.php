@@ -280,6 +280,9 @@ $wgPasswordAttemptThrottle = [
 $wgUseCdn = true;
 $wgCdnMaxAge = 86400; // 24 hours
 
+$wgUseFileCache = true;
+$wgFileCacheDirectory = '/run/shm/bg3wiki-cache';
+
 # Can't send purge to Nginx; only Vagrant supported.
 #$wgCdnServers = [ '127.0.0.1' ];
 #$wgInternalServer = 'http://127.0.0.1';

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 MW_INSTALL_PATH=/var/www/bg3/w
 
@@ -11,10 +11,12 @@ sleep 60
 
 echo Started.
 
-while sleep 2
+while true
 do
 	# Job types that need to be run ASAP
 	php "$RUNJOBS" --type="enotifNotify"
 
 	php "$RUNJOBS" --wait --maxjobs=20
+
+	sleep 10
 done
