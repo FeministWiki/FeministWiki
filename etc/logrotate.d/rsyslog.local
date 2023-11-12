@@ -6,7 +6,9 @@
 {
 	rotate 4
 	weekly
+	maxsize 100M
 	missingok
+	create 640 syslog adm
 	notifempty
 	compress
 	delaycompress

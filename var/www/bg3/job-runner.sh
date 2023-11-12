@@ -6,6 +6,8 @@ RUNJOBS=$MW_INSTALL_PATH/maintenance/runJobs.php
 
 echo Starting job service...
 
+renice +19 $$
+
 # Wait a minute after the server starts up to give other processes time to get started
 sleep 60
 
