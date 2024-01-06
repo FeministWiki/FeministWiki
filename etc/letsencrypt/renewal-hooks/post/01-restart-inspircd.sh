@@ -1,3 +1,3 @@
 #!/bin/sh
 
-/bin/systemctl restart inspircd
+/usr/bin/systemctl restart inspircd

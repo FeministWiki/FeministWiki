@@ -148,6 +148,7 @@ wfLoadExtensions([
 	"DeleteBatch",
 	"Elastica",
 	"EmbedVideo",
+	"DiscordRCFeed",
 	"HTMLTags",
 	"ImageMap",
 	"JsonConfig",
@@ -155,6 +156,7 @@ wfLoadExtensions([
 	"LocalVariables",
 	"Loops",
 	"MassEditRegex",
+	"Math",
 	"MobileDetect",
 	"MobileFrontend",
 	"NamespacePreload",
@@ -248,6 +250,9 @@ $wgRestrictDisplayTitle = false;
 
 # Enable fancy Wikitext editing
 $wgDefaultUserOptions['usecodemirror'] = 1;
+
+# Enable subpages for main namespace
+$wgNamespacesWithSubpages[NS_MAIN] = true;
 
 $wgAllowUserCss = true;
 $wgAllowUserJs = true;
@@ -425,6 +430,24 @@ $wgCargoDBserver = "localhost";
 $wgCargoDBname = "bg3wiki-cargo";
 $wgCargoDBuser = "bg3wiki-cargo";
 #$wgCargoDBpassword = "(set in secrets.php)";
+
+#
+# Discord RC Feed
+#
+
+$wgRCFeeds['discord'] = [
+	'url' => $discordRCFeedWebhookUri,
+	'omit_minor' => true,
+	'omit_talk' => true,
+	'omit_namespaces' => [ NS_USER ],
+];
+
+$wgRCFeeds['discord_talk'] = [
+	'url' => $discordRCFeedTalkWebhookUri,
+	'omit_minor' => true,
+	'only_talk' => true,
+	'omit_namespaces' => [ NS_USER ],
+];
 
 #
 # HTML Tags
