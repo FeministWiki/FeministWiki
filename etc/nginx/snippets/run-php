@@ -6,6 +6,21 @@ fastcgi_cache SHM;
 fastcgi_cache_valid 1h;
 fastcgi_cache_use_stale error timeout http_500 http_503;
 
-add_header X-Cache $upstream_cache_status;
+# We could do this in a more refined manner, e.g. by checking if the
+# Vary response header contains "User-Agent", but currently MediaWiki
+# will either return no Vary header at all, or one which includes the
+# User-Agent, so no need for complication.  For an example of how the
+# Vary header can be checked for a specific substring, see the file:
+# /etc/nginx/conf.d/fcgi-cache.conf
+fastcgi_no_cache $upstream_http_vary;
+
+fastcgi_cache_bypass $fcgi_cache_bypass_uri;
+
+# Enable for debugging
+#add_header X-Cache $upstream_cache_status;
+# And one of the following, depending on whether the mapped variable
+# $fcgi_nocache from /etc/nginx/conf.d/fcgi-cache.conf is used:
+#add_header X-NoCache $upstream_http_vary;
+#add_header X-NoCache $fcgi_nocache;
 
 access_log /var/log/nginx/cache-stats.log cache_stats gzip;

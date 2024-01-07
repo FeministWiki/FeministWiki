@@ -17,6 +17,10 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
+#if ( $_SERVER['REMOTE_ADDR'] == $taylanIpAddr ) {
+#	file_put_contents('/tmp/apcu_shm_stats', print_r(apcu_sma_info(), true));
+#}
+
 $wgSitename = "Baldur's Gate 3 Wiki";
 $wgMetaNamespace = "BG3Wiki";
 
@@ -72,8 +76,8 @@ $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $wgSharedTables[] = "actor";
 
 ## Shared memory settings
-$wgMainCacheType = CACHE_MEMCACHED;
-$wgMemCachedServers = [ '127.0.0.1:11211' ];
+$wgMainCacheType = CACHE_ACCEL;
+$wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
@@ -227,15 +231,6 @@ $wgNamespacesWithSubpages[NS_MODDING] = true;
 # General
 #
 
-# Don't invalidate caches every time this file is edited
-$wgInvalidateCacheOnLocalSettingsChange = false;
-
-# Update this to invalidate caches manually instead
-$wgCacheEpoch = 20231031050000;
-
-# We use a systemd service for this
-$wgJobRunRate = 0;
-
 # Serve Main_Page as https://bg3.wiki/
 $wgMainPageIsDomainRoot = true;
 
@@ -282,13 +277,28 @@ $wgPasswordAttemptThrottle = [
 # Performance
 #
 
-$wgUseCdn = true;
-$wgCdnMaxAge = 86400; // 24 hours
+# We use a systemd service for this
+$wgJobRunRate = 0;
 
+# Don't invalidate caches every time this file is edited
+$wgInvalidateCacheOnLocalSettingsChange = false;
+
+# Update this to invalidate caches manually instead
+$wgCacheEpoch = 20240107123000;
+
+# Parser cache lasts 10 days
+$wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
+
+# On-disk HTML cache for anon visitors
 $wgUseFileCache = true;
 $wgFileCacheDirectory = '/run/shm/bg3wiki-cache';
 
-# Can't send purge to Nginx; only Vagrant supported.
+# Allow caching via reverse proxy
+# In our case this is just the Nginx FCGI cache
+$wgUseCdn = true;
+$wgCdnMaxAge = 24 * 60 * 60;
+
+# Can't send purge to Nginx; only Varnish supported
 #$wgCdnServers = [ '127.0.0.1' ];
 #$wgInternalServer = 'http://127.0.0.1';
 
