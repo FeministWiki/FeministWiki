@@ -20,7 +20,7 @@ basedir                 = /usr
 
 # Broken reverse DNS slows down connections considerably and name resolve is
 # safe to skip if there are no "host by domain name" access grants
-#skip-name-resolve
+skip-name-resolve
 
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
@@ -33,13 +33,20 @@ bind-address            = 127.0.0.1
 thread_handling          = pool-of-threads
 thread_pool_max_threads  = 100
 thread_pool_idle_timeout = 600
-max_connections          = 3000
-
-query_cache_type      = 1
-query_cache_size      = 2G
+max_connections          = 300
 
 max_heap_table_size   = 256M
 tmp_memory_table_size = 256M
+
+table_open_cache       = 8000
+table_definition_cache = 4000
+
+# Better not to enable the query cache, because:
+# 1. It causes lock contention, since every cacheable query locks.
+# 2. Empirically, we only get a cache hit/insert ratio of about 4/3.
+# We once enabled it with 2 GiB size, and it was catastrophic.
+query_cache_type = 0
+query_cache_size = 0
 
 #key_buffer_size        = 128M
 #max_allowed_packet     = 1G
