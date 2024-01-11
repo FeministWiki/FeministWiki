@@ -1,7 +1,5 @@
-# See /usr/share/postfix/main.cf.dist for a commented, more complete version
-
 # Disable backwards-compatibility
-compatibility_level = 2
+compatibility_level = 3.6
 
 #
 # Core options
@@ -34,8 +32,8 @@ confirm_delay_cleared = yes
 
 milter_protocol = 2
 milter_default_action = accept
-smtpd_milters = inet:localhost:8891
-non_smtpd_milters = inet:localhost:8891
+smtpd_milters = unix:/opendkim/opendkim.sock
+non_smtpd_milters = unix:/opendkim/opendkim.sock
 
 #
 # Mail delivery
@@ -82,14 +80,14 @@ virtual_transport = dovecot
 # TLS parameters
 #
 
-smtpd_tls_cert_file = /etc/fw-certs/fullchain.pem
-smtpd_tls_key_file = /etc/fw-certs/privkey.pem
-
-smtpd_tls_security_level = may
-smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-
+smtp_tls_CApath = /etc/ssl/certs
 smtp_tls_security_level = may
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+
+smtpd_tls_cert_file = /etc/fw-certs/fullchain.pem
+smtpd_tls_key_file = /etc/fw-certs/privkey.pem
+smtpd_tls_security_level = may
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 
 smtpd_tls_received_header = yes
 smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
@@ -126,8 +124,8 @@ smtpd_helo_restrictions =
 smtpd_sender_restrictions =
     permit_mynetworks
     permit_sasl_authenticated
-    # Local blacklist; run 'postmap /etc/postfix/sender_access' after editing!
-    check_sender_access hash:/etc/postfix/sender_access
+    # Local blacklist; run 'postmap /etc/postfix/sender-access' after editing!
+    check_sender_access hash:/etc/postfix/sender-access
     reject_unknown_sender_domain
 
 smtpd_recipient_restrictions =
