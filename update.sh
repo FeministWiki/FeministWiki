@@ -10,7 +10,6 @@ find etc root var -type f -exec sh -c 'for file; do cp -a /"$file" "$file"; done
 
 sed -ri 's/(ldap_password): "[^"]+"/\1: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 sed -ri 's/(key|password|bindauth)="[^"]+"/\1="[REDACTED]"/' etc/inspircd/inspircd.conf
-sed -ri "s/(SUBSCRIBE_FORM_SECRET) = '[^']+'/\1 = '[REDACTED]'/" etc/mailman/mm_cfg.py
 
 (cd /root; tar -czf- pwd) \
   | openssl aes-256-cbc \
