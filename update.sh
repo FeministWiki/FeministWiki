@@ -6,7 +6,7 @@ then
     exit 1
 fi
 
-find etc root var -type f -exec sh -c 'for file; do cp /"$file" "$file"; done' {} +
+find etc root var -type f -exec sh -c 'for file; do cp -a /"$file" "$file"; done' {} +
 
 sed -ri 's/(ldap_password): "[^"]+"/\1: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 sed -ri 's/(key|password|bindauth)="[^"]+"/\1="[REDACTED]"/' etc/inspircd/inspircd.conf
