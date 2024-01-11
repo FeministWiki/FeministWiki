@@ -10,6 +10,8 @@ ejabberd
 feministwiki
 files
 forum
+ftp
+hostmaster
 info
 ldap
 legal
@@ -18,7 +20,10 @@ mailer-daemon
 mailman
 mailman-owner
 mediawiki
+news
 nextcloud
+nobody
+noc
 phpbb
 postmaster
 root
@@ -27,8 +32,11 @@ security
 support
 system
 technician
+usenet
+webmaster
 wiki
 wordpress
+www
 www-data
 xmpp
 xmpp-server
