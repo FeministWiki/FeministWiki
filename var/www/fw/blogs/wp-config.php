@@ -28,10 +28,10 @@ require '.secrets.php';
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'blogs' );
+define( 'DB_NAME', 'feministblogs' );
 
 /** MySQL database username */
-define( 'DB_USER', 'blogs' );
+define( 'DB_USER', 'feministblogs' );
 
 /** MySQL database password */
 #define( 'DB_PASSWORD', (Defined in .secrets.php) );

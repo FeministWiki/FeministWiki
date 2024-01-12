@@ -4,7 +4,7 @@ server {
 	access_log /var/log/nginx/default-redirect.log;
 	error_log /var/log/nginx/default-error.log;
 
-	# Note that this covers not just hXXXXXXX.stratoserver.net,
+	# Note that this covers not just wizardcompany.de,
 	# but also various xyz.feministwiki.org domains which don't
 	# have any nginx configuration, such as irc.feministwiki.org
 	include snippets/letsencrypt;

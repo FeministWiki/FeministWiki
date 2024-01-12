@@ -284,14 +284,14 @@ $wgJobRunRate = 0;
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
 # Update this to invalidate caches manually instead
-$wgCacheEpoch = 20240107123000;
+$wgCacheEpoch = 20240112200300;
 
 # Parser cache lasts 10 days
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 
 # On-disk HTML cache for anon visitors
 $wgUseFileCache = true;
-$wgFileCacheDirectory = '/run/shm/bg3wiki-cache';
+$wgFileCacheDirectory = '/dev/shm/bg3wiki-cache';
 
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache
@@ -534,7 +534,7 @@ $wgPFEnableStringFunctions = true;
 # Scribunto
 #
 
-$wgScribuntoDefaultEngine = 'luasandbox';
+$wgScribuntoDefaultEngine = 'luastandalone';
 $wgScribuntoUseGeSHi = true;
 $wgScribuntoUseCodeEditor = true;
 $wgScribuntoEngineConf['luasandbox']['allowEnvFuncs'] = false;
@@ -592,3 +592,5 @@ $wgTwitterSiteHandle = "@bg3_wiki";
 #$wgShowExceptionDetails = true;
 #$wgShowDBErrorBacktrace = true;
 #$wgShowSQLErrors = true;
+
+#$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';

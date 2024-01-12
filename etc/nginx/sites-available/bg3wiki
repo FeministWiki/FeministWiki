@@ -13,6 +13,20 @@ server {
 }
 
 server {
+	listen 80;
+	server_name new.bg3.wiki;
+
+	access_log /var/log/nginx/bg3wiki-redirect.log;
+	error_log /var/log/nginx/bg3wiki-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://new.bg3.wiki$request_uri;
+	}
+}
+
+server {
 	listen 443 ssl;
 	server_name www.bg3.wiki;
 
@@ -27,7 +41,7 @@ server {
 
 server {
 	listen 443 ssl;
-	server_name bg3.wiki;
+	server_name bg3.wiki new.bg3.wiki;
 
 	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
