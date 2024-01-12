@@ -22,8 +22,8 @@ server {
 server {
 	listen 443 ssl default_server;
 
-	#ssl_certificate     /etc/letsencrypt/live/h3003167.stratoserver.net/fullchain.pem;
-	#ssl_certificate_key /etc/letsencrypt/live/h3003167.stratoserver.net/privkey.pem;
+	ssl_certificate     /etc/letsencrypt/live/wizardcompany.de/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/wizardcompany.de/privkey.pem;
 
 	access_log /var/log/nginx/default-access.log;
 	error_log /var/log/nginx/default-error.log;
