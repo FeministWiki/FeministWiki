@@ -53,7 +53,7 @@ fw=/etc/fw-certs
 /bin/touch "$fw/privkey.pem"
 /bin/touch "$fw/bundle.pem"
 /bin/chown -R root:ssl-cert "$fw" || exit
-/bin/chmod -R 640 "$fw/privkey.pem" "$fw/bundle.pem" || exit
+/bin/chmod 640 "$fw/privkey.pem" "$fw/bundle.pem" || exit
 
 /bin/cat "$le/cert.pem" > "$fw/cert.pem"
 /bin/cat "$le/chain.pem" > "$fw/chain.pem"
