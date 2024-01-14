@@ -25,11 +25,11 @@ domains=$(printf '%s' "$domains" | /usr/bin/tr '\n' ',')
 if [ "$renew" ]
 then
     /usr/bin/certbot -n certonly \
-                     --cert-name feministwiki \
-                     --authenticator standalone \
-                     --preferred-challenges http \
                      --force-renewal \
-                     -d "$domains"
+                     --cert-name feministwiki \
+                     --authenticator webroot \
+                     --webroot-path /var/www/html \
+                     --domains "$domains"
 
     retval=$?
     if [ $retval -ne 0 ]

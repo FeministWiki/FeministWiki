@@ -8,8 +8,8 @@ echo Starting job service...
 
 renice +19 $$
 
-# Wait a minute after the server starts up to give other processes time to get started
-sleep 60
+# Wait a bit to give other things time to get started
+sleep 20
 
 echo Started.
 
@@ -20,5 +20,5 @@ do
 
 	php "$RUNJOBS" --wait --maxjobs=20
 
-	sleep 10
+	sleep 5
 done
