@@ -38,10 +38,10 @@ server {
 	}
 
 	location ~ \.php$ {
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 
 	location ~ /app.php/ {
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 }

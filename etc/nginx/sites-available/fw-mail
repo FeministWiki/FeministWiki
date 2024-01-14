@@ -31,7 +31,7 @@ server {
 
 	location = / {
 		fastcgi_index index.php;
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 
 	location ~ ^/(\.git|\.tx|SQL|bin|config|logs|temp|tests|vendor)/ {
@@ -47,7 +47,7 @@ server {
 	}
 
 	location ~ \.php$ {
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 
 	location ~* \.(jpg|jpeg|gif|png|webp|svg|woff|woff2|ttf|css|js|ico|xml)$ {

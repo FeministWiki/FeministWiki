@@ -34,7 +34,7 @@ server {
 	}
 
 	location ~ \.php$ {
-		include snippets/run-php;
+		include snippets/run-php-direct;
 	}
 
 	location / {

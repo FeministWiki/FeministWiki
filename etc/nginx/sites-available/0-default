@@ -12,16 +12,14 @@ server {
 	location = /php-status {
 		allow 127.0.0.1;
 		deny all;
-		include snippets/run-php;
+		include snippets/run-php-direct;
 	}
 
 	location = /php-control {
 		allow 127.0.0.1;
 		deny all;
-		include snippets/run-php;
+		include snippets/run-php-direct;
 		fastcgi_param SCRIPT_FILENAME /var/www/control.php;
-		fastcgi_cache_bypass 1;
-		fastcgi_no_cache 1;
 	}
 
 	location / {

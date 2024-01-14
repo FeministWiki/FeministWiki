@@ -93,7 +93,7 @@ server {
 	# Root URL is main page
 	location = / {
 		fastcgi_index w/index.php;
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 
 	location = /wiki/Main_Page {
@@ -102,7 +102,7 @@ server {
 
 	# Location for wiki's entry points
 	location ~ ^/w/(index|load|api|thumb|opensearch_desc|rest)\.php$ {
-		include snippets/run-php;
+		include snippets/run-php-cached;
 	}
 
 	# Images
