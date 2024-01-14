@@ -10,7 +10,7 @@
 # Further documentation for configuration settings may be found at:
 # https://www.mediawiki.org/wiki/Manual:Configuration_settings
 
-require '/var/www/fw/wiki/secrets.php';
+require '/var/www/fw/wiki/.secrets.php';
 
 $fwLang = NULL;
 if (array_key_exists('REQUEST_URI', $_SERVER)) {
@@ -54,7 +54,6 @@ if ($fwLang === NULL) {
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = "https://feministwiki.org";
-$wgCanonicalServer = "https://feministwiki.org";
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
@@ -176,25 +175,6 @@ $wgDiff3 = "/usr/bin/diff3";
 $wgGroupPermissions['*']['createaccount'] = false;
 $wgGroupPermissions['*']['edit'] = false;
 
-## Default skin: you can change the default skin. Use the internal symbolic
-## names, ie 'vector', 'monobook':
-$wgDefaultSkin = "vector";
-
-# Enabled skins.
-# The following skins were automatically enabled:
-wfLoadSkin( 'Vector' );
-
-
-# Enabled extensions. Most of the extensions are enabled by adding
-# wfLoadExtensions('ExtensionName');
-# to LocalSettings.php. Check specific extension documentation for more details.
-# The following extensions were automatically enabled:
-wfLoadExtension( 'Cite' );
-wfLoadExtension( 'CodeEditor' );
-wfLoadExtension( 'MultimediaViewer' );
-wfLoadExtension( 'ParserFunctions' );
-wfLoadExtension( 'WikiEditor' );
-
 
 # End of automatically generated settings.
 # Add more configuration options below.
@@ -203,81 +183,142 @@ wfLoadExtension( 'WikiEditor' );
 #####################################################
 #####################################################
 
-###
-### General Settings
-###
+wfLoadExtensions([
+    'Cite',
+    'CodeEditor',
+    'EmbedVideo',
+    'Interwiki',
+    'LDAPAuthentication2',
+    'LDAPProvider',
+    'LDAPUserInfo',
+    'MobileFrontend',
+    'MultimediaViewer',
+    'PageImages',
+    'ParserFunctions',
+    'PluggableAuth',
+    'Popups',
+    'Renameuser',
+    'TextExtracts',
+    'UniversalLanguageSelector',
+    'UserMerge',
+    'WikiEditor',
+    'WikiSEO',
+]);
 
-$wgUseCdn = true;
-$wgCdnMaxAge = 3600;
+#
+# Skins
+#
+
+wfLoadSkin('MinervaNeue');
+wfLoadSkin('Vector');
+
+$wgDefaultSkin = 'vector-2022';
+$wgVectorDefaultSidebarVisibleForAnonymousUser = true;
+
+#
+# General
+#
 
 if ($fwLang === NULL) {
     $wgMainPageIsDomainRoot = true;
 }
 
+$wgRestrictDisplayTitle = false;
+
 $wgExternalLinkTarget = '_blank';
-$wgNamespaceAliases['FW'] = NS_PROJECT;
+
+$wgNamespaceAliases = [
+    'fw' => NS_PROJECT,
+    'mw' => NS_MEDIAWIKI,
+    'f' => NS_FILE,
+    't' => NS_TEMPLATE,
+];
+
+#
+# Security
+#
 
 $wgPasswordAttemptThrottle = [
     [ 'count' => 5, 'seconds' => 3600 ]
 ];
 
-# Add <meta name="robots" content="noindex,nofollow"/>
-# to all pages outside the main namespace.
-$wgNoFollowLinks = false;
-$wgDefaultRobotPolicy = 'noindex,nofollow';
-$wgNamespaceRobotPolicies[NS_MAIN] = 'index,follow';
+#
+# Performance
+#
 
-$wgRestrictDisplayTitle = false;
+# We use a systemd service for this
+$wgJobRunRate = 0;
 
-# Unstable?
+# Don't invalidate caches every time this file is edited
+$wgInvalidateCacheOnLocalSettingsChange = false;
+
+# Update this to invalidate caches manually instead
+$wgCacheEpoch = 20240112200300;
+
+# Parser cache lasts 10 days
+$wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
+
+# On-disk HTML cache for anon visitors
+$wgUseFileCache = true;
+$wgFileCacheDirectory = '/dev/shm/fw-wiki-cache';
+
+# Allow caching via reverse proxy
+$wgUseCdn = true;
+$wgCdnMaxAge = 24 * 60 * 60;
+
+# Can't send purge to Nginx; only Varnish supported
+#$wgCdnServers = [ '127.0.0.1' ];
+#$wgInternalServer = 'http://127.0.0.1';
+
+# Seems to cause issues?
 #$wgEnableSidebarCache = true;
 #$wgSidebarCacheExpiry = 3600;
 
-###
-### Extensions
-###
+#
+# SEO
+#
 
-wfLoadExtension('UserMerge');
-$wgGroupPermissions['bureaucrat']['usermerge'] = true;
+# Add rel="nofollow" to links to pages that don't exist (redlinks)
+$wgHooks['HtmlPageLinkRendererEnd'][] = 'noFollowRedLinks';
+function noFollowRedLinks(
+    $linkRenderer, $target, $isKnown, &$text, &$attribs, &$ret)
+{
+    if (!$isKnown && preg_match('/\bnew\b/S', $attribs['class'] ?? "")) {
+        $attribs['rel'] = 'nofollow';
+    }
+    return true;
+}
 
-wfLoadExtension('Renameuser');
+# We don't have spam issues, so there's no need for this
+$wgNoFollowLinks = false;
 
-wfLoadExtension('MobileFrontend');
+####################################
+#                                  #
+# Extension-specific configuration #
+#                                  #
+####################################
 
-wfLoadExtension('WikiSEO');
-$wgWikiSeoDefaultImage = 'FeministWiki_banner.png';
-$wgTwitterSiteHandle = '@FeministWiki';
-$wgGoogleSiteVerificationKey = "RZf8hzu0sR32H9OsEXa3-aN3LzE4T2nLPg1s9SrJgJI";
+#
+# Interwiki
+#
 
-wfLoadExtension('EmbedVideo');
-
-wfLoadExtension('PluggableAuth');
-$wgGroupPermissions['*']['autocreateaccount'] = true;
-
-wfLoadExtension('TextExtracts');
-wfLoadExtension('PageImages');
-wfLoadExtension('Popups');
-
-wfLoadExtension('LDAPProvider');
-wfLoadExtension('LDAPAuthentication2');
-wfLoadExtension('LDAPUserInfo');
-
-wfLoadExtension('Interwiki');
 $wgGroupPermissions['sysop']['interwiki'] = true;
 
-###
-### Skins
-###
+#
+# UserMerge
+#
 
-wfLoadSkin('MinervaNeue');
+$wgGroupPermissions['bureaucrat']['usermerge'] = true;
 
-###
-### LDAP
-###
+#
+# PluggableAuth / LDAP stuff
+#
+
+$wgGroupPermissions['*']['autocreateaccount'] = true;
 
 $LDAPProviderDomainConfigProvider = function() use ($fwLDAPPassword) {
     $connection = [
-        'server' => 'localhost', //ldap.feministwiki.org
+        'server' => '127.0.0.1', //ldap.feministwiki.org
         'port' => '389', //636
         'user' => 'cn=readonly,dc=feministwiki,dc=org',
         'pass' => $fwLDAPPassword,
@@ -311,9 +352,19 @@ $wgPluggableAuth_Config['Log in'] = [
     ]
 ];
 
-###
-### Debug
-###
+#
+# WikiSEO
+#
+
+$wgWikiSeoDefaultImage = 'FeministWiki_banner.png';
+$wgTwitterSiteHandle = '@FeministWiki';
+$wgGoogleSiteVerificationKey = "RZf8hzu0sR32H9OsEXa3-aN3LzE4T2nLPg1s9SrJgJI";
+
+#############
+#           #
+# Debugging #
+#           #
+#############
 
 #$wgDebugLogFile = "/tmp/mw-debug.log";
 

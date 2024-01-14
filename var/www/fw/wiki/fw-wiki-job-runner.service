@@ -1,0 +1,14 @@
+[Unit]
+Description=FW Wiki Job Runner
+
+[Service]
+ExecStart=/var/www/fw/wiki/job-runner.sh
+Nice=10
+ProtectSystem=full
+User=www-data
+OOMScoreAdjust=200
+StandardOutput=append:/var/log/fw-wiki-job-runner.log
+StandardError=append:/var/log/fw-wiki-job-runner.log
+
+[Install]
+WantedBy=multi-user.target

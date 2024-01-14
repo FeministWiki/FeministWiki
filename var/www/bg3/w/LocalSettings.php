@@ -312,12 +312,18 @@ $wgCdnMaxAge = 24 * 60 * 60;
 
 # Add <meta name="robots" content="noindex,nofollow"/>
 # to all pages outside the main and guide namespaces.
-$wgDefaultRobotPolicy = 'noindex,nofollow';
-$wgNamespaceRobotPolicies[NS_MAIN] = 'index,follow';
-$wgNamespaceRobotPolicies[NS_GUIDE] = 'index,follow';
-$wgNamespaceRobotPolicies[NS_MODDING] = 'index,follow';
+#
+# Jan 2024: Should not be necessary anymore, since our
+# rankings are quite solid; just let the crawlers do
+# what they want to do, and let people find all our
+# pages in search results.
+#
+#$wgDefaultRobotPolicy = 'noindex,nofollow';
+#$wgNamespaceRobotPolicies[NS_MAIN] = 'index,follow';
+#$wgNamespaceRobotPolicies[NS_GUIDE] = 'index,follow';
+#$wgNamespaceRobotPolicies[NS_MODDING] = 'index,follow';
 
-# The above makes this redundant
+# We're careful about spammers; no need for this
 $wgNoFollowLinks = false;
 
 #

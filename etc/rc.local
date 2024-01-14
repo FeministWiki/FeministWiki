@@ -1,8 +1,8 @@
 #!/bin/sh
 
-for d in ngx-fcgi-cache bg3wiki-cache
+for d in bg3wiki-cache fw-wiki-cache ngx-fcgi-cache
 do
-	dir=/run/shm/$d
+	dir=/dev/shm/$d
 	mkdir -p "$dir"
 	chmod 700 "$dir"
 	chown www-data:www-data "$dir"
