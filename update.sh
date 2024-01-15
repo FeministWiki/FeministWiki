@@ -6,19 +6,34 @@ then
     exit 1
 fi
 
+for arg
+do
+    case $arg in
+        (-np)
+            no_pwd=yes
+            ;;
+        (*)
+            echo >&2 'Invalid arguments.'
+            exit 1
+    esac
+done
+
 find etc root var -type f -exec sh -c 'for file; do cp -a /"$file" "$file"; done' {} +
 
 sed -ri 's/(ldap_password): "[^"]+"/\1: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 sed -ri 's/(key|password|bindauth)="[^"]+"/\1="[REDACTED]"/' etc/inspircd/inspircd.conf
 
-(cd /root; tar -czf- pwd) \
-  | openssl aes-256-cbc \
-    -md sha512 \
-    -pbkdf2 \
-    -iter 100000 \
-    -pass file:/root/pwd/meta \
-    -in - \
-    -out pwd.enc
+if ! [ "$no_pwd" ]
+then
+    (cd /root; tar -czf- pwd) \
+        | openssl aes-256-cbc \
+                  -md sha512 \
+                  -pbkdf2 \
+                  -iter 100000 \
+                  -pass file:/root/pwd/meta \
+                  -in - \
+                  -out pwd.enc
+fi
 
 echo
 echo '~~~~~~~~~~~~~~~~~~~~~'

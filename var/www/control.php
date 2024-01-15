@@ -13,20 +13,29 @@ function println($line) {
 $commands = [
 
 'opcache-stats' => function () {
-	$stats = opcache_get_status();
-	unset($stats['scripts']);
+	$stats = opcache_get_status(false);
 	print_r($stats);
+},
+
+'opcache-reset' => function () {
+	opcache_reset();
+	println('Done.');
 },
 
 'apcu-stats' => function () {
 	$stats = [];
-	$stats['cache'] = apcu_cache_info();
-	unset($stats['cache']['cache_list']);
-	unset($stats['cache']['deleted_list']);
-	unset($stats['cache']['slot_distribution']);
-	$stats['sma'] = apcu_sma_info();
-	unset($stats['sma']['block_lists']);
+	$stats['cache'] = apcu_cache_info(true);
+	$stats['sma'] = apcu_sma_info(true);
 	print_r($stats);
+},
+
+'reload' => function () {
+	opcache_invalidate(__FILE__, true);
+	println('Done.');
+},
+
+'ping' => function () {
+	println('Pong.');
 },
 
 ];

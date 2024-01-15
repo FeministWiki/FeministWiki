@@ -77,6 +77,9 @@ $wgSharedTables[] = "actor";
 
 ## Shared memory settings
 $wgMainCacheType = CACHE_ACCEL;
+$wgParserCacheType = CACHE_ACCEL;
+$wgSessionCacheType = CACHE_ACCEL;
+$wgMessageCacheType = CACHE_ACCEL;
 $wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
@@ -593,10 +596,12 @@ $wgTwitterSiteHandle = "@bg3_wiki";
 #           #
 #############
 
-#$wgDebugLogFile = "/tmp/mw-debug.log";
-
-#$wgShowExceptionDetails = true;
-#$wgShowDBErrorBacktrace = true;
-#$wgShowSQLErrors = true;
-
 #$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';
+
+#if ($_SERVER['REMOTE_ADDR'] === $taylanIpAddr) {
+#	$wgDebugLogFile = "/tmp/mw-debug.log";
+#	$wgShowExceptionDetails = true;
+#	$wgShowDBErrorBacktrace = true;
+#	$wgShowSQLErrors = true;
+#	file_put_contents('/tmp/test-mw', 'test');
+#}
