@@ -45,7 +45,7 @@ if ($email != '') {
     if (verifyEmail($email)) {
         println("New email address: $email");
     } else {
-        $email = "${username}@feministwiki.org";
+        $email = "{$username}@feministwiki.org";
         println("Email address reset to default: $email");
     }
     $settings['mail'] = $email;
