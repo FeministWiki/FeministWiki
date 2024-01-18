@@ -9,8 +9,8 @@ fi
 for arg
 do
     case $arg in
-        (-np)
-            no_pwd=yes
+        (-p)
+            passwords=yes
             ;;
         (*)
             echo >&2 'Invalid arguments.'
@@ -23,7 +23,7 @@ find etc root var -type f -exec sh -c 'for file; do cp -a /"$file" "$file"; done
 sed -ri 's/(ldap_password): "[^"]+"/\1: "[REDACTED]"/' etc/ejabberd/ejabberd.yml
 sed -ri 's/(key|password|bindauth)="[^"]+"/\1="[REDACTED]"/' etc/inspircd/inspircd.conf
 
-if ! [ "$no_pwd" ]
+if [ "$passwords" ]
 then
     (cd /root; tar -czf- pwd) \
         | openssl aes-256-cbc \

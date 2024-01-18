@@ -11,4 +11,7 @@ fastcgi_no_cache $fcgi_cache_nocache;
 
 add_header X-Cache $fcgi_cache_status;
 
-access_log /var/log/nginx/cache-stats.log fcgi_cache_stats gzip;
+access_log /var/log/nginx/cache-stats.log
+	fcgi_cache_stats
+	gzip
+	if=$fcgi_cache_log_enabled;

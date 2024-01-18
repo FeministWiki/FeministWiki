@@ -1,8 +1,12 @@
+map "" $bg3log {
+	default 0;
+}
+
 server {
 	listen 80;
 	server_name bg3.wiki www.bg3.wiki;
 
-	access_log /var/log/nginx/bg3wiki-redirect.log;
+	access_log /var/log/nginx/bg3wiki-redirect.log combined if=$bg3log;
 	error_log /var/log/nginx/bg3wiki-error.log;
 
 	include snippets/letsencrypt;
@@ -16,7 +20,7 @@ server {
 	listen 80;
 	server_name new.bg3.wiki;
 
-	access_log /var/log/nginx/bg3wiki-redirect.log;
+	access_log /var/log/nginx/bg3wiki-redirect.log combined if=$bg3log;
 	error_log /var/log/nginx/bg3wiki-error.log;
 
 	include snippets/letsencrypt;
@@ -33,7 +37,7 @@ server {
 	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
 
-	access_log /var/log/nginx/bg3wiki-redirect.log;
+	access_log /var/log/nginx/bg3wiki-redirect.log combined if=$bg3log;
 	error_log /var/log/nginx/bg3wiki-error.log;
 
 	return 301 https://bg3.wiki$request_uri;
@@ -46,7 +50,7 @@ server {
 	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
 
-	access_log /var/log/nginx/bg3wiki-access.log combined gzip;
+	access_log /var/log/nginx/bg3wiki-access.log combined gzip if=$bg3log;
 	error_log /var/log/nginx/bg3wiki-error.log;
 
 	log_not_found off;
