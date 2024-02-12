@@ -1,5 +1,0 @@
-export PATH=$HOME/bin:$PATH
-export EDITOR=mg
-export LC_COLLATE=POSIX
-
-. ~/.bashrc

@@ -1,3 +1,4 @@
+# Easily toggle logging on/off here
 map "" $bg3log {
 	default 0;
 }

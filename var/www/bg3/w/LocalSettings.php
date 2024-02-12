@@ -17,10 +17,6 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-#if ( $_SERVER['REMOTE_ADDR'] == $taylanIpAddr ) {
-#	file_put_contents('/tmp/apcu_shm_stats', print_r(apcu_sma_info(), true));
-#}
-
 $wgSitename = "Baldur's Gate 3 Wiki";
 $wgMetaNamespace = "BG3Wiki";
 
@@ -202,6 +198,8 @@ wfLoadSkin("Citizen");
 $wgCitizenThemeDefault = "dark";
 $wgDefaultMobileSkin = "Citizen"; # Extension:MobileFrontend
 
+wfLoadSkin("Sp-Beta");
+
 # Add footer link to Copyrights page
 $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
 	if ( $key !== 'places' ) {
@@ -214,7 +212,7 @@ $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$f
 };
 
 #
-# Extra Namespaces
+# Namespaces
 #
 
 define( 'NS_GUIDE',        3000 );
@@ -227,8 +225,33 @@ $wgExtraNamespaces[NS_GUIDE_TALK] = 'Guide_talk';
 $wgExtraNamespaces[NS_MODDING] = 'Modding';
 $wgExtraNamespaces[NS_MODDING_TALK] = 'Modding_talk';
 
+$wgContentNamespaces = [
+	NS_MAIN,
+	NS_GUIDE,
+	NS_MODDING,
+];
+
+$wgSitemapNamespaces = [
+	NS_MAIN,
+	NS_GUIDE,
+	NS_MODDING,
+];
+
+$wgNamespacesWithSubpages[NS_MAIN] = true;
 $wgNamespacesWithSubpages[NS_GUIDE] = true;
 $wgNamespacesWithSubpages[NS_MODDING] = true;
+
+$wgVisualEditorAvailableNamespaces['Help'] = true;
+$wgVisualEditorAvailableNamespaces['Guides'] = true;
+$wgVisualEditorAvailableNamespaces['Modding'] = true;
+
+$wgNamespaceAliases = [
+	'mw' => NS_MEDIAWIKI,
+	't' => NS_TEMPLATE,
+	'f' => NS_FILE,
+	'g' => NS_GUIDE,
+	'm' => NS_MODDING,
+];
 
 #
 # General
@@ -249,22 +272,11 @@ $wgRestrictDisplayTitle = false;
 # Enable fancy Wikitext editing
 $wgDefaultUserOptions['usecodemirror'] = 1;
 
-# Enable subpages for main namespace
-$wgNamespacesWithSubpages[NS_MAIN] = true;
-
 $wgAllowUserCss = true;
 $wgAllowUserJs = true;
 
 $wgFileExtensions[] = 'webm';
 $wgFileExtensions[] = 'mp4';
-
-$wgNamespaceAliases = [
-	'mw' => NS_MEDIAWIKI,
-	't' => NS_TEMPLATE,
-	'f' => NS_FILE,
-	'g' => NS_GUIDE,
-	'm' => NS_MODDING,
-];
 
 $wgGalleryOptions['mode'] = 'packed';
 
@@ -351,12 +363,6 @@ $wgAutoConfirmCount = 3;
 
 # Extension:ConfirmEdit
 $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
-
-#
-# Sitemap generation
-#
-
-$wgSitemapNamespaces = [ NS_MAIN, NS_GUIDE, NS_MODDING ];
 
 #
 # Search
@@ -524,8 +530,9 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 # MobileFrontend
 #
 
-$wgMFVaryOnUA = true;
+#$wgMFVaryOnUA = true;
 $wgMFCollapseSectionsByDefault = false;
+$wgMFSiteStylesRenderBlocking = true;
 
 #
 # PageImages
@@ -571,21 +578,12 @@ $wgDefaultUserOptions['syntaxhighlight-theme'] = 'stata-dark';
 $egVariablesDisabledFunctions = [ 'var_final' ];
 
 #
-# VisualEditor
-#
-
-$wgVisualEditorAvailableNamespaces['Help'] = true;
-$wgVisualEditorAvailableNamespaces['Guides'] = true;
-$wgVisualEditorAvailableNamespaces['Modding'] = true;
-
-#
 # WikiSEO
 #
 
 $wgGoogleSiteVerificationKey = 'AFZzz9W5H3CmDLSRstrLBj7jyuQqJCrOwX1IS01k1MA';
 
-# This is broken and just clears the image set by PageImages!
-#$wgWikiSeoOverwritePageImage = true;
+$wgWikiSeoOverwritePageImage = true;
 
 $wgTwitterCardType = 'summary';
 $wgTwitterSiteHandle = "@bg3_wiki";

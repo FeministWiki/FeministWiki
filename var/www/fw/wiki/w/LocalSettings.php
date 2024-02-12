@@ -211,6 +211,7 @@ wfLoadExtensions([
 
 wfLoadSkin('MinervaNeue');
 wfLoadSkin('Vector');
+#wfLoadSkin('Sp-Beta');
 
 $wgDefaultSkin = 'vector-2022';
 $wgVectorDefaultSidebarVisibleForAnonymousUser = true;
