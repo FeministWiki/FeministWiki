@@ -16,9 +16,11 @@ server {
 	listen 80;
 	server_name
 		feministwiki.org
+		feministwiki.com
 		feministwiki.net
 		feministwiki.dev
 		www.feministwiki.org
+		www.feministwiki.com
 		www.feministwiki.net
 		www.feministwiki.dev
 		fem.wiki www.fem.wiki
@@ -51,6 +53,10 @@ server {
 server {
 	listen 443 ssl;
 	server_name
+		feministwiki.com
+		feministwiki.net
+		www.feministwiki.com
+		www.feministwiki.net
 		www.feministwiki.org
 		www.feministwiki.dev
 		fem.wiki www.fem.wiki

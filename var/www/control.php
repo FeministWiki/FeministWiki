@@ -3,7 +3,7 @@
 header("Cache-Control: no-store");
 
 if ($_SERVER['REMOTE_ADDR'] !== '127.0.0.1') {
-	exit('Forbidden.');
+    exit('Forbidden.');
 }
 
 function println($line) {
@@ -19,7 +19,7 @@ function mbytes($bytes) {
 }
 
 function cmd_opcache_stats() {
-	$details = opcache_get_status(false);
+    $details = opcache_get_status(false);
 
     $stats = $details['opcache_statistics'];
     $oomRestarts = $stats['oom_restarts'];
@@ -56,20 +56,20 @@ function cmd_opcache_stats() {
         ],
     ];
 
-	print_r([
+    print_r([
         'details' => $details,
         'summary' => $summary,
     ]);
 }
 
 function cmd_opcache_reset() {
-	opcache_reset();
-	println('Opcache reset done.');
+    opcache_reset();
+    println('Opcache reset done.');
 }
 
 function cmd_apcu_stats() {
-	$cache = apcu_cache_info(true);
-	$sma = apcu_sma_info(true);
+    $cache = apcu_cache_info(true);
+    $sma = apcu_sma_info(true);
 
     $used = $cache['mem_size'];
     $total = $sma['seg_size'];
@@ -80,7 +80,7 @@ function cmd_apcu_stats() {
         'mem_total_mbytes' => mbytes($total),
     ];
 
-	print_r([
+    print_r([
         'cache' => $cache,
         'sma' => $sma,
         'summary' => $summary,
@@ -93,16 +93,16 @@ function cmd_eval() {
 }
 
 function cmd_reload() {
-	opcache_invalidate(__FILE__, true);
-	println('Done.');
+    opcache_invalidate(__FILE__, true);
+    println('Done.');
 }
 
 function cmd_ping() {
-	println('Pong.');
+    println('Pong.');
 }
 
 $func = 'cmd_' . $_SERVER['QUERY_STRING'];
 $retval = call_user_func($func);
 if ($retval === false) {
-	println('Unrecognized command.');
+    println('Unrecognized command.');
 }

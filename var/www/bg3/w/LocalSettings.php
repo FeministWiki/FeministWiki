@@ -149,6 +149,8 @@ wfLoadExtensions([
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
 	"DeleteBatch",
+	"DiscussionTools",
+	"Echo",
 	"Elastica",
 	"EmbedVideo",
 	"DiscordRCFeed",
@@ -156,6 +158,7 @@ wfLoadExtensions([
 	"ImageMap",
 	"JsonConfig",
 	"LabeledSectionTransclusion",
+	"Linter",
 	"LocalVariables",
 	"Loops",
 	"MassEditRegex",
@@ -225,17 +228,10 @@ $wgExtraNamespaces[NS_GUIDE_TALK] = 'Guide_talk';
 $wgExtraNamespaces[NS_MODDING] = 'Modding';
 $wgExtraNamespaces[NS_MODDING_TALK] = 'Modding_talk';
 
-$wgContentNamespaces = [
-	NS_MAIN,
-	NS_GUIDE,
-	NS_MODDING,
-];
+$wgContentNamespaces[] = NS_GUIDE;
+$wgContentNamespaces[] = NS_MODDING;
 
-$wgSitemapNamespaces = [
-	NS_MAIN,
-	NS_GUIDE,
-	NS_MODDING,
-];
+$wgSitemapNamespaces = $wgContentNamespaces;
 
 $wgNamespacesWithSubpages[NS_MAIN] = true;
 $wgNamespacesWithSubpages[NS_GUIDE] = true;
@@ -361,7 +357,8 @@ $wgSMTP = [
 $wgAutoConfirmAge = 10;
 $wgAutoConfirmCount = 3;
 
-# Extension:ConfirmEdit
+$wgGroupPermissions['autoconfirmed']['autopatrol'] = true;
+# Requires Extension:ConfirmEdit
 $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
 
 #
@@ -404,13 +401,15 @@ $wgRestrictionLevels[] = 'protect';
 $wgGroupPermissions['*']['createpage'] = false;
 $wgGroupPermissions['user']['createpage'] = true;
 
-$wgGroupPermissions['autopatrolled']['autopatrol'] = true;
-$wgGroupPermissions['candelete']['delete'] = true;
-$wgGroupPermissions['canpatrol']['patrol'] = true;
-$wgGroupPermissions['canprotect']['protect'] = true;
-$wgGroupPermissions['moduleeditor']['editmodules'] = true;
-$wgGroupPermissions['projecteditor']['editproject'] = true;
-$wgGroupPermissions['templateeditor']['edittemplates'] = true;
+$wgGroupPermissions['maintainer']['delete'] = true;
+$wgGroupPermissions['maintainer']['patrol'] = true;
+$wgGroupPermissions['maintainer']['protect'] = true;
+$wgGroupPermissions['maintainer']['editmodules'] = true;
+$wgGroupPermissions['maintainer']['editproject'] = true;
+$wgGroupPermissions['maintainer']['edittemplates'] = true;
+$wgGroupPermissions['maintainer']['recreatecargodata'] = true;
+$wgGroupPermissions['maintainer']['cs-moderator-edit'] = true;
+$wgGroupPermissions['maintainer']['cs-moderator-delete'] = true;
 
 # The constant NS_MODULE is not available in LocalSettings.php,
 # even if you try to use it after loading Scribunto, so use the
@@ -464,14 +463,19 @@ $wgRCFeeds['discord'] = [
 	'url' => $discordRCFeedWebhookUri,
 	'omit_minor' => true,
 	'omit_talk' => true,
-	'omit_namespaces' => [ NS_USER ],
+	'omit_namespaces' => [ NS_USER, NS_MEDIAWIKI, 844 ],
 ];
 
 $wgRCFeeds['discord_talk'] = [
 	'url' => $discordRCFeedTalkWebhookUri,
 	'omit_minor' => true,
 	'only_talk' => true,
-	'omit_namespaces' => [ NS_USER ],
+	'omit_namespaces' => [ NS_USER_TALK ],
+];
+
+$wgRCFeeds['discord_comments'] = [
+	'url' => $discordRCFeedTalkWebhookUri,
+	'only_namespaces' => [ 844 ],
 ];
 
 #
