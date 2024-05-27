@@ -260,8 +260,8 @@ $wgCacheEpoch = 20240112200300;
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 
 # On-disk HTML cache for anon visitors
-$wgUseFileCache = true;
-$wgFileCacheDirectory = '/dev/shm/fw-wiki-cache';
+#$wgUseFileCache = true;
+#$wgFileCacheDirectory = '/dev/shm/fw-wiki-cache';
 
 # Allow caching via reverse proxy
 $wgUseCdn = true;

@@ -306,8 +306,8 @@ $wgCacheEpoch = 20240407042300;
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 
 # On-disk HTML cache for anon visitors
-$wgUseFileCache = true;
-$wgFileCacheDirectory = '/dev/shm/bg3wiki-cache';
+#$wgUseFileCache = true;
+#$wgFileCacheDirectory = '/dev/shm/bg3wiki-cache';
 
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache

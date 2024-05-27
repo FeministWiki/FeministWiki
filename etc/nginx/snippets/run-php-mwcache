@@ -1,0 +1,19 @@
+include /etc/nginx/fastcgi.conf;
+
+fastcgi_pass $fcgi_socket_path;
+
+fastcgi_cache MW;
+fastcgi_cache_valid 1h;
+fastcgi_cache_use_stale error timeout http_500 http_503;
+
+fastcgi_ignore_headers Vary;
+
+fastcgi_cache_bypass $fcgi_mwcache_nocache $fcgi_mwcache_bypass;
+fastcgi_no_cache $fcgi_mwcache_nocache;
+
+add_header X-Cache $fcgi_mwcache_status;
+
+access_log /var/log/nginx/mwcache-stats.log
+	fcgi_mwcache_stats
+	gzip
+	if=$fcgi_mwcache_log_enabled;
