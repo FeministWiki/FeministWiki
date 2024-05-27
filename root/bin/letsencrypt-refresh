@@ -44,7 +44,7 @@ fi
 # their ownership and permissions.
 
 le=/etc/letsencrypt/live/feministwiki
-fw=/etc/fw-certs
+fw=/etc/feministwiki/certs
 
 /bin/mkdir -p "$fw"
 /bin/touch "$fw/cert.pem"

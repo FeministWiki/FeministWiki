@@ -26,6 +26,9 @@ biff = no
 delay_warning_time = 30m
 confirm_delay_cleared = yes
 
+# Twitter are idiots
+#reject_invalid_helo_hostname = no
+
 #
 # Mail filtering / OpenDKIM
 #
@@ -84,8 +87,8 @@ smtp_tls_CApath = /etc/ssl/certs
 smtp_tls_security_level = may
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 
-smtpd_tls_cert_file = /etc/fw-certs/fullchain.pem
-smtpd_tls_key_file = /etc/fw-certs/privkey.pem
+smtpd_tls_cert_file = /etc/feministwiki/certs/fullchain.pem
+smtpd_tls_key_file = /etc/feministwiki/certs/privkey.pem
 smtpd_tls_security_level = may
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 

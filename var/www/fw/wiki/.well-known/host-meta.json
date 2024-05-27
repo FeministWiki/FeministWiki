@@ -3,6 +3,10 @@
     {
       "rel": "urn:xmpp:alt-connections:websocket",
       "href": "wss://xmpp.feministwiki.org:5443/ws"
+    },
+    {
+      "rel": "lrdd",
+      "href": "https://fedi.feministwiki.org/.well-known/webfinger?resource={uri}"
     }
   ]
 }

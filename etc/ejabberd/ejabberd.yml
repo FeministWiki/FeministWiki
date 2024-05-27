@@ -33,8 +33,8 @@ hosts:
   - "feministwiki.org"
 
 certfiles:
-  - /etc/fw-certs/fullchain.pem
-  - /etc/fw-certs/privkey.pem
+  - /etc/feministwiki/certs/fullchain.pem
+  - /etc/feministwiki/certs/privkey.pem
 
 # TLS configuration
 define_macro:

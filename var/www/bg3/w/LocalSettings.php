@@ -142,6 +142,7 @@ wfLoadExtensions([
 	"Arrays",
 	"Cargo",
 	"CategoryTree",
+	"CheckUser",
 	"CirrusSearch",
 	"Cite",
 	"CodeEditor",
@@ -169,6 +170,7 @@ wfLoadExtensions([
 	"PageImages",
 	"PageNotice",
 	"ParserFunctions",
+	"Poem",
 	"Popups",
 	"PortableInfobox",
 	"RegexFunctions",
@@ -200,8 +202,6 @@ $wgDefaultTheme = "dark-grey"; # Extension:Theme
 wfLoadSkin("Citizen");
 $wgCitizenThemeDefault = "dark";
 $wgDefaultMobileSkin = "Citizen"; # Extension:MobileFrontend
-
-wfLoadSkin("Sp-Beta");
 
 # Add footer link to Copyrights page
 $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
@@ -245,8 +245,6 @@ $wgNamespaceAliases = [
 	'mw' => NS_MEDIAWIKI,
 	't' => NS_TEMPLATE,
 	'f' => NS_FILE,
-	'g' => NS_GUIDE,
-	'm' => NS_MODDING,
 ];
 
 #
@@ -276,6 +274,13 @@ $wgFileExtensions[] = 'mp4';
 
 $wgGalleryOptions['mode'] = 'packed';
 
+$wgMaxPPExpandDepth = 200;
+
+$wgTidyConfig = [
+	'driver' => 'RemexHtml',
+	'pwrap' => false,
+];
+
 #
 # Security
 #
@@ -295,7 +300,7 @@ $wgJobRunRate = 0;
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
 # Update this to invalidate caches manually instead
-$wgCacheEpoch = 20240112200300;
+$wgCacheEpoch = 20240407042300;
 
 # Parser cache lasts 10 days
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
@@ -408,8 +413,11 @@ $wgGroupPermissions['maintainer']['editmodules'] = true;
 $wgGroupPermissions['maintainer']['editproject'] = true;
 $wgGroupPermissions['maintainer']['edittemplates'] = true;
 $wgGroupPermissions['maintainer']['recreatecargodata'] = true;
-$wgGroupPermissions['maintainer']['cs-moderator-edit'] = true;
-$wgGroupPermissions['maintainer']['cs-moderator-delete'] = true;
+
+$wgGroupPermissions['sysop']['checkuser'] = true;
+$wgGroupPermissions['sysop']['checkuser-log'] = true;
+$wgGroupPermissions['sysop']['investigate'] = true;
+$wgGroupPermissions['sysop']['checkuser-temporary-account'] = true;
 
 # The constant NS_MODULE is not available in LocalSettings.php,
 # even if you try to use it after loading Scribunto, so use the
@@ -430,12 +438,12 @@ $wgNamespaceProtection[828] = ['editmodules'];
 #
 
 $wgCaptchaQuestions = [
-	"Which company develops BG3? (one word)" => "larian",
-	"What's the name of the female Barbarian companion in BG3?" => "karlach",
-	"What's the name of the female Cleric companion in BG3?" => "shadowheart",
-	"What's the name of the male Rogue companion in BG3?" => "astarion",
-	"What's the name of the male Warlock companion in BG3?" => "wyll",
-	"What's the name of the male Wizard companion in BG3?" => "gale",
+	"Which class uses divine magic?" => "cleric",
+	"Which class uses nature magic?" => "druid",
+	"Which class uses unarmed combat?" => "monk",
+	"What year was the game released?" => "2023",
+	"Fill in the blanks: Baldur's ____ 3" => "gate",
+	"Highest you can roll on a 2d6?" => "12",
 ];
 
 $wgCaptchaTriggers['edit']          = true;
@@ -453,6 +461,7 @@ $wgCargoDBtype = "mysql";
 $wgCargoDBserver = "localhost";
 $wgCargoDBname = "bg3wiki-cargo";
 $wgCargoDBuser = "bg3wiki-cargo";
+$wgCargoMaxQueryLimit = 5000;
 #$wgCargoDBpassword = "(set in secrets.php)";
 
 #
@@ -463,7 +472,7 @@ $wgRCFeeds['discord'] = [
 	'url' => $discordRCFeedWebhookUri,
 	'omit_minor' => true,
 	'omit_talk' => true,
-	'omit_namespaces' => [ NS_USER, NS_MEDIAWIKI, 844 ],
+	'omit_namespaces' => [ NS_USER, NS_MEDIAWIKI ],
 ];
 
 $wgRCFeeds['discord_talk'] = [
@@ -473,9 +482,9 @@ $wgRCFeeds['discord_talk'] = [
 	'omit_namespaces' => [ NS_USER_TALK ],
 ];
 
-$wgRCFeeds['discord_comments'] = [
-	'url' => $discordRCFeedTalkWebhookUri,
-	'only_namespaces' => [ 844 ],
+$wgRCFeeds['discord_untrusted'] = [
+	'url' => $discordRCFeedUntrustedWebhookUri,
+	'omit_patrolled' => true,
 ];
 
 #
@@ -534,9 +543,20 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 # MobileFrontend
 #
 
-#$wgMFVaryOnUA = true;
 $wgMFCollapseSectionsByDefault = false;
+
+# Wiki articles aren't cached at all right now, so no need.
+#$wgMFVaryOnUA = true;
+
+# Non-blocking loading of Mobile.css causes Citizen colors to
+# change after the page becomes visible, which isn't nice.
 $wgMFSiteStylesRenderBlocking = true;
+
+# Image lazy loading causes weird bugs with PortableInfobox.
+$wgMFLazyLoadImages = [
+	'beta' => false,
+	'base' => false,
+];
 
 #
 # PageImages
