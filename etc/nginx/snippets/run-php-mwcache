@@ -8,7 +8,10 @@ fastcgi_cache_use_stale error timeout http_500 http_503;
 
 fastcgi_ignore_headers Vary;
 
-fastcgi_cache_bypass $fcgi_mwcache_bypass;
+fastcgi_cache_bypass
+	$fcgi_mwcache_bypass_uri
+	$fcgi_mwcache_bypass_cookie
+	;
 
 add_header X-Cache $upstream_cache_status;
 
