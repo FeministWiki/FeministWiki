@@ -1,0 +1,40 @@
+#!/bin/bash
+
+match=like
+
+if [ "$1" = -x ]
+then
+  match=regexp
+  shift
+fi
+
+# Change ' to '' because this will be inside an SQL string
+term=${1//\'/\'\'}
+
+if [ $match = regexp ]
+then
+  # Change \ to \\ since regexp inside SQL string requires double backslash escapes
+  term=${term//\\/\\\\}
+else
+  # Wrap % around it since LIKE matches against the full string
+  term=%$term%
+fi
+
+mysql bg3wiki << EOF | parse-wiki-page-list
+  select page_namespace, page_title
+
+  from page
+
+  join slots
+    on slot_revision_id = page_latest
+   and slot_role_id = 1
+
+  join content
+    on content_id = slot_content_id
+   and content_address like 'tt:%'
+
+  join text
+    on old_id = substring(content_address, 4)
+
+  where old_text $match '$term'
+EOF

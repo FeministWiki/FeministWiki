@@ -1,0 +1,23 @@
+#!/bin/sh
+
+renice 19 $$
+ionice -p $$ -c 3
+
+zcat /var/log/nginx/mwcache-stats.log | {
+	lines=0
+	hits=0
+	while IFS=' ' read status _
+	do
+		lines=$(( $lines + 1 ))
+		if [ "$status" = HIT ]
+		then
+			hits=$(( $hits + 1 ))
+		fi
+	done
+
+	p=$(dc -e "$hits 100 * $lines / p")
+
+	echo "Hits: $hits"
+	echo "Total: $lines"
+	echo "Percentage: $p%"
+}

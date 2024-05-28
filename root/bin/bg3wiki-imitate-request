@@ -1,0 +1,25 @@
+#!/bin/sh
+
+uri=$1
+
+cd /var/www/bg3
+
+sudo -u www-data \
+	SCRIPT_FILENAME=/var/www/bg3/w/index.php \
+	REQUEST_METHOD=GET \
+	SCRIPT_NAME=index.php \
+	REQUEST_URI="$uri" \
+	DOCUMENT_URI="$uri" \
+	DOCUMENT_ROOT=/var/www/bg3 \
+	SERVER_PROTOCOL=HTTP/1.1 \
+	REQUEST_SCHEME=https \
+	HTTPS=on \
+	GATEWAY_INTERFACE=CGI/1.1 \
+	SERVER_SOFTWARE=nginx/1.0 \
+	REMOTE_ADDR=127.0.0.1 \
+	REMOTE_PORT=1234 \
+	SERVER_ADDR=127.0.0.1 \
+	SERVER_PORT=443 \
+	SERVER_NAME=bg3.wiki \
+	REDIRECT_STATUS=200 \
+	php-cgi
