@@ -300,14 +300,10 @@ $wgJobRunRate = 0;
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
 # Update this to invalidate caches manually instead
-$wgCacheEpoch = 20240407042300;
+$wgCacheEpoch = 20240528030000;
 
 # Parser cache lasts 10 days
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
-
-# On-disk HTML cache for anon visitors
-#$wgUseFileCache = true;
-#$wgFileCacheDirectory = '/dev/shm/bg3wiki-cache';
 
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache
