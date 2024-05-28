@@ -9,9 +9,8 @@ fastcgi_cache_use_stale error timeout http_500 http_503;
 fastcgi_ignore_headers Vary;
 
 fastcgi_cache_bypass $fcgi_mwcache_bypass;
-fastcgi_no_cache $fcgi_mwcache_nocache;
 
-add_header X-Cache $fcgi_mwcache_status;
+add_header X-Cache $upstream_cache_status;
 
 access_log /var/log/nginx/mwcache-stats.log
 	fcgi_mwcache_stats
