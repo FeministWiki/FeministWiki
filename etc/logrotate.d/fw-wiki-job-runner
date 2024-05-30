@@ -1,0 +1,14 @@
+/var/log/fw-wiki-job-runner.log {
+    daily
+    notifempty
+    missingok
+    rotate 4
+    compress
+    delaycompress
+    prerotate
+        systemctl stop fw-wiki-job-runner
+    endscript
+    postrotate
+        systemctl start fw-wiki-job-runner
+    endscript
+}

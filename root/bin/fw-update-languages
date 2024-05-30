@@ -2,13 +2,13 @@
 
 languages='de en es fr it pt'
 
-for dblang in $languages
+for lang in $languages
 do
-    if [ $dblang = en ]
+    if [ $lang = en ]
     then
         db=feministwiki
     else
-        db=feministwiki_$dblang
+        db=feministwiki_$lang
     fi
 
     for lang in $languages

@@ -25,8 +25,8 @@ if (array_key_exists('REQUEST_URI', $_SERVER)) {
     } else if (strlen($fwUri) > 2 && $fwUri[2] === '/') {
         $fwLang = substr($fwUri, 0, 2);
     }
-} else if (getenv('FWLANG', true)) {
-    $fwLang = getenv('FWLANG', true);
+} else if (getenv('FW_LANG', true)) {
+    $fwLang = getenv('FW_LANG', true);
 }
 
 # Protect against web entry

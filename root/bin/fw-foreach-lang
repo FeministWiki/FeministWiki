@@ -1,0 +1,8 @@
+#!/bin/sh
+
+languages='de en es fr it pt'
+
+for lang in $languages
+do
+    FW_LANG=$lang "$@"
+done
