@@ -177,6 +177,7 @@ wfLoadExtensions([
 	"SearchDigest",
 	"Scribunto",
 	"SimpleBatchUpload",
+	"SpamBlacklist",
 	"SyntaxHighlightThemes",
 	"SyntaxHighlight_GeSHi",
 	"TabberNeue",
@@ -438,8 +439,7 @@ $wgCaptchaQuestions = [
 	"Which class uses nature magic?" => "druid",
 	"Which class uses unarmed combat?" => "monk",
 	"What year was the game released?" => "2023",
-	"Fill in the blanks: Baldur's ____ 3" => "gate",
-	"Highest you can roll on a 2d6?" => "12",
+	"What's the second word in the game's name?" => "gate",
 ];
 
 $wgCaptchaTriggers['edit']          = true;
@@ -574,6 +574,17 @@ $wgScribuntoDefaultEngine = 'luastandalone';
 $wgScribuntoUseGeSHi = true;
 $wgScribuntoUseCodeEditor = true;
 $wgScribuntoEngineConf['luasandbox']['allowEnvFuncs'] = false;
+
+#
+# SpamBlacklist
+#
+
+# Just use the following wiki pages:
+# MediaWiki:Spam-blacklist
+# MediaWiki:Spam-whitelist
+$wgSpamBlacklistSettings = [];
+
+$wgLogSpamBlacklistHits = true;
 
 #
 # SyntaxHighlightThemes

@@ -21,6 +21,7 @@ basedir                 = /usr
 performance_schema = on
 slow_query_log     = on
 long_query_time    = 0.1
+log_output         = TABLE
 
 # Broken reverse DNS slows down connections considerably and name resolve is
 # safe to skip if there are no "host by domain name" access grants
@@ -42,8 +43,8 @@ max_connections          = 300
 max_heap_table_size   = 256M
 tmp_memory_table_size = 256M
 
-table_open_cache       = 8000
-table_definition_cache = 4000
+table_open_cache       = 4000
+table_definition_cache = 2000
 
 join_buffer_size       = 1M
 
