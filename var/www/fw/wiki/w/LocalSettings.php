@@ -28,6 +28,9 @@ if (array_key_exists('REQUEST_URI', $_SERVER)) {
 } else if (getenv('FW_LANG', true)) {
     $fwLang = getenv('FW_LANG', true);
 }
+if ($fwLang === 'en') {
+    $fwLang = NULL;
+}
 
 # Protect against web entry
 if ( !defined( 'MEDIAWIKI' ) ) {
