@@ -541,9 +541,6 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 
 $wgMFCollapseSectionsByDefault = false;
 
-# Wiki articles aren't cached at all right now, so no need.
-#$wgMFVaryOnUA = true;
-
 # Non-blocking loading of Mobile.css causes Citizen colors to
 # change after the page becomes visible, which isn't nice.
 $wgMFSiteStylesRenderBlocking = true;
