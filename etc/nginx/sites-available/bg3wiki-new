@@ -4,20 +4,6 @@ map "" $bg3log {
 }
 
 server {
-	listen 80;
-	server_name new.bg3.wiki;
-
-	access_log /var/log/nginx/new-bg3wiki-redirect.log combined if=$bg3log;
-	error_log /var/log/nginx/new-bg3wiki-error.log;
-
-	include snippets/letsencrypt;
-
-	location / {
-		return 301 https://new.bg3.wiki$request_uri;
-	}
-}
-
-server {
 	listen 443 ssl;
 	server_name new.bg3.wiki;
 
@@ -62,7 +48,7 @@ server {
 	# Root URL is main page
 	location = / {
 		fastcgi_index w/index.php;
-		include snippets/run-php-mwcache;
+		include snippets/run-php-mwfc;
 	}
 
 	location = /wiki/Main_Page {
@@ -71,7 +57,7 @@ server {
 
 	# Location for wiki's entry points
 	location ~ ^/w/(index|load|api|thumb|opensearch_desc|rest)\.php$ {
-		include snippets/run-php-mwcache;
+		include snippets/run-php-mwfc;
 	}
 
 	# Block Discord's broken page preview tool
@@ -79,7 +65,7 @@ server {
 		if ($http_user_agent ~ "Discordbot") {
 			return 403;
 		}
-		include snippets/run-php-mwcache;
+		include snippets/run-php-mwfc;
 	}
 
 	# Images
@@ -114,5 +100,19 @@ server {
 	# Add specific rules for other entry points/images as needed above this
 	location / {
 		return 404;
+	}
+}
+
+server {
+	listen 80;
+	server_name new.bg3.wiki;
+
+	access_log /var/log/nginx/new-bg3wiki-redirect.log combined if=$bg3log;
+	error_log /var/log/nginx/new-bg3wiki-error.log;
+
+	include snippets/letsencrypt;
+
+	location / {
+		return 301 https://new.bg3.wiki$request_uri;
 	}
 }

@@ -47,7 +47,21 @@ server {
 	access_log /var/log/nginx/fw-wiki-access.log;
 	error_log /var/log/nginx/fw-wiki-error.log;
 
-	return 301 https://feministwiki.org/de$request_uri;
+	location = /favicon.ico {
+		return 301 https://feministwiki.org/favicon.ico;
+	}
+
+	location = /robots.txt {
+		return 301 https://feministwiki.org/robots.txt;
+	}
+
+	location = /sitemap.xml {
+		return 301 https://feministwiki.org/sitemap.xml;
+	}
+
+	location / {
+		return 301 https://feministwiki.org/de$request_uri;
+	}
 }
 
 server {

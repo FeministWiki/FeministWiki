@@ -1,0 +1,79 @@
+# default nginx site config for Pleroma
+#
+# Simple installation instructions:
+# 1. Install your TLS certificate, possibly using Let's Encrypt.
+# 2. Replace 'example.tld' with your instance's domain wherever it appears.
+# 3. Copy this file to /etc/nginx/sites-available/ and then add a symlink to it
+#    in /etc/nginx/sites-enabled/ and run 'nginx -s reload' or restart nginx.
+
+proxy_cache_path /tmp/fw-pleroma-media-cache levels=1:2 keys_zone=pleroma_media_cache:10m max_size=10g
+                 inactive=720m use_temp_path=off;
+
+# this is explicitly IPv4 since Pleroma.Web.Endpoint binds on IPv4 only
+# and `localhost.` resolves to [::0] on some systems: see issue #930
+upstream phoenix {
+    server 127.0.0.1:4000 max_fails=5 fail_timeout=60s;
+}
+
+server {
+    server_name    fedi.feministwiki.org;
+
+    listen         80;
+
+    # Uncomment this if you need to use the 'webroot' method with certbot. Make sure
+    # that the directory exists and that it is accessible by the webserver. If you followed
+    # the guide, you already ran 'mkdir -p /var/lib/letsencrypt' to create the folder.
+    # You may need to load this file with the ssl server block commented out, run certbot
+    # to get the certificate, and then uncomment it.
+    #
+    # location ~ /\.well-known/acme-challenge {
+    #     root /var/lib/letsencrypt/;
+    # }
+
+    include snippets/letsencrypt;
+
+    location / {
+      return         301 https://$server_name$request_uri;
+    }
+}
+
+# Enable SSL session caching for improved performance
+ssl_session_cache shared:ssl_session_cache:10m;
+
+server {
+    server_name fedi.feministwiki.org;
+
+    listen 443 ssl;
+
+    ssl_trusted_certificate   /etc/letsencrypt/live/feministwiki/chain.pem;
+    ssl_certificate           /etc/letsencrypt/live/feministwiki/fullchain.pem;
+    ssl_certificate_key       /etc/letsencrypt/live/feministwiki/privkey.pem;
+
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    location / {
+        proxy_pass http://phoenix;
+    }
+
+    # Uncomment this if you want notice compatibility routes for frontends like Soapbox.
+    # location ~ ^/@[^/]+/([^/]+)$ {
+    #     proxy_pass http://phoenix/notice/$1;
+    # }
+    #
+    # location ~ ^/@[^/]+/posts/([^/]+)$ {
+    #     proxy_pass http://phoenix/notice/$1;
+    # }
+    #
+    # location ~ ^/[^/]+/status/([^/]+)$ {
+    #     proxy_pass http://phoenix/notice/$1;
+    # }
+
+    # Served from other domain; see config file 'fw-fedi-uploads'.
+    location ~ ^/(media|proxy) {
+        return 404;
+    }
+}

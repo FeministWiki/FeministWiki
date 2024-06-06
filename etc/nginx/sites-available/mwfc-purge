@@ -1,0 +1,14 @@
+server {
+	listen 1080 default_server;
+
+	access_log /var/log/nginx/mwfc-purge-access.log;
+	error_log /var/log/nginx/mwfc-purge-error.log;
+
+	location / {
+		if ($request_method != "PURGE") {
+			return 405;
+		}
+		include snippets/run-php-mwfc;
+	}
+}
+

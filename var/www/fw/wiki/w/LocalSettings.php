@@ -266,9 +266,10 @@ $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 $wgUseCdn = true;
 $wgCdnMaxAge = 24 * 60 * 60;
 
-# Can't send purge to Nginx; only Varnish supported
-#$wgCdnServers = [ '127.0.0.1' ];
-#$wgInternalServer = 'http://127.0.0.1';
+# Make MediaWiki send PURGE requests to Nginx
+# Note that this implicitly uses port 1080
+$wgCdnServers = [ '127.0.0.1' ];
+$wgInternalServer = 'http://feministwiki.org';
 
 # Seems to cause issues?
 #$wgEnableSidebarCache = true;

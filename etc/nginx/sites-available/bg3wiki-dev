@@ -5,13 +5,13 @@ map "" $bg3log {
 
 server {
 	listen 443 ssl;
-	server_name bg3.wiki;
+	server_name dev.bg3.wiki;
 
 	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
 
-	access_log /var/log/nginx/bg3wiki-access.log combined gzip if=$bg3log;
-	error_log /var/log/nginx/bg3wiki-error.log;
+	access_log /var/log/nginx/dev-bg3wiki-access.log combined gzip if=$bg3log;
+	error_log /var/log/nginx/dev-bg3wiki-error.log;
 
 	log_not_found off;
 
@@ -48,7 +48,7 @@ server {
 	# Root URL is main page
 	location = / {
 		fastcgi_index w/index.php;
-		include snippets/run-php-mwfc;
+		include snippets/run-php-direct;
 	}
 
 	location = /wiki/Main_Page {
@@ -57,7 +57,7 @@ server {
 
 	# Location for wiki's entry points
 	location ~ ^/w/(index|load|api|thumb|opensearch_desc|rest)\.php$ {
-		include snippets/run-php-mwfc;
+		include snippets/run-php-direct;
 	}
 
 	# Block Discord's broken page preview tool
@@ -65,7 +65,7 @@ server {
 		if ($http_user_agent ~ "Discordbot") {
 			return 403;
 		}
-		include snippets/run-php-mwfc;
+		include snippets/run-php-direct;
 	}
 
 	# Images
@@ -105,27 +105,14 @@ server {
 
 server {
 	listen 80;
-	server_name bg3.wiki www.bg3.wiki;
+	server_name dev.bg3.wiki;
 
-	access_log /var/log/nginx/bg3wiki-redirect.log combined if=$bg3log;
-	error_log /var/log/nginx/bg3wiki-error.log;
+	access_log /var/log/nginx/dev-bg3wiki-redirect.log combined if=$bg3log;
+	error_log /var/log/nginx/dev-bg3wiki-error.log;
 
 	include snippets/letsencrypt;
 
 	location / {
-		return 301 https://bg3.wiki$request_uri;
+		return 301 https://dev.bg3.wiki$request_uri;
 	}
-}
-
-server {
-	listen 443 ssl;
-	server_name www.bg3.wiki;
-
-	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
-
-	access_log /var/log/nginx/bg3wiki-redirect.log combined if=$bg3log;
-	error_log /var/log/nginx/bg3wiki-error.log;
-
-	return 301 https://bg3.wiki$request_uri;
 }

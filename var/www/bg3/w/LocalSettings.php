@@ -311,9 +311,10 @@ $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 $wgUseCdn = true;
 $wgCdnMaxAge = 24 * 60 * 60;
 
-# Can't send purge to Nginx; only Varnish supported
-#$wgCdnServers = [ '127.0.0.1' ];
-#$wgInternalServer = 'http://127.0.0.1';
+# Make MediaWiki send PURGE requests to Nginx
+# Note that this implicitly uses port 1080
+$wgCdnServers = [ '127.0.0.1' ];
+$wgInternalServer = 'http://bg3.wiki';
 
 # Seems to cause issues?
 #$wgEnableSidebarCache = true;
@@ -624,10 +625,11 @@ $wgTwitterSiteHandle = "@bg3_wiki";
 
 #$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';
 
-#if ($_SERVER['REMOTE_ADDR'] === $taylanIpAddr) {
-#	$wgDebugLogFile = "/tmp/mw-debug.log";
-#	$wgShowExceptionDetails = true;
-#	$wgShowDBErrorBacktrace = true;
-#	$wgShowSQLErrors = true;
-#	file_put_contents('/tmp/test-mw', 'test');
-#}
+if ($_SERVER['REMOTE_ADDR'] === $taylanIpAddr && $_SERVER['SERVER_NAME'] === 'dev.bg3.wiki') {
+	#$wgDebugLogFile = "/tmp/mw-debug.log";
+	$wgUseCdn = false;
+	$wgDebugToolbar = true;
+	$wgShowExceptionDetails = true;
+	$wgShowDBErrorBacktrace = true;
+	$wgShowSQLErrors = true;
+}
