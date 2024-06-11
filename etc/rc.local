@@ -1,9 +1,3 @@
 #!/bin/sh
 
-for d in bg3wiki-cache fw-wiki-cache ngx-fcgi-cache
-do
-	dir=/dev/shm/$d
-	mkdir -p "$dir"
-	chmod 700 "$dir"
-	chown www-data:www-data "$dir"
-done
+# Empty.

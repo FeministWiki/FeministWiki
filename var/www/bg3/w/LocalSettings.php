@@ -436,11 +436,11 @@ $wgNamespaceProtection[828] = ['editmodules'];
 #
 
 $wgCaptchaQuestions = [
-	"Which class uses divine magic?" => "cleric",
-	"Which class uses nature magic?" => "druid",
-	"Which class uses unarmed combat?" => "monk",
-	"What year was the game released?" => "2023",
-	"What's the second word in the game's name?" => "gate",
+	"Which class plays instruments? (Create an account to skip CAPTCHA.)" => "bard",
+	"Which class uses nature magic? (Create an account to skip CAPTCHA.)" => "druid",
+	"Which class uses unarmed combat? (Create an account to skip CAPTCHA.)" => "monk",
+	"What year was the game released? (Create an account to skip CAPTCHA.)" => "2023",
+	"The second word in the game's name? (Create an account to skip CAPTCHA.)" => "gate",
 ];
 
 $wgCaptchaTriggers['edit']          = true;
@@ -568,7 +568,7 @@ $wgPFEnableStringFunctions = true;
 # Scribunto
 #
 
-$wgScribuntoDefaultEngine = 'luastandalone';
+$wgScribuntoDefaultEngine = 'luasandbox';
 $wgScribuntoUseGeSHi = true;
 $wgScribuntoUseCodeEditor = true;
 $wgScribuntoEngineConf['luasandbox']['allowEnvFuncs'] = false;
