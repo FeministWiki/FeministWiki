@@ -93,6 +93,7 @@ server {
 
 	# Handling for the article path (pretty URLs)
 	location /wiki/ {
+		access_log /var/log/nginx/bg3wiki-pagehits.log;
 		rewrite ^/wiki/(?<pagename>.*)$ /w/index.php;
 	}
 

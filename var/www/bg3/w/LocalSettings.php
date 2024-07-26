@@ -149,6 +149,7 @@ wfLoadExtensions([
 	"CodeMirror",
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
+	#"CSS", # potentially unsafe
 	"DeleteBatch",
 	"DiscussionTools",
 	"Echo",
@@ -224,6 +225,12 @@ define( 'NS_GUIDE_TALK',   3001 );
 define( 'NS_MODDING',      3002 );
 define( 'NS_MODDING_TALK', 3003 );
 
+# Would be defined by Scribunto later, but we want it now.
+# Defining an NS constant here is supported by MediaWiki; see:
+# includes/registration/ExtensionProcessor.php (1.39.7)
+define( 'NS_MODULE',      828 );
+define( 'NS_MODULE_TALK', 829 );
+
 $wgExtraNamespaces[NS_GUIDE] = 'Guide';
 $wgExtraNamespaces[NS_GUIDE_TALK] = 'Guide_talk';
 $wgExtraNamespaces[NS_MODDING] = 'Modding';
@@ -246,6 +253,8 @@ $wgNamespaceAliases = [
 	'mw' => NS_MEDIAWIKI,
 	't' => NS_TEMPLATE,
 	'f' => NS_FILE,
+	'c' => NS_CATEGORY,
+	'lua' => NS_MODULE,
 ];
 
 #
@@ -281,6 +290,8 @@ $wgTidyConfig = [
 	'driver' => 'RemexHtml',
 	'pwrap' => false,
 ];
+
+$wgResourceLoaderMaxage['unversioned'] = 20;
 
 #
 # Security
@@ -361,8 +372,10 @@ $wgAutoConfirmAge = 10;
 $wgAutoConfirmCount = 3;
 
 $wgGroupPermissions['autoconfirmed']['autopatrol'] = true;
-# Requires Extension:ConfirmEdit
+# Extension:ConfirmEdit
 $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
+# Extension:SpamBlacklist
+$wgGroupPermissions['autoconfirmed']['sboverride'] = true;
 
 #
 # Search
@@ -417,13 +430,9 @@ $wgGroupPermissions['sysop']['checkuser-log'] = true;
 $wgGroupPermissions['sysop']['investigate'] = true;
 $wgGroupPermissions['sysop']['checkuser-temporary-account'] = true;
 
-# The constant NS_MODULE is not available in LocalSettings.php,
-# even if you try to use it after loading Scribunto, so use the
-# number 828 directly.  The number will never change.
-
 $wgNamespaceProtection[NS_TEMPLATE] = ['edittemplates'];
 $wgNamespaceProtection[NS_PROJECT] = ['editproject'];
-$wgNamespaceProtection[828] = ['editmodules'];
+$wgNamespaceProtection[NS_MODULE] = ['editmodules'];
 
 ####################################
 #                                  #
@@ -469,7 +478,12 @@ $wgRCFeeds['discord'] = [
 	'url' => $discordRCFeedWebhookUri,
 	'omit_minor' => true,
 	'omit_talk' => true,
-	'omit_namespaces' => [ NS_USER, NS_MEDIAWIKI ],
+	'omit_namespaces' => [ NS_FILE, NS_USER, NS_MEDIAWIKI ],
+];
+
+$wgRCFeeds['discord_file'] = [
+	'url' => $discordRCFeedFileWebhookUri,
+	'only_namespaces' => [ NS_FILE ],
 ];
 
 $wgRCFeeds['discord_talk'] = [
