@@ -17,8 +17,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-$wgSitename = "Baldur's Gate 3 Wiki";
-$wgMetaNamespace = "BG3Wiki";
+$wgSitename = "bg3.wiki";
+$wgMetaNamespace = "bg3wiki";
 
 ## The URL base path to the directory containing the wiki;
 ## defaults for all runtime URL paths are based off of this.
@@ -123,10 +123,10 @@ $wgAuthenticationTokenVersion = "1";
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
-$wgRightsPage = ""; # Set to the title of a wiki page that describes your license/copyright
-$wgRightsUrl = "https://creativecommons.org/licenses/by-nc-sa/4.0/";
-$wgRightsText = "CC BY-NC-SA";
-$wgRightsIcon = "$wgResourceBasePath/resources/assets/licenses/cc-by-nc-sa.png";
+$wgRightsPage = "bg3wiki:Copyrights";
+$wgRightsUrl = "";
+$wgRightsText = "CC BY-NC-SA 4.0 or CC BY-SA 4.0";
+$wgRightsIcon = null;
 
 # Path to the GNU diff3 utility. Used for conflict resolution.
 $wgDiff3 = "/usr/bin/diff3";
@@ -149,6 +149,7 @@ wfLoadExtensions([
 	"CodeMirror",
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
+	"ContributionScores",
 	#"CSS", # potentially unsafe
 	"DeleteBatch",
 	"DiscussionTools",
@@ -200,6 +201,9 @@ wfLoadExtensions([
 wfLoadSkin("Vector");
 $wgDefaultSkin = "vector";
 $wgDefaultTheme = "dark-grey"; # Extension:Theme
+$wgSkipThemes = [
+	'vector' => [ 'dark' => true ]
+];
 
 wfLoadSkin("Citizen");
 $wgCitizenThemeDefault = "dark";
@@ -224,6 +228,8 @@ define( 'NS_GUIDE',        3000 );
 define( 'NS_GUIDE_TALK',   3001 );
 define( 'NS_MODDING',      3002 );
 define( 'NS_MODDING_TALK', 3003 );
+define( 'NS_MODS',         3004 );
+define( 'NS_MODS_TALK',    3005 );
 
 # Would be defined by Scribunto later, but we want it now.
 # Defining an NS constant here is supported by MediaWiki; see:
@@ -235,15 +241,19 @@ $wgExtraNamespaces[NS_GUIDE] = 'Guide';
 $wgExtraNamespaces[NS_GUIDE_TALK] = 'Guide_talk';
 $wgExtraNamespaces[NS_MODDING] = 'Modding';
 $wgExtraNamespaces[NS_MODDING_TALK] = 'Modding_talk';
+$wgExtraNamespaces[NS_MODS] = 'Mods';
+$wgExtraNamespaces[NS_MODS_TALK] = 'Mods_talk';
 
 $wgContentNamespaces[] = NS_GUIDE;
 $wgContentNamespaces[] = NS_MODDING;
+$wgContentNamespaces[] = NS_MODS;
 
 $wgSitemapNamespaces = $wgContentNamespaces;
 
 $wgNamespacesWithSubpages[NS_MAIN] = true;
 $wgNamespacesWithSubpages[NS_GUIDE] = true;
 $wgNamespacesWithSubpages[NS_MODDING] = true;
+$wgNamespacesWithSubpages[NS_MODS] = true;
 
 $wgVisualEditorAvailableNamespaces['Help'] = true;
 $wgVisualEditorAvailableNamespaces['Guides'] = true;
@@ -347,6 +357,7 @@ $wgInternalServer = 'http://bg3.wiki';
 #$wgNamespaceRobotPolicies[NS_MAIN] = 'index,follow';
 #$wgNamespaceRobotPolicies[NS_GUIDE] = 'index,follow';
 #$wgNamespaceRobotPolicies[NS_MODDING] = 'index,follow';
+#$wgNamespaceRobotPolicies[NS_MODS] = 'index,follow';
 
 # We're careful about spammers; no need for this
 $wgNoFollowLinks = false;
@@ -396,6 +407,8 @@ $wgNamespacesToBeSearchedDefault = [
 	NS_GUIDE_TALK => true,
 	NS_MODDING => true,
 	NS_MODDING_TALK => true,
+	NS_MODS => true,
+	NS_MODS_TALK => true,
 ];
 
 #$wgDisableSearchUpdate = true;
@@ -469,6 +482,17 @@ $wgCargoDBname = "bg3wiki-cargo";
 $wgCargoDBuser = "bg3wiki-cargo";
 $wgCargoMaxQueryLimit = 5000;
 #$wgCargoDBpassword = "(set in secrets.php)";
+
+#
+# Contribution Scores
+#
+
+$wgContribScoreDisableCache = true;
+$wgContribScoreCacheTTL = 0.1;
+$wgContribScoreReports = [
+    [ 30, 20 ],
+    [ 0, 200 ],
+];
 
 #
 # Discord RC Feed
