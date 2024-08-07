@@ -150,7 +150,8 @@ wfLoadExtensions([
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
 	"ContributionScores",
-	#"CSS", # potentially unsafe
+	# Potentially unsafe.
+	#"CSS",
 	"DeleteBatch",
 	"DiscussionTools",
 	"Echo",
@@ -161,6 +162,8 @@ wfLoadExtensions([
 	"ImageMap",
 	"JsonConfig",
 	"LabeledSectionTransclusion",
+	# Incompatible with CodeMirror: https://phabricator.wikimedia.org/T300618
+	#"LinkSuggest",
 	"Linter",
 	"LocalVariables",
 	"Loops",
@@ -209,8 +212,17 @@ wfLoadSkin("Citizen");
 $wgCitizenThemeDefault = "dark";
 $wgDefaultMobileSkin = "Citizen"; # Extension:MobileFrontend
 
+# Add CSS classes to body depending on whether user is logged in
+$wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$bodyAttrs ) {
+	if ( $out->getUser()->getId() == 0 || $out->getUser()->getId() == 1 ) {
+		$bodyAttrs['class'] .= ' mw-anonymous mw-ads-enabled';
+	} else {
+		$bodyAttrs['class'] .= ' mw-logged-in';
+	}
+};
+
 # Add footer link to Copyrights page
-$wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$footerlinks ) {
+$wgHooks['SkinAddFooterLinks'][] = function ( $skin, $key, &$footerlinks ) {
 	if ( $key !== 'places' ) {
 		return;
 	}
@@ -218,6 +230,45 @@ $wgHooks['SkinAddFooterLinks'][] = function ( Skin $skin, string $key, array &$f
 		'bg3wiki-copyrights-text',
 		'bg3wiki-copyrights-page'
 	);
+};
+
+# Add insertion point for top-right header ad on desktop
+$wgHooks['SiteNoticeAfter'][] = function ( &$html, $skin ) {
+	if ( $skin->getSkinName() !== "vector" ) {
+		return;
+	}
+	$html .= "<div id='bg3wiki-header-ad' class='bg3wiki-ad'>";
+	$html .= "<p>Ad placeholder</p>";
+	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
+	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "</div>";
+};
+
+# Add insertion point for sticky vertical ad on desktop
+$wgHooks['SkinAfterPortlet'][] = function( $skin, $portletName, &$html ) {
+	if ( $skin->getSkinName() !== "vector" ) {
+		return;
+	}
+	if ( $portletName !== "Advertisement" ) {
+		return;
+	}
+	$html .= "<div id='bg3wiki-sidebar-ad' class='bg3wiki-ad'>";
+	$html .= "<p>Ad placeholder</p>";
+	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
+	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "</div>";
+};
+
+# Add insertion point for bottom banner ad on mobile
+$wgHooks['SkinAfterContent'][] = function( &$html, $skin ) {
+	if ( $skin->getSkinName() !== "citizen" ) {
+		return;
+	}
+	$html .= "<div id='bg3wiki-footer-ad' class='bg3wiki-ad'>";
+	$html .= "<p>Ad placeholder</p>";
+	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
+	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "</div>";
 };
 
 #
