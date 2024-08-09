@@ -29,8 +29,8 @@ server {
 
 	root /var/www/bg3;
 
-	include headers/default;
-	include headers/unsafe-csp;
+	#include headers/default;
+	#include headers/unsafe-csp;
 
 	# Why was this needed again?
 	# Turn on server logs and see if some clients still request it.

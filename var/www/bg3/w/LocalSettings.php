@@ -137,6 +137,18 @@ $wgDiff3 = "/usr/bin/diff3";
 ################################################################################
 ################################################################################
 
+$devSite = false;
+$debugMode = false;
+
+if ( $_SERVER['SERVER_NAME'] === 'dev.bg3.wiki' ) {
+	$devSite = true;
+	$wgServer = "https://dev.bg3.wiki";
+}
+
+if ( $devSite && $_SERVER['REMOTE_ADDR'] == $taylanIpAddr ) {
+	$debugMode = true;
+}
+
 wfLoadExtensions([
 	"ArrayFunctions",
 	"Arrays",
@@ -188,6 +200,7 @@ wfLoadExtensions([
 	"TabberNeue",
 	"TemplateData",
 	"TemplateStyles",
+	"TemplateStylesExtender",
 	"TextExtracts",
 	"Theme",
 	"Variables",
@@ -213,23 +226,54 @@ $wgCitizenThemeDefault = "dark";
 $wgDefaultMobileSkin = "Citizen"; # Extension:MobileFrontend
 
 # Add CSS classes to body depending on whether user is logged in
-$wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$bodyAttrs ) {
-	if ( $out->getUser()->getId() == 0 || $out->getUser()->getId() == 1 ) {
-		$bodyAttrs['class'] .= ' mw-anonymous mw-ads-enabled';
+$wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$attrs ) {
+	if ( $out->getUser()->getId() == 0 ) {
+		$attrs['class'] .= ' mw-anonymous';
 	} else {
-		$bodyAttrs['class'] .= ' mw-logged-in';
+		$attrs['class'] .= ' mw-logged-in';
 	}
 };
 
 # Add footer link to Copyrights page
-$wgHooks['SkinAddFooterLinks'][] = function ( $skin, $key, &$footerlinks ) {
+$wgHooks['SkinAddFooterLinks'][] = function ( $skin, $key, &$links ) {
 	if ( $key !== 'places' ) {
 		return;
 	}
-	$footerlinks['copyright'] = $skin->footerLink(
+	$links['copyright'] = $skin->footerLink(
 		'bg3wiki-copyrights-text',
 		'bg3wiki-copyrights-page'
 	);
+};
+
+#
+# Advertisement
+#
+
+$bg3wikiFuseJs = 'https://cdn.fuseplatform.net/publift/tags/2/3741/fuse.js';
+
+function bg3wikiAdsEnabled($user) {
+	$id = $user->getId();
+	return $id == 0 /*|| $id == 1*/;
+}
+
+# Add Publift Fuse script
+$wgHooks['BeforePageDisplay'][] = function ( $out, $skin ) use ($bg3wikiFuseJs) {
+	$user = $out->getUser();
+	if ( !bg3wikiAdsEnabled($user) ) {
+		return;
+	}
+	$script = "<script async src='$bg3wikiFuseJs'></script>";
+	$out->addHeadItem("bg3wiki-ads", $script);
+};
+
+# Add CSS class to body depending on whether ads should be enabled
+$wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$attrs ) {
+	$user = $out->getUser();
+	if ( bg3wikiAdsEnabled($user) ) {
+		$attrs['class'] .= ' mw-ads-enabled';
+	} else {
+		$attrs['class'] .= ' mw-ads-disabled';
+	}
 };
 
 # Add insertion point for top-right header ad on desktop
@@ -237,10 +281,12 @@ $wgHooks['SiteNoticeAfter'][] = function ( &$html, $skin ) {
 	if ( $skin->getSkinName() !== "vector" ) {
 		return;
 	}
+	if ( $skin->getTitle()->isSpecialPage() ) {
+		return;
+	}
 	$html .= "<div id='bg3wiki-header-ad' class='bg3wiki-ad'>";
 	$html .= "<p>Ad placeholder</p>";
-	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
-	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "<div id='bg3wiki-header-ad-fuse' data-fuse='23198268145'></div>";
 	$html .= "</div>";
 };
 
@@ -249,13 +295,15 @@ $wgHooks['SkinAfterPortlet'][] = function( $skin, $portletName, &$html ) {
 	if ( $skin->getSkinName() !== "vector" ) {
 		return;
 	}
+	if ( $skin->getTitle()->isSpecialPage() ) {
+		return;
+	}
 	if ( $portletName !== "Advertisement" ) {
 		return;
 	}
 	$html .= "<div id='bg3wiki-sidebar-ad' class='bg3wiki-ad'>";
 	$html .= "<p>Ad placeholder</p>";
-	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
-	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "<div id='bg3wiki-sidebar-ad-fuse' data-fuse='23198268148'></div>";
 	$html .= "</div>";
 };
 
@@ -264,10 +312,12 @@ $wgHooks['SkinAfterContent'][] = function( &$html, $skin ) {
 	if ( $skin->getSkinName() !== "citizen" ) {
 		return;
 	}
+	if ( $skin->getTitle()->isSpecialPage() ) {
+		return;
+	}
 	$html .= "<div id='bg3wiki-footer-ad' class='bg3wiki-ad'>";
 	$html .= "<p>Ad placeholder</p>";
-	// $html .= "<p>Ad block user?<br>No problem.<br><br>";
-	// $html .= "If you want, you can log in to hide this ad placeholder.</p>";
+	$html .= "<div id='bg3wiki-footer-ad-fuse' data-fuse='23198268151'></div>";
 	$html .= "</div>";
 };
 
@@ -380,7 +430,7 @@ $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache
-$wgUseCdn = true;
+$wgUseCdn = !$devSite;
 $wgCdnMaxAge = 24 * 60 * 60;
 
 # Make MediaWiki send PURGE requests to Nginx
@@ -714,9 +764,8 @@ $wgTwitterSiteHandle = "@bg3_wiki";
 
 #$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';
 
-if ($_SERVER['REMOTE_ADDR'] === $taylanIpAddr && $_SERVER['SERVER_NAME'] === 'dev.bg3.wiki') {
+if ($debugMode) {
 	#$wgDebugLogFile = "/tmp/mw-debug.log";
-	$wgUseCdn = false;
 	$wgDebugToolbar = true;
 	$wgShowExceptionDetails = true;
 	$wgShowDBErrorBacktrace = true;
