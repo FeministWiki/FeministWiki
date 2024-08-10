@@ -251,25 +251,35 @@ $wgHooks['SkinAddFooterLinks'][] = function ( $skin, $key, &$links ) {
 
 $bg3wikiFuseJs = 'https://cdn.fuseplatform.net/publift/tags/2/3741/fuse.js';
 
-function bg3wikiAdsEnabled($user) {
-	$id = $user->getId();
-	return $id == 0 /*|| $id == 1*/;
+function bg3wikiAdsEnabled( OutputPage $out ) {
+	$ns = $out->getTitle()->getNamespace();
+	$action = $out->getContext()->getActionName();
+	return $out->getUser()->isAnon()
+		&& bg3wikiAdsEnabledNs( $ns )
+		&& $action == 'view';
+}
+
+function bg3wikiAdsEnabledNs( $ns ) {
+	switch ( $ns ) {
+		case NS_MAIN:
+		case NS_FILE:
+			return true;
+		default:
+			return false;
+	}
 }
 
 # Add Publift Fuse script
 $wgHooks['BeforePageDisplay'][] = function ( $out, $skin ) use ($bg3wikiFuseJs) {
-	$user = $out->getUser();
-	if ( !bg3wikiAdsEnabled($user) ) {
-		return;
+	if ( bg3wikiAdsEnabled( $out ) ) {
+		$script = "<script async src='$bg3wikiFuseJs'></script>";
+		$out->addHeadItem("bg3wiki-ads", $script);
 	}
-	$script = "<script async src='$bg3wikiFuseJs'></script>";
-	$out->addHeadItem("bg3wiki-ads", $script);
 };
 
 # Add CSS class to body depending on whether ads should be enabled
 $wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$attrs ) {
-	$user = $out->getUser();
-	if ( bg3wikiAdsEnabled($user) ) {
+	if ( bg3wikiAdsEnabled( $out ) ) {
 		$attrs['class'] .= ' mw-ads-enabled';
 	} else {
 		$attrs['class'] .= ' mw-ads-disabled';
@@ -278,10 +288,10 @@ $wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$attrs ) {
 
 # Add insertion point for top-right header ad on desktop
 $wgHooks['SiteNoticeAfter'][] = function ( &$html, $skin ) {
-	if ( $skin->getSkinName() !== "vector" ) {
+	if ( !bg3wikiAdsEnabled( $skin->getOutput() ) ) {
 		return;
 	}
-	if ( $skin->getTitle()->isSpecialPage() ) {
+	if ( $skin->getSkinName() !== "vector" ) {
 		return;
 	}
 	$html .= "<div id='bg3wiki-header-ad' class='bg3wiki-ad'>";
@@ -292,10 +302,10 @@ $wgHooks['SiteNoticeAfter'][] = function ( &$html, $skin ) {
 
 # Add insertion point for sticky vertical ad on desktop
 $wgHooks['SkinAfterPortlet'][] = function( $skin, $portletName, &$html ) {
-	if ( $skin->getSkinName() !== "vector" ) {
+	if ( !bg3wikiAdsEnabled( $skin->getOutput() ) ) {
 		return;
 	}
-	if ( $skin->getTitle()->isSpecialPage() ) {
+	if ( $skin->getSkinName() !== "vector" ) {
 		return;
 	}
 	if ( $portletName !== "Advertisement" ) {
@@ -309,10 +319,10 @@ $wgHooks['SkinAfterPortlet'][] = function( $skin, $portletName, &$html ) {
 
 # Add insertion point for bottom banner ad on mobile
 $wgHooks['SkinAfterContent'][] = function( &$html, $skin ) {
-	if ( $skin->getSkinName() !== "citizen" ) {
+	if ( !bg3wikiAdsEnabled( $skin->getOutput() ) ) {
 		return;
 	}
-	if ( $skin->getTitle()->isSpecialPage() ) {
+	if ( $skin->getSkinName() !== "citizen" ) {
 		return;
 	}
 	$html .= "<div id='bg3wiki-footer-ad' class='bg3wiki-ad'>";
@@ -517,6 +527,10 @@ $wgNamespacesToBeSearchedDefault = [
 #
 # User groups & permissions
 #
+
+$wgGroupPermissions['*']['deletedhistory'] = true;
+$wgGroupPermissions['*']['browsearchive'] = true;
+$wgGroupPermissions['*']['deletedtext'] = true;
 
 $wgAvailableRights[] = 'editmodules';
 $wgAvailableRights[] = 'editproject';
