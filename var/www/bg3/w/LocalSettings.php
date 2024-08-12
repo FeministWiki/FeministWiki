@@ -146,7 +146,11 @@ if ( $_SERVER['SERVER_NAME'] === 'dev.bg3.wiki' ) {
 }
 
 if ( $devSite && $_SERVER['REMOTE_ADDR'] == $taylanIpAddr ) {
-	$debugMode = true;
+	#$wgDebugLogFile = "/tmp/mw-debug.log";
+	$wgDebugToolbar = true;
+	$wgShowExceptionDetails = true;
+	$wgShowDBErrorBacktrace = true;
+	$wgShowSQLErrors = true;
 }
 
 wfLoadExtensions([
@@ -381,6 +385,8 @@ $wgNamespaceAliases = [
 #
 # General
 #
+
+#$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';
 
 # Serve Main_Page as https://bg3.wiki/
 $wgMainPageIsDomainRoot = true;
@@ -770,18 +776,6 @@ $wgWikiSeoOverwritePageImage = true;
 $wgTwitterCardType = 'summary';
 $wgTwitterSiteHandle = "@bg3_wiki";
 
-#############
-#           #
-# Debugging #
-#           #
-#############
-
-#$wgReadOnly = 'Server transfer in progress; please save your changes in a text file and try again later.';
-
-if ($debugMode) {
-	#$wgDebugLogFile = "/tmp/mw-debug.log";
-	$wgDebugToolbar = true;
-	$wgShowExceptionDetails = true;
-	$wgShowDBErrorBacktrace = true;
-	$wgShowSQLErrors = true;
-}
+#
+# END OF FILE
+#
