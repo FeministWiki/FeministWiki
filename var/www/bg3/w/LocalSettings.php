@@ -252,17 +252,17 @@ $wgHooks['SkinAddFooterLinks'][] = function ( $skin, $key, &$links ) {
 $bg3wikiFuseJs = 'https://cdn.fuseplatform.net/publift/tags/2/3741/fuse.js';
 
 function bg3wikiAdsEnabled( OutputPage $out ) {
+	$user = $out->getUser();
 	$ns = $out->getTitle()->getNamespace();
-	$action = $out->getContext()->getActionName();
-	return $out->getUser()->isAnon()
-		&& bg3wikiAdsEnabledNs( $ns )
-		&& $action == 'view';
+	return $user->isAnon() && bg3wikiAdsEnabledNs( $ns );
 }
 
 function bg3wikiAdsEnabledNs( $ns ) {
 	switch ( $ns ) {
 		case NS_MAIN:
 		case NS_FILE:
+		case NS_SPECIAL:
+		case NS_CATEGORY:
 			return true;
 		default:
 			return false;
