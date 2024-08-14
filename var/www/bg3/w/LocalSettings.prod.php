@@ -447,7 +447,9 @@ $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache
 $wgUseCdn = !$devSite;
-$wgCdnMaxAge = 24 * 60 * 60;
+
+# Only 5 min because of ad provider A/B testing
+$wgCdnMaxAge = 300;
 
 # Make MediaWiki send PURGE requests to Nginx
 # Note that this implicitly uses port 1080
