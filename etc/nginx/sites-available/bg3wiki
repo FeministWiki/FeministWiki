@@ -49,7 +49,7 @@ server {
 
 	### END LibreSpeed ###
 
-	# No cache for robots, sitemaps, ads
+	# No cache for robots, sitemaps, ads.txt
 	location ~ ^/(robots|sitemap|ads\.txt) {
 	}
 

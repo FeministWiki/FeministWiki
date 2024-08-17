@@ -20,7 +20,8 @@ server {
 	#include headers/default;
 	#include headers/unsafe-csp;
 
-	# Why was this needed again? Turn on server logs and see if some clients still request it.
+	# Why was this needed again?
+	# Turn on server logs and see if some clients still request it.
 	location = /w/resources/assets/bg3wiki-favicon.ico {
 		return 301 /favicon.ico;
 	}
@@ -36,8 +37,8 @@ server {
 
 	### END LibreSpeed ###
 
-	# No cache for robots or sitemaps
-	location ~ ^/(robots|sitemap) {
+	# No cache for robots, sitemaps, ads.txt
+	location ~ ^/(robots|sitemap|ads\.txt) {
 	}
 
 	# Static assets outside of MediaWiki
