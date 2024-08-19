@@ -26,9 +26,6 @@ biff = no
 delay_warning_time = 30m
 confirm_delay_cleared = yes
 
-# Twitter are idiots
-#reject_invalid_helo_hostname = no
-
 #
 # Mail filtering / OpenDKIM
 #
@@ -122,7 +119,8 @@ smtpd_helo_restrictions =
     permit_mynetworks
     permit_sasl_authenticated
     reject_non_fqdn_helo_hostname
-    reject_unknown_helo_hostname
+    # Twitter are idiots, so we may need to disable this
+    #reject_unknown_helo_hostname
 
 smtpd_sender_restrictions =
     permit_mynetworks
