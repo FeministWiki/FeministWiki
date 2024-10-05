@@ -3,5 +3,5 @@
   <Link rel="urn:xmpp:alt-connections:websocket"
         href="wss://xmpp.feministwiki.org:5443/ws" />
   <Link rel="lrdd"
-        template="https://fedi.feministwiki.org/.well-known/webfinger?resource={uri}" />
+        template="https://feministwiki.org/.well-known/webfinger?resource={uri}" />
 </XRD>

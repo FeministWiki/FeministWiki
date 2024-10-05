@@ -101,6 +101,11 @@ server {
 	include headers/default;
 	include headers/unsafe-csp;
 
+	# Redirect Webfinger requests for Fediverse
+	location /.well-known/webfinger {
+		return 301 https://fedi.feministwiki.org$request_uri;
+	}
+
 	# No cache for robots or sitemaps
 	location ~ ^/(robots|sitemap) {
 	}

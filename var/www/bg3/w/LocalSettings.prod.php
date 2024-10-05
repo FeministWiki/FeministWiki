@@ -166,8 +166,7 @@ wfLoadExtensions([
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
 	"ContributionScores",
-	# Potentially unsafe.
-	#"CSS",
+	"CSS",
 	"DeleteBatch",
 	"DiscussionTools",
 	"Echo",
@@ -345,13 +344,23 @@ $wgHooks['SkinAfterContent'][] = function( &$html, $skin ) {
 	if ( $skin->getSkinName() !== "citizen" ) {
 		return;
 	}
+	$html .= "<p id='bg3wiki-ad-provider-notice'></p>";
+
+};
+
+$wgHooks['SkinAfterBottomScripts'][] = function( $skin, &$html ) {
+	if ( !bg3wikiAdsEnabled( $skin->getOutput() ) ) {
+		return;
+	}
+	if ( $skin->getSkinName() !== "citizen" ) {
+		return;
+	}
 	$html .= <<< EOF
 	  <div id='bg3wiki-footer-ad'>
 	    <p>Ad placeholder</p>
-	    <div id='bg3wiki-footer-ad-fuse' data-fuse='23198268151'></div>
+	    <div id='bg3wiki-footer-ad-fuse'></div>
 	    <div id='bg3wiki-footer-ad-ramp'></div>
 	  </div>
-	  <p id='bg3wiki-ad-provider-notice'></p>
 	EOF;
 
 };
@@ -362,11 +371,8 @@ $wgHooks['SkinAfterBottomScripts'][] = function ( $skin, &$html )
 	if ( !bg3wikiAdsEnabled( $skin->getOutput() ) ) {
 		return;
 	}
-	if ( $devSite ) {
-		$html .= '<script src="/js/ads.dev.js"></script>';
-	} else {
-		$html .= '<script src="/js/ads.prod.js"></script>';
-	}
+	$src = $devSite ? '/js/ads.dev.js' : '/js/ads.prod.js';
+	$html .= "<script async type='module' src='$src'></script>";
 };
 
 #
@@ -452,8 +458,8 @@ $wgTidyConfig = [
 	'pwrap' => false,
 ];
 
-# For when working on MW:Vector.css and such
-#$wgResourceLoaderMaxage['unversioned'] = 20;
+# Useful when working on MW:Vector.css and such
+#$wgResourceLoaderMaxage['unversioned'] = 5;
 
 #
 # Security
@@ -482,7 +488,7 @@ $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
 # Allow caching via reverse proxy
 # In our case this is just the Nginx FCGI cache
 $wgUseCdn = !$devSite;
-$wgCdnMaxAge = 24 * 60 * 60;
+$wgCdnMaxAge = 3600;
 
 # Make MediaWiki send PURGE requests to Nginx
 # Note that this implicitly uses port 1080
@@ -569,10 +575,6 @@ $wgNamespacesToBeSearchedDefault = [
 # User groups & permissions
 #
 
-$wgGroupPermissions['*']['deletedhistory'] = true;
-$wgGroupPermissions['*']['browsearchive'] = true;
-$wgGroupPermissions['*']['deletedtext'] = true;
-
 $wgAvailableRights[] = 'editmodules';
 $wgAvailableRights[] = 'editproject';
 $wgAvailableRights[] = 'edittemplates';
@@ -602,6 +604,11 @@ $wgGroupPermissions['sysop']['checkuser-temporary-account'] = true;
 $wgNamespaceProtection[NS_TEMPLATE] = ['edittemplates'];
 $wgNamespaceProtection[NS_PROJECT] = ['editproject'];
 $wgNamespaceProtection[NS_MODULE] = ['editmodules'];
+
+# To allow the public to see deleted content:
+#$wgGroupPermissions['*']['deletedhistory'] = true;
+#$wgGroupPermissions['*']['browsearchive'] = true;
+#$wgGroupPermissions['*']['deletedtext'] = true;
 
 ####################################
 #                                  #
@@ -646,8 +653,8 @@ $wgCargoMaxQueryLimit = 5000;
 $wgContribScoreDisableCache = true;
 $wgContribScoreCacheTTL = 0.1;
 $wgContribScoreReports = [
-    [ 30, 20 ],
-    [ 0, 200 ],
+	[ 30, 20 ],
+	[ 0, 200 ],
 ];
 
 #
@@ -692,30 +699,30 @@ $wgHTMLTagsAttributes['summary'] = [ 'class', 'style' ];
 $wgJsonConfigEnableLuaSupport = true;
 $wgJsonConfigModels['Tabular.JsonConfig'] = 'JsonConfig\JCTabularContent';
 $wgJsonConfigs['Tabular.JsonConfig'] = [
-        'namespace' => 486,
-        'nsName' => 'Data',
-        // page name must end in ".tab", and contain at least one symbol
-        'pattern' => '/.\.tab$/',
-        'license' => 'CC0-1.0',
-        'isLocal' => false,
+	'namespace' => 486,
+	'nsName' => 'Data',
+	// page name must end in ".tab", and contain at least one symbol
+	'pattern' => '/.\.tab$/',
+	'license' => 'CC0-1.0',
+	'isLocal' => false,
 ];
 
 $wgJsonConfigModels['Map.JsonConfig'] = 'JsonConfig\JCMapDataContent';
 $wgJsonConfigs['Map.JsonConfig'] = [
-        'namespace' => 486,
-        'nsName' => 'Data',
-        // page name must end in ".map", and contain at least one symbol
-        'pattern' => '/.\.map$/',
-        'license' => 'CC0-1.0',
-        'isLocal' => false,
+	'namespace' => 486,
+	'nsName' => 'Data',
+	// page name must end in ".map", and contain at least one symbol
+	'pattern' => '/.\.map$/',
+	'license' => 'CC0-1.0',
+	'isLocal' => false,
 ];
 $wgJsonConfigInterwikiPrefix = "commons";
 
 $wgJsonConfigs['Tabular.JsonConfig']['remote'] = [
-        'url' => 'https://commons.wikimedia.org/w/api.php'
+	'url' => 'https://commons.wikimedia.org/w/api.php'
 ];
 $wgJsonConfigs['Map.JsonConfig']['remote'] = [
-        'url' => 'https://commons.wikimedia.org/w/api.php'
+	'url' => 'https://commons.wikimedia.org/w/api.php'
 ];
 
 #

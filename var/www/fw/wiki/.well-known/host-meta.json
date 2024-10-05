@@ -6,7 +6,7 @@
     },
     {
       "rel": "lrdd",
-      "href": "https://fedi.feministwiki.org/.well-known/webfinger?resource={uri}"
+      "href": "https://feministwiki.org/.well-known/webfinger?resource={uri}"
     }
   ]
 }
