@@ -130,7 +130,7 @@ collation-server      = utf8mb4_general_ci
 # Read the manual for more InnoDB related options. There are many!
 # Most important is to give InnoDB 80 % of the system RAM for buffer use:
 # https://mariadb.com/kb/en/innodb-system-variables/#innodb_buffer_pool_size
-innodb_buffer_pool_size = 8G
+innodb_buffer_pool_size = 16G
 
 innodb_log_file_size = 2G
 

@@ -18,11 +18,9 @@ server {
 		feministwiki.org
 		feministwiki.com
 		feministwiki.net
-		feministwiki.dev
 		www.feministwiki.org
 		www.feministwiki.com
 		www.feministwiki.net
-		www.feministwiki.dev
 		fem.wiki www.fem.wiki
 		feminism.wiki www.feminism.wiki
 		feminist.wiki www.feminist.wiki;
@@ -72,7 +70,6 @@ server {
 		www.feministwiki.com
 		www.feministwiki.net
 		www.feministwiki.org
-		www.feministwiki.dev
 		fem.wiki www.fem.wiki
 		feminism.wiki www.feminism.wiki
 		feminist.wiki www.feminist.wiki;
@@ -88,7 +85,7 @@ server {
 
 server {
 	listen 443 ssl;
-	server_name feministwiki.org feministwiki.dev;
+	server_name feministwiki.org;
 
 	ssl_certificate     /etc/letsencrypt/live/feministwiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/feministwiki/privkey.pem;

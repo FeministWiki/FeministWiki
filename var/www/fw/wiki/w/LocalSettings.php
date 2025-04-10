@@ -204,6 +204,7 @@ wfLoadExtensions([
     'TextExtracts',
     'UniversalLanguageSelector',
     'UserMerge',
+    'VisualEditor',
     'WikiEditor',
     'WikiSEO',
 ]);

@@ -1,8 +1,3 @@
-# Easily toggle logging on/off here
-map "" $bg3log {
-	default 0;
-}
-
 server {
 	listen 443 ssl;
 	server_name new.bg3.wiki;
@@ -10,17 +5,18 @@ server {
 	ssl_certificate     /etc/letsencrypt/live/bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/bg3.wiki/privkey.pem;
 
-	access_log /var/log/nginx/new-bg3wiki-access.log combined gzip if=$bg3log;
+	access_log /var/log/nginx/new-bg3wiki-access.log combined;
 	error_log /var/log/nginx/new-bg3wiki-error.log;
 
 	log_not_found off;
 
-	root /var/www/bg3;
+	root /var/www/new-bg3wiki;
 
-	include headers/default;
-	include headers/unsafe-csp;
+	#include headers/default;
+	#include headers/unsafe-csp;
 
-	# Why was this needed again? Turn on server logs and see if some clients still request it.
+	# Why was this needed again?
+	# Turn on server logs and see if some clients still request it.
 	location = /w/resources/assets/bg3wiki-favicon.ico {
 		return 301 /favicon.ico;
 	}
@@ -36,13 +32,42 @@ server {
 
 	### END LibreSpeed ###
 
-	# No cache for robots or sitemaps
+	### Payment ###
+
+	location /payment {
+	}
+
+	location /payment/requests {
+		return 403;
+	}
+
+	location /payment/riddle/clients {
+		return 403;
+	}
+
+	location ~ ^/payment/.*\.php$ {
+		include snippets/run-php-direct;
+	}
+
+	### END Payment ###
+
+	# ads.txt from Playwire
+	location = /ads.txt {
+		return 307 https://config.playwire.com/dyn_ads/1025372/75208/ads.txt;
+	}
+
+	# No cache for robots, sitemaps
 	location ~ ^/(robots|sitemap) {
 	}
 
 	# Static assets outside of MediaWiki
 	location ~ ^/(favicon|static) {
 		include headers/cache-30d;
+	}
+
+	# Custom CSS and JS code
+	location ~ ^/(css|js)/ {
+		include headers/cache-5min;
 	}
 
 	# Root URL is main page
@@ -107,7 +132,7 @@ server {
 	listen 80;
 	server_name new.bg3.wiki;
 
-	access_log /var/log/nginx/new-bg3wiki-redirect.log combined if=$bg3log;
+	access_log /var/log/nginx/new-bg3wiki-redirect.log combined;
 	error_log /var/log/nginx/new-bg3wiki-error.log;
 
 	include snippets/letsencrypt;

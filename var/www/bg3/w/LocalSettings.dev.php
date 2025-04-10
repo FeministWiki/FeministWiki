@@ -37,9 +37,9 @@ $wgResourceBasePath = $wgScriptPath;
 ## The URL paths to the logo.  Make sure you change this from the default,
 ## or else you'll overwrite your logo when you upgrade!
 $wgLogos = [
-	'1x'   => "/static/logo-135px.webp",
-	'1.5x' => "/static/logo-202px.webp",
-	'2x'   => "/static/logo-270px.webp",
+	'1x'   => "/static/logo-192px.webp",
+	'1.5x' => "/static/logo-288px.webp",
+	'2x'   => "/static/logo-384px.webp",
 ];
 
 ## UPO means: this is also a user preference option
@@ -140,7 +140,7 @@ $wgDiff3 = "/usr/bin/diff3";
 $devSite = false;
 $debugMode = false;
 
-if ( $_SERVER['SERVER_NAME'] === 'dev.bg3.wiki' ) {
+if ( ($_SERVER['SERVER_NAME'] ?? '') === 'dev.bg3.wiki' ) {
 	$devSite = true;
 	$wgServer = "https://dev.bg3.wiki";
 }
@@ -156,6 +156,7 @@ if ( $devSite && $_SERVER['REMOTE_ADDR'] == $taylanIpAddr ) {
 wfLoadExtensions([
 	"ArrayFunctions",
 	"Arrays",
+	"AudioButton",
 	"Cargo",
 	"CategoryTree",
 	"CheckUser",
@@ -166,8 +167,9 @@ wfLoadExtensions([
 	"ConfirmEdit",
 	"ConfirmEdit/QuestyCaptcha",
 	"ContributionScores",
-	"CSS",
+#	"CSS",
 	"DeleteBatch",
+	"Details",
 	"DiscussionTools",
 	"Echo",
 	"Elastica",
@@ -207,6 +209,7 @@ wfLoadExtensions([
 	"TextExtracts",
 	"Theme",
 	"Variables",
+#	"VisualData",
 	"VisualEditor",
 	"Widgets",
 	"WikiEditor",
@@ -282,7 +285,7 @@ function bg3wikiAdsEnabledNs( $ns ) {
 # Add CSS class to body depending on whether ads should be enabled
 $wgHooks['OutputPageBodyAttributes'][] = function( $out, $skin, &$attrs ) {
 	if ( bg3wikiAdsEnabled( $out ) ) {
-		$attrs['class'] .= ' mw-ads-enabled';
+		$attrs['class'] .= ' mw-ads-enabled mw-ads-ramp';
 	} else {
 		$attrs['class'] .= ' mw-ads-disabled';
 	}
@@ -308,10 +311,11 @@ $wgHooks['SiteNoticeAfter'][] = function ( &$html, $skin ) {
 	if ( $skin->getSkinName() !== "vector" ) {
 		return;
 	}
+	# To re-enable publift ads, put this under the ramp one:
+	# <div id='bg3wiki-header-ad-fuse' data-fuse='23198268145'></div>
 	$html .= <<< EOF
 	  <div id='bg3wiki-header-ad'>
 	    <p>Ad placeholder</p>
-	    <div id='bg3wiki-header-ad-fuse' data-fuse='23198268145'></div>
 	    <div id='bg3wiki-header-ad-ramp'></div>
 	  </div>
 	EOF;
@@ -327,10 +331,11 @@ $wgHooks['SkinAfterPortlet'][] = function( $skin, $portletName, &$html ) {
 	if ( $portletName !== "Advertisement" ) {
 		return;
 	}
+	# To re-enable publift ads, put this under the ramp one:
+	# <div id='bg3wiki-sidebar-ad-fuse' data-fuse='23198268148'></div>
 	$html .= <<< EOF
 	  <div id='bg3wiki-sidebar-ad'>
 	    <p>Ad placeholder</p>
-	    <div id='bg3wiki-sidebar-ad-fuse' data-fuse='23198268148'></div>
 	    <div id='bg3wiki-sidebar-ad-ramp'></div>
 	  </div>
 	  <p id='bg3wiki-ad-provider-notice'></p>
@@ -355,10 +360,11 @@ $wgHooks['SkinAfterBottomScripts'][] = function( $skin, &$html ) {
 	if ( $skin->getSkinName() !== "citizen" ) {
 		return;
 	}
+	# To re-enable publift ads, put this under the ramp one:
+	# <div id='bg3wiki-footer-ad-fuse'></div>
 	$html .= <<< EOF
 	  <div id='bg3wiki-footer-ad'>
 	    <p>Ad placeholder</p>
-	    <div id='bg3wiki-footer-ad-fuse'></div>
 	    <div id='bg3wiki-footer-ad-ramp'></div>
 	  </div>
 	EOF;
@@ -495,7 +501,8 @@ $wgCdnMaxAge = 3600;
 $wgCdnServers = [ '127.0.0.1' ];
 $wgInternalServer = 'http://bg3.wiki';
 
-# Seems to cause issues?
+# Should probably be disabled since the sidebar varies
+# depending on whether the user is logged in.
 #$wgEnableSidebarCache = true;
 #$wgSidebarCacheExpiry = 3600;
 
@@ -537,8 +544,8 @@ $wgSMTP = [
 # Autoconfirm
 #
 
-$wgAutoConfirmAge = 10;
-$wgAutoConfirmCount = 3;
+$wgAutoConfirmAge = 24 * 60 * 60;
+$wgAutoConfirmCount = 15;
 
 $wgGroupPermissions['autoconfirmed']['autopatrol'] = true;
 # Extension:ConfirmEdit
@@ -586,7 +593,12 @@ $wgRestrictionLevels[] = 'edittemplates';
 $wgRestrictionLevels[] = 'protect';
 
 $wgGroupPermissions['*']['createpage'] = false;
-$wgGroupPermissions['user']['createpage'] = true;
+$wgGroupPermissions['autoconfirmed']['createpage'] = true;
+
+$wgGroupPermissions['user']['upload'] = false;
+$wgGroupPermissions['user']['reupload'] = false;
+$wgGroupPermissions['autoconfirmed']['upload'] = true;
+$wgGroupPermissions['autoconfirmed']['reupload'] = true;
 
 $wgGroupPermissions['maintainer']['delete'] = true;
 $wgGroupPermissions['maintainer']['patrol'] = true;
@@ -595,6 +607,8 @@ $wgGroupPermissions['maintainer']['editmodules'] = true;
 $wgGroupPermissions['maintainer']['editproject'] = true;
 $wgGroupPermissions['maintainer']['edittemplates'] = true;
 $wgGroupPermissions['maintainer']['recreatecargodata'] = true;
+$wgGroupPermissions['maintainer']['visualdata-caneditdata'] = true;
+$wgGroupPermissions['maintainer']['visualdata-canmanageschemas'] = true;
 
 $wgGroupPermissions['sysop']['checkuser'] = true;
 $wgGroupPermissions['sysop']['checkuser-log'] = true;
@@ -641,8 +655,8 @@ $wgCaptchaTriggers['badlogin']      = true;
 
 $wgCargoDBtype = "mysql";
 $wgCargoDBserver = "localhost";
-$wgCargoDBname = "bg3wiki-cargo";
-$wgCargoDBuser = "bg3wiki-cargo";
+$wgCargoDBname = "bg3wiki_cargo";
+$wgCargoDBuser = "bg3wiki_cargo";
 $wgCargoMaxQueryLimit = 5000;
 #$wgCargoDBpassword = "(set in secrets.php)";
 
@@ -766,6 +780,15 @@ $wgPageImagesLeadSectionOnly = false;
 $wgPFEnableStringFunctions = true;
 
 #
+# Popups
+#
+
+# This fixes the "there was an issue displaying this page" issue.
+# As well as this one:
+# https://www.mediawiki.org/wiki/Topic:Uvkion1a0f5xqa07
+$wgPopupsTextExtractsIntroOnly = false;
+
+#
 # Scribunto
 #
 
@@ -799,7 +822,9 @@ $wgDefaultUserOptions['syntaxhighlight-theme'] = 'stata-dark';
 # that the defaults cannot be removed, probably because the
 # extension copies the default config value somewhere on init.
 # Instead, modify: ./extensions/TextExtracts/extension.json
-#$wgExtractsRemoveClasses = [];
+$wgExtractsRemoveClasses[] = '.toc';
+$wgExtractsRemoveClasses[] = '.mw-headline';
+$wgExtractsRemoveClasses[] = '.mw-empty-elt';
 
 #
 # Variables

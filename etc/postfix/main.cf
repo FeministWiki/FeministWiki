@@ -135,4 +135,5 @@ smtpd_recipient_restrictions =
     reject_unknown_recipient_domain
     reject_unauth_destination
     # Consult public blacklists last so as not to abuse them.
-    reject_rbl_client zen.spamhaus.org
+    # Disabled because it flags yahoo?? Apparently Spamhaus is shitty like that.
+    #reject_rbl_client zen.spamhaus.org
