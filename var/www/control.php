@@ -67,6 +67,11 @@ function cmd_opcache_reset() {
     println('Opcache reset done.');
 }
 
+function cmd_apcu_clear() {
+    apcu_clear_cache();
+    println('APCu cache cleared.');
+}
+
 function cmd_apcu_stats() {
     $cache = apcu_cache_info(true);
     $sma = apcu_sma_info(true);

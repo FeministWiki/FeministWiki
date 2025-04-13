@@ -19,9 +19,9 @@ basedir                 = /usr
 #tmpdir                  = /tmp
 
 performance_schema = on
-slow_query_log     = on
-long_query_time    = 0.1
-log_output         = TABLE
+#slow_query_log     = on
+#long_query_time    = 0.1
+#log_output         = TABLE
 
 # Broken reverse DNS slows down connections considerably and name resolve is
 # safe to skip if there are no "host by domain name" access grants
@@ -130,7 +130,7 @@ collation-server      = utf8mb4_general_ci
 # Read the manual for more InnoDB related options. There are many!
 # Most important is to give InnoDB 80 % of the system RAM for buffer use:
 # https://mariadb.com/kb/en/innodb-system-variables/#innodb_buffer_pool_size
-innodb_buffer_pool_size = 16G
+innodb_buffer_pool_size = 12G
 
 innodb_log_file_size = 2G
 

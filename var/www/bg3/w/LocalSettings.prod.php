@@ -486,7 +486,7 @@ $wgJobRunRate = 0;
 $wgInvalidateCacheOnLocalSettingsChange = false;
 
 # Update this to invalidate caches manually instead
-$wgCacheEpoch = 20240528030000;
+$wgCacheEpoch = 20250411055500;
 
 # Parser cache lasts 10 days
 $wgParserCacheExpiryTime = 10 * 24 * 60 * 60;
@@ -606,7 +606,6 @@ $wgGroupPermissions['maintainer']['protect'] = true;
 $wgGroupPermissions['maintainer']['editmodules'] = true;
 $wgGroupPermissions['maintainer']['editproject'] = true;
 $wgGroupPermissions['maintainer']['edittemplates'] = true;
-$wgGroupPermissions['maintainer']['recreatecargodata'] = true;
 $wgGroupPermissions['maintainer']['visualdata-caneditdata'] = true;
 $wgGroupPermissions['maintainer']['visualdata-canmanageschemas'] = true;
 
@@ -635,11 +634,11 @@ $wgNamespaceProtection[NS_MODULE] = ['editmodules'];
 #
 
 $wgCaptchaQuestions = [
-	"Which class plays instruments? (Create an account to skip CAPTCHA.)" => "bard",
-	"Which class uses nature magic? (Create an account to skip CAPTCHA.)" => "druid",
-	"Which class uses unarmed combat? (Create an account to skip CAPTCHA.)" => "monk",
-	"What year was the game released? (Create an account to skip CAPTCHA.)" => "2023",
-	"The second word in the game's name? (Create an account to skip CAPTCHA.)" => "gate",
+	"Which class plays instruments? (Log in to skip CAPTCHA.)" => "bard",
+	"Which class uses nature magic? (Log in to skip CAPTCHA.)" => "druid",
+	"Which class uses unarmed combat? (Log in to skip CAPTCHA.)" => "monk",
+	"What year was the game released? (Log in to skip CAPTCHA.)" => "2023",
+	"The second word in the game's name? (Log in to skip CAPTCHA.)" => "gate",
 ];
 
 $wgCaptchaTriggers['edit']          = true;
@@ -659,6 +658,20 @@ $wgCargoDBname = "bg3wiki_cargo";
 $wgCargoDBuser = "bg3wiki_cargo";
 $wgCargoMaxQueryLimit = 5000;
 #$wgCargoDBpassword = "(set in secrets.php)";
+
+$wgGroupPermissions['*']['runcargoqueries'] = false;
+$wgGroupPermissions['user']['runcargoqueries'] = true;
+$wgGroupPermissions['maintainer']['recreatecargodata'] = true;
+
+$wgAPIModules['cargofields'] = 'ApiDisabled';
+$wgAPIModules['cargoformatparams'] = 'ApiDisabled';
+$wgAPIModules['cargoquery'] = 'ApiDisabled';
+$wgAPIModules['cargoqueryautocomplete'] = 'ApiDisabled';
+$wgAPIModules['cargorecreatedata'] = 'ApiDisabled';
+$wgAPIModules['cargorecreatespecialdata'] = 'ApiDisabled';
+$wgAPIModules['cargorecreatespecialtable'] = 'ApiDisabled';
+$wgAPIModules['cargorecreatetables'] = 'ApiDisabled';
+$wgAPIModules['cargotables'] = 'ApiDisabled';
 
 #
 # Contribution Scores
