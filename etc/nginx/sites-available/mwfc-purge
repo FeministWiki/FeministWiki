@@ -8,7 +8,26 @@ server {
 		if ($request_method != "PURGE") {
 			return 405;
 		}
-		include snippets/run-php-mwfc;
+
+		# Mandatory, for caching to be processed at all.
+		fastcgi_pass php_fpm;
+
+		# Select cache from which we will purge.
+		fastcgi_cache MW;
+
+		#
+		# Note: The following differs from upstream docs!
+		#
+		# The functionality is provided by this package:
+		#   libnginx-mod-http-cache-purge
+		#
+		# Whose documentation can be found here:
+		#   https://github.com/nginx-modules/ngx_cache_purge
+		#
+
+		# Enable purge handling.
+		fastcgi_cache_purge PURGE from 127.0.0.0/8;
+		cache_purge_response_type text;
 	}
 }
 

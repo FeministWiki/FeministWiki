@@ -9,6 +9,7 @@ converse.initialize({
     theme: "dracula",
 })
 
+/*
 document.addEventListener("DOMContentLoaded", function() {
     var header = document.getElementsByTagName("converse-brand-heading")[0]
     header.parentNode.removeChild(header)
@@ -21,3 +22,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 })
+*/

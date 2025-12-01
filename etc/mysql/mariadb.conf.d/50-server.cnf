@@ -5,8 +5,8 @@
 # this is read by the standalone daemon and embedded servers
 [server]
 
-# this is only for the mysqld standalone daemon
-[mysqld]
+# this is only for the mariadbd daemon
+[mariadbd]
 
 #
 # * Basic Settings
@@ -18,7 +18,7 @@ basedir                 = /usr
 #datadir                 = /var/lib/mysql
 #tmpdir                  = /tmp
 
-performance_schema = on
+#performance_schema = on
 #slow_query_log     = on
 #long_query_time    = 0.1
 #log_output         = TABLE
@@ -49,13 +49,6 @@ table_definition_cache = 2000
 join_buffer_size       = 1M
 
 key_buffer_size        = 8M
-
-# Better not to enable the query cache, because:
-# 1. It causes lock contention, since every cacheable query locks.
-# 2. Empirically, we only get a cache hit/insert ratio of about 4/3.
-# We once enabled it with 2 GiB size, and it was catastrophic.
-query_cache_type = 0
-query_cache_size = 0
 
 #key_buffer_size        = 128M
 #max_allowed_packet     = 1G
@@ -95,8 +88,8 @@ query_cache_size = 0
 #log_slow_min_examined_row_limit = 1000
 
 # The following can be used as easy to replay backup logs or for replication.
-# note: if you are setting up a replication slave, see README.Debian about
-#       other settings you may need to change.
+# note: if you are setting up a replica, see README.Debian about other
+#       settings you may need to change.
 #server-id              = 1
 #log_bin                = /var/log/mysql/mysql-bin.log
 expire_logs_days        = 10
@@ -117,10 +110,8 @@ expire_logs_days        = 10
 # * Character sets
 #
 
-# MySQL/MariaDB default is Latin1, but in Debian we rather default to the full
-# utf8 4-byte character set. See also client.cnf
-character-set-server  = utf8mb4
-collation-server      = utf8mb4_general_ci
+# MariaDB default is now utf8 4-byte character set.
+# No Debian specific default is required.
 
 #
 # * InnoDB
@@ -140,10 +131,9 @@ innodb_log_file_size = 2G
 # This group is only read by MariaDB servers, not by MySQL.
 # If you use the same .cnf file for MySQL and MariaDB,
 # you can put MariaDB-only options here
-[mariadb]
-userstat = 1
+[mariadbd]
 
-# This group is only read by MariaDB-10.11 servers.
+# This group is only read by MariaDB-11.8 servers.
 # If you use the same .cnf file for MariaDB of different versions,
 # use this group for options that older servers don't understand
-[mariadb-10.11]
+[mariadb-11.8]

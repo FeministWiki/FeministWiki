@@ -137,5 +137,5 @@ mailman   unix  -       n       n       -       -       pipe
   flags=FRX user=list argv=/usr/lib/mailman/bin/postfix-to-mailman.py ${nexthop} ${user}
 
 dovecot   unix  -       n       n       -       -       pipe
-  flags=ODRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -e -f ${sender}
+  flags=ODRhu user=vmail:vmail argv=/usr/lib/dovecot/dovecot-lda -e -f ${sender}
  -d ${user}@${nexthop} -a ${recipient}

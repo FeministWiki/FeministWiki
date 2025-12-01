@@ -194,13 +194,13 @@ wfLoadExtensions([
     'LDAPAuthentication2',
     'LDAPProvider',
     'LDAPUserInfo',
+    'Lockdown',
     'MobileFrontend',
     'MultimediaViewer',
     'PageImages',
     'ParserFunctions',
     'PluggableAuth',
     'Popups',
-    'Renameuser',
     'TextExtracts',
     'UniversalLanguageSelector',
     'UserMerge',
@@ -301,6 +301,12 @@ $wgNoFollowLinks = false;
 ####################################
 
 #
+# Lockdown
+#
+
+$wgSpecialPageLockdown['Recentchangeslinked'] = [ 'user' ];
+
+#
 # Interwiki
 #
 
@@ -370,6 +376,6 @@ $wgGoogleSiteVerificationKey = "RZf8hzu0sR32H9OsEXa3-aN3LzE4T2nLPg1s9SrJgJI";
 
 #$wgDebugLogFile = "/tmp/mw-debug.log";
 
-#$wgShowExceptionDetails = true;
-#$wgShowDBErrorBacktrace = true;
-#$wgShowSQLErrors = true;
+$wgShowExceptionDetails = true;
+$wgShowDBErrorBacktrace = true;
+$wgShowSQLErrors = true;
