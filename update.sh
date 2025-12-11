@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if ! [ "$(pwd)" = /root/repo/fw ];
+if ! [ "$(pwd)" = /root/repo ];
 then
-    echo >&2 'Run this from /root/repo/fw!'
+    echo >&2 'Run this from /root/repo!'
     exit 1
 fi
 

@@ -138,4 +138,5 @@ smtpd_recipient_restrictions =
     # Consult public blacklists last so as not to abuse them.
     # Disabled because it flags yahoo?? Apparently Spamhaus is shitty like that.
     #reject_rbl_client zen.spamhaus.org
+
 cyrus_sasl_config_path = /etc/postfix/sasl
