@@ -9,11 +9,27 @@ server {
 			return 405;
 		}
 
+		include snippets/run-php-direct;
+		fastcgi_param SCRIPT_FILENAME /var/www/purge.php;
+	}
+}
+
+server {
+	listen 1081 default_server;
+
+	access_log /var/log/nginx/mwfc-purge-access.log;
+	error_log /var/log/nginx/mwfc-purge-error.log;
+
+	location / {
+		if ($request_method != "PURGE") {
+			return 405;
+		}
+
 		# Mandatory, for caching to be processed at all.
 		fastcgi_pass php_fpm;
 
 		# Select cache from which we will purge.
-		fastcgi_cache MW;
+		fastcgi_cache mwfc;
 
 		#
 		# Note: The following differs from upstream docs!
@@ -30,4 +46,3 @@ server {
 		cache_purge_response_type text;
 	}
 }
-
