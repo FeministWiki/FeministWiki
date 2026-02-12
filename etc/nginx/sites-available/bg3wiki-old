@@ -5,7 +5,7 @@ map "" $old_bg3_log {
 
 server {
 	listen 443 ssl;
-	server_name bg3.wiki old.bg3.wiki; # Allow bg3.wiki for fake local requests
+	server_name old.bg3.wiki bg3.wiki; # Allow bg3.wiki for fake local requests
 
 	ssl_certificate     /etc/letsencrypt/live/old.bg3.wiki/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/old.bg3.wiki/privkey.pem;
