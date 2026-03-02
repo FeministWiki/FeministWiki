@@ -3,3 +3,5 @@ abuse: technician
 admin: technician
 info: technician
 postmaster: technician
+root: technician
+www-data: technician

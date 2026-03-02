@@ -1,8 +1,9 @@
 #!/bin/sh
 
-cd /var/www/fw/wiki/w
+cd /var/www/fw/wiki/w || exit
 
-php maintenance/generateSitemap.php \
-    --fspath=sitemap \
-    --urlpath=w/sitemap \
-    --skip-redirects
+php maintenance/run.php \
+	generateSitemap.php -q \
+	--fspath=sitemap \
+	--urlpath=w/sitemap \
+	--skip-redirects

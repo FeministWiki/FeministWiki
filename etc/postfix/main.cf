@@ -30,10 +30,10 @@ confirm_delay_cleared = yes
 # Mail filtering / OpenDKIM
 #
 
-milter_protocol = 2
+#milter_protocol = 6
 milter_default_action = accept
-smtpd_milters = unix:/opendkim/opendkim.sock
-non_smtpd_milters = unix:/opendkim/opendkim.sock
+smtpd_milters = unix:/opendkim/opendkim.sock unix:/opendmarc/opendmarc.sock
+non_smtpd_milters = $smtpd_milters
 internal_mail_filter_classes = bounce
 
 #
