@@ -27,13 +27,15 @@ delay_warning_time = 30m
 confirm_delay_cleared = yes
 
 #
-# Mail filtering / OpenDKIM
+# Mail filtering with Rspamd
 #
 
-#milter_protocol = 6
+milter_protocol = 6
 milter_default_action = accept
-smtpd_milters = unix:/opendkim/opendkim.sock unix:/opendmarc/opendmarc.sock
+
+smtpd_milters = inet:127.0.0.1:11332
 non_smtpd_milters = $smtpd_milters
+
 internal_mail_filter_classes = bounce
 
 #
