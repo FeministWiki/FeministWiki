@@ -77,7 +77,6 @@ virtual_mailbox_maps = ldap:/etc/postfix/ldap-vmailboxes.cf
 virtual_alias_maps = hash:/etc/postfix/virtual-aliases
 virtual_uid_maps = static:5000
 virtual_gid_maps = static:5000
-#virtual_transport = dovecot
 virtual_transport = lmtp:unix:private/dovecot-lmtp
 
 #
